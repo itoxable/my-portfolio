@@ -1,0 +1,28 @@
+$fa-font-path: "../styles/fonts" !default;
+$material-design-icons-font-path: '../styles/fonts/' !default;
+
+$link-hover-decoration: "none";
+
+
+$font-family-sans-serif:  "Lato, Helvetica Neue", Helvetica, Arial, sans-serif !default;
+
+$gray-base:              #000 !default;
+$gray-darker:            lighten($gray-base, 20%) !default;
+
+$font-size-base:          16px !default;
+$brand-primary:           #00425b !default;;
+
+$border-radius-base:        0 !default;
+$border-radius-large:       0 !default;
+$border-radius-small:       0 !default;
+
+$navbar-height:                    60px !default;
+$navbar-default-color:             #fff !default;
+$navbar-default-bg:                #05425a !default;
+$navbar-default-border:            transparent !default;
+
+$navbar-default-link-color:                #fff !default;
+$navbar-default-link-hover-color:          #05425a !default;
+$navbar-default-link-hover-bg:             #ffdd00 !default;
+$navbar-default-link-active-color:         #05425a !default;
+$navbar-default-link-active-bg:            #ffdd00 !default;

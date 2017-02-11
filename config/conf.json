@@ -1,0 +1,11 @@
+{
+  "distFolder": "dist/META-INF/resources",
+  "testDistFolder": "dist/META-INF/resources",
+
+  "existingBrowsers": {
+    "chrome": "Chrome",
+    "phantomjs": "PhantomJS",
+    "firefox": "Firefox",
+    "safari": "Safari"
+  }
+}
