@@ -1,0 +1,12 @@
+<div class="main-content">
+    <div class="portfolio-sections">
+        <template ngFor let-section [ngForOf]="sections" let-i="index">
+            <a href="javascript:;" [class.section-selected]="selectedSection == section.name" (click)="selectSection(section)">{{section.name}}</a>
+        </template>
+    </div>
+    <mp-image-gallery [dataTable]="dataTable" ></mp-image-gallery>
+</div>
+
+<!--<div class="sub-container">-->
+    <!--<router-outlet></router-outlet>-->
+<!--</div>-->

@@ -1,0 +1,84 @@
+<template [ngIf]="dataTable">
+<p class="bg-danger error-message" style="margin: 5px" *ngIf="errorMessage">{{errorMessage}}</p>
+<div class="data-table-wrapper {{dataTable.wrapperStyleClass}}">
+    <template [ngIf]="initialized && (data == undefined || data.length == 0)">
+        <div class="data-table-empty-message {{dataTable.noDataMessageStyleClass}}">
+            {{dataTable.noDataMessage}}
+        </div>
+    </template>
+    <p class="bg-success data-table-message" *ngIf="infoMessage">{{infoMessage}} <span class="close-data-table-message" (click)="infoMessage = null">&times;</span></p>
+    <p class="bg-danger data-table-message" *ngIf="instantErrorMessage">{{instantErrorMessage}} <span class="close-data-table-message" (click)="instantErrorMessage = null">&times;</span></p>
+
+    <template [ngIf]="data.length > 0">
+        <table class="table data-table {{dataTable.tableStyleClass}}" [ngClass]="{'table-hover':dataTable.selectable && dataTable.selectionType != 'checkbox'}">
+            <template [ngIf]="dataTable.caption != undefined">
+                <caption>
+                    {{dataTable.caption}}
+                    <i *ngIf="dataTable.refreshButton" class="fa fa-refresh cursor-pointer pull-right" (click)="refresh()" aria-hidden="true"></i>
+                </caption>
+            </template>
+            <thead *ngIf="dataTable.showHeader">
+                <tr>
+                   <template ngFor let-column [ngForOf]="dataTable.columns" let-i="index">
+                        <td *ngIf="!column.actionType" [width]="column.width">
+                            {{ column.displayName }}
+
+                            <template [ngIf]="column.sortable">
+                                <span (click)="sort(column, i)" *ngIf="!column.isSorting" class="fa fa-sort sortable-column" title="Sort by {{column.displayName }}"></span>
+                                <span (click)="sort(column, i)" *ngIf="column.isSorting && column.sortDir == ASCENDING" class="fa fa-sort-asc sortable-column"></span>
+                                <span (click)="sort(column, i)" *ngIf="column.isSorting && column.sortDir == DESCENDING" class="fa fa-sort-desc sortable-column"></span>
+                            </template>
+                            <template [ngIf]="column.filter">
+                                <div>
+                                    <div class="form-group clearable-input-box table-filter">
+                                        <input [(ngModel)]="column.filterValue" class="form-control" style="width: auto" type="text" (keyup)="filterTable(column, $event.currentTarget['value'])">
+                                        <span class="clear-input-box" *ngIf="getFilter(column)" (click)="filterTable(column, '')">&times;</span>
+                                    </div>
+                                </div>
+                            </template>
+
+                        </td>
+                        <td *ngIf="column.actionType" [width]="column.width">
+                            <input *ngIf="dataTable.showSelectAll && column.actionType == 'checkbox'" type="checkbox" (change)="toggleSelectRows($event)">
+                        </td>
+                    </template>
+                </tr>
+            </thead>
+
+            <tbody>
+            <template ngFor let-item [ngForOf]="data" let-i="index">
+                <tr [ngClass]="{'info':item.isSelected}" (click)="toggleSelectRow(i)">
+
+                    <template ngFor let-column [ngForOf]="dataTable.columns" let-idx="index">
+                        <td *ngIf="!column.actionType" id="row-{{i}}-column-{{idx}}" class="{{column.columnClass}}" [width]="column.width">
+                            <template [ngIf]="!column.innerHTML">
+                                <span class="{{column.class}}" [class.editable-value]="column.editable" (dblclick)="setToEdit(column, item)">{{getValue(item, column)}}</span>
+                            </template>
+
+                            <div *ngIf="column.innerHTML" class="{{column.class}}" [innerHTML]="column.innerHTML"></div>
+                        </td>
+                        <td *ngIf="column.actionType" class="{{column.columnClass}}" [width]="column.width">
+                            <input *ngIf="column.actionType == 'checkbox'" type="checkbox" (change)="toggleSelectRow(i, column.action)">
+                            <span *ngIf="column.actionType == 'edit'" class="fa fa-pencil-square table-cell-action" (click)="select(item)"></span>
+                            <span *ngIf="column.actionType == 'view'" class="gp gp-nav-cou-report table-cell-action" style="cursor: pointer" (click)="select(item)"></span>
+                        </td>
+                    </template>
+                </tr>
+            </template>
+            </tbody>
+        </table>
+
+        <!--<mp-data-table-pagination-control *ngIf="totalItems > 0" [totalItems]="totalItems"-->
+                                       <!--[pageSize]="dataTable.dataRequestModel.pageSize"-->
+                                       <!--[pagination]="dataTable.pagination"-->
+                                       <!--[currentPage]="dataTable.dataRequestModel.page"-->
+                                       <!--(goToPageEvent)="goToPage($event)"-->
+                                       <!--(changePageSizeEvent)="changePageSize($event)">-->
+
+        <!--</mp-data-table-pagination-control>-->
+
+        <div class="clearfix"></div>
+    </template>
+    <mp-loading *ngIf="isLoading"></mp-loading>
+</div>
+</template>

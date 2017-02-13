@@ -282,6 +282,36 @@ gulp.task('serve', function() {
                     }
                 },
                 {
+                    route: '/portfolio',
+                    handle: function (req, res, next) {
+                        forward(req, res, next);
+                    }
+                },
+                {
+                    route: '/forbidden',
+                    handle: function (req, res, next) {
+                        forward(req, res, next);
+                    }
+                },
+                {
+                    route: '/contact',
+                    handle: function (req, res, next) {
+                        forward(req, res, next);
+                    }
+                },
+                {
+                    route: '/about',
+                    handle: function (req, res, next) {
+                        forward(req, res, next);
+                    }
+                },
+                {
+                    route: '/blog',
+                    handle: function (req, res, next) {
+                        forward(req, res, next);
+                    }
+                },
+                {
                     route: '/404',
                     handle: function (req, res, next) {
                         forward(req, res, next);

@@ -1,0 +1,47 @@
+<div class="data-table-actions {{pagination.paginationStyleClass}}" *ngIf="totalPages > 1 && !pagination.hideWhenEmpty">
+    <div *ngIf="pagination.showLegend" class="data-table-legend">
+        {{getPageLegend()}}
+    </div>
+    <nav *ngIf="pagination.showPagination && totalPages > 1">
+        <ul class="pagination">
+
+            <li [ngClass]="{'disabled':currentPage == 0}" *ngIf="pagination.showPaginationFirstLast">
+                <a href="javascript:;" aria-label="First" (click)="goToFirst()" class="go-to-first">
+                    <span aria-hidden="true">{{pagination.paginationFirstLabel}}</span>
+                </a>
+            </li>
+
+
+            <li [ngClass]="{'disabled':currentPage == 0}" *ngIf="pagination.showPaginationArrows">
+                <a href="javascript:;" aria-label="Previous" (click)="goToPrevious()" class="go-to-previous">
+                    <span class="gp gp-prev-icon"></span>
+                </a>
+            </li>
+
+            <template [ngIf]="pagination.showPaginationNumbers">
+                <li *ngFor="let page of pagination.pagesOnDisplay; let idx = index" [ngClass]="{'active': currentPage == page}">
+                    <a href="javascript:;" (click)="goToPage(page)" class="go-to-page-{{idx}}">{{page + 1}}</a>
+                </li>
+            </template>
+
+            <li [ngClass]="{'disabled':currentPage >= (totalPages -1)}" *ngIf="pagination.showPaginationArrows">
+                <a href="javascript:;" aria-label="Next" (click)="goToNext()" class="go-to-next">
+                    <span class="gp gp-next-icon"></span>
+                </a>
+            </li>
+
+            <li [ngClass]="{'disabled':currentPage >= (totalPages -1)}" *ngIf="pagination.showPaginationFirstLast">
+                <a href="javascript:;" aria-label="First" (click)="goToLast()" class="go-to-last">
+                    <span aria-hidden="true">{{pagination.paginationLastLabel}}</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <div class="data-table-page-size" *ngIf="pagination.showPageSizeSelection">
+        <select class="form-control change-page-size" (change)="changePageSize($event)">
+            <option [selected]="pageSize == size" *ngFor="let size of pagination.pageSizes; let idx = index"  value="{{size}}">{{size + ' per page'}}</option>
+        </select>
+    </div>
+    <div class="clearfix"></div>
+</div>
+

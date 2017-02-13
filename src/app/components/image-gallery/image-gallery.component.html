@@ -1,0 +1,30 @@
+
+<template [ngIf]="dataTable">
+
+    <template [ngIf]="data.length > 0">
+        <mp-loading *ngIf="isLoading"></mp-loading>
+        <div class="gallery-wrapper">
+
+            <template ngFor let-item [ngForOf]="data" let-i="index">
+                <div class="gallery-item" (click)="select(item)" [style.background-imagex]="'url('+item.url+')'">
+
+                    <img [src]="item.url">
+
+                    <div class="gallery-item-data">
+                        <template ngFor let-column [ngForOf]="dataTable.columns" let-idx="index">
+                            <span>{{getValue(item, column)}}</span>
+                        </template>
+                    </div>
+                </div>
+            </template>
+            <div class="clearfix"></div>
+
+            <div class="gallery-load-more">
+                <button type="button" class="btn bg-primary" *ngIf="data.length < totalItems" (click)="loadMore()">
+                    Load More
+                </button>
+            </div>
+        </div>
+    </template>
+
+</template>
