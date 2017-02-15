@@ -9,6 +9,8 @@ import {Http, Response} from "@angular/http";
 import {DataTablePaginationModel} from "./data-table-pagination-control.component";
 import {DataRequestModel} from "../../models/data-request.model";
 import {Subscription} from "rxjs";
+import {AngularFire, FirebaseListObservable} from 'angularfire2';
+import {FirebaseListFactoryOpts, Query} from "angularfire2/interfaces";
 
 
 @Component({
@@ -73,7 +75,7 @@ export class DataTableComponent implements OnDestroy{
     getDataSubscription:Subscription;
     getTotalItemsSubscription:Subscription;
 
-    constructor(private http: Http){
+    constructor(private http: Http, private angularFire:AngularFire){
     }
 
     setDataTable(dataTable:DataTableModel) {
@@ -199,20 +201,44 @@ export class DataTableComponent implements OnDestroy{
         let start:number = this.dataTable.dataRequestModel.pageSize * this.dataTable.dataRequestModel.page;
         let end:number = start+this.dataTable.dataRequestModel.pageSize;
 
-        let isPageable:boolean = this.isPageable();
-        if(isPageable){
-            url = url.replace(/{START}/g, start);
-            url = url.replace(/{END}/g, end);
-            url = url.replace(/{SORT}/g, this.dataTable.dataRequestModel.sort);
-            url = url.replace(/{SORT_DIR}/g, this.dataTable.dataRequestModel.sortDir);
-            url = url.replace(/{PAGE}/g, this.dataTable.dataRequestModel.page);
-            url = url.replace(/{PAGESIZE}/g, this.dataTable.dataRequestModel.pageSize);
-        }
 
         if(callback){
             callback.bind(this);
         }
-        this.getDataSubscription = this.http.get(url,{ headers: this.dataTable.httpHeaders }).map(res => res.json()).subscribe(data => {callback(data)}, err => this.processErrorMessages(err));
+
+        if(this.dataTable.isFirebase){
+            // this.angularFire.database.list()
+            let query:Query = {
+                key: "ruiCunha",
+                // orderByKey?: boolean | Observable<boolean>;
+                // orderByPriority?: boolean | Observable<boolean>;
+                // orderByChild?: string | Observable<string>;
+                // orderByValue?: boolean | Observable<boolean>;
+                // equalTo?: any | Observable<any>;
+                // startAt?: any | Observable<any>;
+                // endAt?: any | Observable<any>;
+                // limitToFirst?: number | Observable<number>;
+                // limitToLast?: number | Observable<number>;
+            };
+            let firebaseListFactoryOpts:FirebaseListFactoryOpts = {
+                preserveSnapshot: true,
+                query: query
+            };
+
+            this.angularFire.database.list(url, firebaseListFactoryOpts).subscribe(data => {callback(data)}, err => this.processErrorMessages(err));
+
+        }else{
+            let isPageable:boolean = this.isPageable();
+            if(isPageable){
+                url = url.replace(/{START}/g, start);
+                url = url.replace(/{END}/g, end);
+                url = url.replace(/{SORT}/g, this.dataTable.dataRequestModel.sort);
+                url = url.replace(/{SORT_DIR}/g, this.dataTable.dataRequestModel.sortDir);
+                url = url.replace(/{PAGE}/g, this.dataTable.dataRequestModel.page);
+                url = url.replace(/{PAGESIZE}/g, this.dataTable.dataRequestModel.pageSize);
+            }
+            this.getDataSubscription = this.http.get(url,{ headers: this.dataTable.httpHeaders }).map(res => res.json()).subscribe(data => {callback(data)}, err => this.processErrorMessages(err));
+        }
 
     }
 
@@ -739,6 +765,7 @@ export class DataTableModel {
 
     pageCaching:boolean = true;
 
+    isFirebase:boolean;
 
     data:any;
     dataArrayField:string;

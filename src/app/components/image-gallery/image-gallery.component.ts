@@ -16,6 +16,6 @@ import {ApplicationService} from "../../services/application.service";
 export class ImageGalleryComponent extends DataTableComponent{
 
     constructor(private _http:Http, private applicationService:ApplicationService){
-        super(_http);
+        super(_http, null);
     }
 }

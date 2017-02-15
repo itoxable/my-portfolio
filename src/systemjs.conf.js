@@ -37,6 +37,8 @@
             '@angular/http/testing': 'n:@angular/http/bundles/http-testing.umd.js',
             '@angular/router/testing': 'n:@angular/router/bundles/router-testing.umd.js',
             '@angular/forms/testing': 'n:@angular/forms/bundles/forms-testing.umd.js',
+            'angularfire2':'n:angularfire2',
+            'firebase':'n:firebase',
 
             'rxjs': 'n:rxjs',
             'core-js': 'n:core-js',
@@ -44,7 +46,7 @@
             'angular2-in-memory-web-api': 'n:angular2-in-memory-web-api',
             'moment': 'n:moment/min'
         },
-
+///Users/ruic/Projects/webdev/my-portfolio/node_modules/firebase
         // packages tells the System loader how to load when no filename and/or no extension
         packages: {
             'app': {
@@ -64,6 +66,14 @@
             'moment': {
                 defaultExtension: 'js',
                 main: 'moment-with-locales.min.js'
+            },
+            'angularfire2': {
+                defaultExtension: 'js',
+                main: 'bundles/angularFire2.umd.js'
+            },
+            'firebase': {
+                defaultExtension: 'js',
+                main: 'firebase-browser.js'
             }
         }
     });

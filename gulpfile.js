@@ -122,6 +122,8 @@ gulp.task('lib', function() {
         './node_modules/moment*/min/moment-with-locales.min.js',
         './node_modules/intl*/dist/Intl.min.js',
         './node_modules/intl*/locale-data/jsonp/en-GB.js',
+        './node_modules/angularfire2*/**/*.js',
+        './node_modules/firebase*/**/*.js',
 
         './node_modules/es6-shim/es6-shim.map',
         './node_modules/systemjs/dist/system-polyfills.map',
@@ -322,7 +324,14 @@ gulp.task('serve', function() {
                     handle: function (req, res, next) {
                         forward(req, res, next);
                     }
+                },
+                {
+                    route: '/edit-portfolio',
+                    handle: function (req, res, next) {
+                        forward(req, res, next);
+                    }
                 }
+
             ]
         }
     });
