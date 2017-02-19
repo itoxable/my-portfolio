@@ -5,7 +5,7 @@
 
 import {Component,Input, Output, EventEmitter, OnInit, AfterViewInit, OnDestroy, ViewContainerRef} from '@angular/core';
 import {FileWrapperModel, FileModel} from "../../models/file-wrapper.model";
-
+import * as exif from 'exif';
 
 @Component({
     selector:'mp-file-upload',
@@ -165,9 +165,12 @@ export class FileUploadComponent implements OnInit, AfterViewInit, OnDestroy{
             let fileModel:FileModel;
             if(file.type.indexOf("image/") > -1){
                 let previewURL = URL.createObjectURL(file);
+                let metadata:any;
                 fileModel = new FileModel(file, {
                     previewURL: previewURL
                 });
+                exif.getData(file, function(){});
+
             }else{
                 fileModel = new FileModel(file, {previewURL: this.previewDefaultImage});
             }

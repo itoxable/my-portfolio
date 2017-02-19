@@ -1,12 +1,120 @@
 <div class="main-content">
 
-    <div></div>
-    <mp-file-upload [accept]="'image/*'"
-                    [showFileName]="true" [multiple]="true" [dragAndDrop]="true"
-                    [dropElementSelector]="'.main-content'"
-                    [showPreview]="true" [buttonText]="'Add Images +'" (fileSelected)="setFile($event)" >
+    <div class="setting-section">
+        <h1>Basic Settings</h1>
 
-    </mp-file-upload>
+        <!--<template ngFor let-category [ngForOf]="socialLinks" let-i="index">-->
+            <!--<div class="form-group">&ndash;&gt;-->
+                <!--<label for=""></label>-->
+                <!--<input type="text" [(ngModel)]="settings.facebook" class="form-control" placeholder="">-->
+            <!--</div>-->
+        <!--</template>-->
+        <form>
+            <div class="form-group">
+                <label for=""></label>
+                <input type="text" [(ngModel)]="settings.social.facebook" class="form-control" placeholder="Facebook">
+            </div>
+            <div class="form-group">
+                <label for=""></label>
+                <input type="text" [(ngModel)]="settings.social.instagram" class="form-control" placeholder="Instagram">
+            </div>
+            <div class="form-group">
+                <label for=""></label>
+                <input type="text" [(ngModel)]="settings.social.pinterest" class="form-control" placeholder="Pinterest">
+            </div>
+            <div class="form-group">
+                <label for=""></label>
+                <input type="text" [(ngModel)]="settings.social.dribbble" class="form-control" placeholder="Dribbble">
+            </div>
+            <div class="form-group">
+                <label for=""></label>
+                <input type="text" [(ngModel)]="settings.social.behance" class="form-control" placeholder="Behance">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+
+    </div>
+
+
+
+    <div class="setting-section">
+        <h1>Categories</h1>
+        <button  class="btn btn-default" (click)="addNewCategory()">New Category +</button>
+
+        <div *ngIf="isAddingCategory">
+            <div class="form-group">
+                <input type="text" [(ngModel)]="newCategory" class="form-control" id="categoryName" placeholder="Category Name">
+            </div>
+            <button type="button" class="btn btn-primary" (click)="saveCategory()">Save</button>
+            <button type="button" class="btn btn-default" (click)="isAddingCategory = false">Cancel</button>
+        </div>
+
+        <table class="table table-bordered table-striped" style="width: auto">
+            <tbody>
+                <template ngFor let-category [ngForOf]="categories" let-i="index">
+                    <tr>
+                        <td>
+                            {{category.name}}
+                        </td>
+                        <td>
+                            <span class="fa fa-trash cursor-pointer" aria-hidden="true" (click)="deleteCategory(category)"></span>
+                        </td>
+                    </tr>
+
+                </template>
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <div class="setting-section setting-section-portfolio">
+        <h1>Portfolio</h1>
+
+        <mp-file-upload [accept]="'image/*'"
+                        [showFileName]="true" [multiple]="true" [dragAndDrop]="true"
+                        [dropElementSelector]="'.setting-section-portfolio'"
+                        [showPreview]="true" [buttonText]="'Add Images +'" (fileSelected)="setFile($event)" >
+
+        </mp-file-upload>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Description</td>
+                    <td>Featured</td>
+                    <td>Categories</td>
+                    <td>Added</td>
+                    <td width="100" style="width: 100px">Image</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <template ngFor let-image [ngForOf]="images" let-i="index">
+                    <tr>
+                        <td>{{image.name}}</td>
+                        <td>{{image.description}}</td>
+                        <td>{{image.featured}}</td>
+                        <td>
+                            <template [ngIf]="image.categories">
+                                <span *ngFor="let category of image.categories; let i = index;" class="category">
+                                    {{category}}
+                                </span>
+                            </template>
+                        </td>
+                        <td>{{image.cdate | date}}</td>
+                        <td> <img [src]="image.url" style="height: 100px"></td>
+                        <td>
+                            <span class="fa fa-pencil cursor-pointer" (click)="edit(image)"></span>
+                            <span class="fa fa-trash cursor-pointer" aria-hidden="true" (click)="delete(image)"></span>
+                        </td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+    </div>
+
 
     <div class="uploaded-files" >
         <template ngFor let-file [ngForOf]="files" let-i="index">
@@ -21,29 +129,46 @@
                         <canvas class="uploaded-file-image-canvas uploaded-file-image-canvas-{{i}}"></canvas>
                     </div>
                     <div class="uploaded-file-image-meta">
-
+                        {{file.files[0].file | json}}
                     </div>
                 </div>
                 <div>
                     <div class="form-group">
                         <input type="text" [(ngModel)]="file.data.name" class="form-control" id="name" placeholder="Name">
                     </div>
+
                     <div class="form-group">
                         <textarea class="form-control" [(ngModel)]="file.data.description" id="description" placeholder="Description"></textarea>
                     </div>
+
+                    <div class="form-group">
+                        <select class="form-control" [(ngModel)]="file.data.categories" id="category" multiple>
+                            <template ngFor let-category [ngForOf]="categories" let-i="index">
+                                <option value="{{category.name}}">
+                                    {{category.name}}
+                                </option>
+                            </template>
+                        </select>
+                    </div>
+
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" [(ngModel)]="file.data.description"> Show in home
+                            <input type="checkbox" [(ngModel)]="file.data.featured"> Featured
                         </label>
                     </div>
                     <button type="button" class="btn btn-default" (click)="saveFile(file)">Submit</button>
                 </div>
 
-                <div class="uploaded-file-progress">
+                <div class="uploaded-file-progress" *ngIf="file.uploadStatus">
                     <div class="progress">
-                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" [style.width]="files.uploadStatus.percentage+'%'">
-                            <span>{{files.uploadStatus.percentage}}% </span>
+                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" [style.width]="file.uploadStatus.percentage+'%'">
+                            <span>{{file.uploadStatus.percentage}}% </span>
                         </div>
+                    </div>
+                    <div class="uploaded-file-progress-actions">
+                        <button type="button" class="btn btn-danger btn-sm" (click)="cancel(file)">Cancel</button>
+                        <button type="button" class="btn btn-warning btn-sm" (click)="pauseUpload(file)">Pause</button>
+                        <button type="button" class="btn btn-primary btn-sm" (click)="resumeUpload(file)">Resume</button>
                     </div>
                 </div>
 
@@ -51,6 +176,46 @@
         </template>
         <div class="clearfix"></div>
     </div>
+
+    <div class="setting-section setting-section-portfolio">
+        <mp-text-editor [(ngModel)]="text"></mp-text-editor>
+    </div>
+    {{text}}
+
+    <mp-modal *ngIf="selectedImage"  (onClose)="selectedImage = null" [draggable]="true" [showOverlay]="true" [showFooter]="false">
+        <span header>
+            {{selectedImage.name}}
+        </span>
+        <div body>
+
+                <div>
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="selectedImage.name" class="form-control" placeholder="Name">
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" [(ngModel)]="selectedImage.description"placeholder="Description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" [(ngModel)]="selectedImage.categories" multiple>
+                            <template ngFor let-category [ngForOf]="categories" let-i="index">
+                                <option value="{{category.name}}">
+                                    {{category.name}}
+                                </option>
+                            </template>
+                        </select>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" [(ngModel)]="selectedImage.featured"> Featured
+                        </label>
+                    </div>
+                    <button type="button" class="btn btn-default" (click)="saveImage(selectedImage)">Save</button>
+                </div>
+
+        </div>
+    </mp-modal>
+
+
 </div>
 
 

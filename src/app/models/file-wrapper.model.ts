@@ -6,9 +6,13 @@ import { EventEmitter } from '@angular/core';
 import { Response, ResponseOptions, Headers, ResponseType } from '@angular/http';
 import { Observable } from "rxjs/Observable";
 import { Subscriber } from "rxjs/Subscriber";
+import * as firebase from 'firebase';
+import UploadTask = firebase.storage.UploadTask;
+import TaskEvent = firebase.storage.TaskEvent;
 
 
 export class FileModel{
+    metadata:any;
     canvas:HTMLCanvasElement;
     canvasContext:CanvasRenderingContext2D;
     title:string;
@@ -40,7 +44,7 @@ export class FileWrapperModel{
     data:any = {};
     uploadStatus:UploadStatus;
     xmlHttpRequest:XMLHttpRequest;
-    
+    uploadComplete:boolean;
     private uploadEventEmitter:EventEmitter<UploadEvent> = new EventEmitter<UploadEvent>();
     
     abortEventEmitter:EventEmitter<UploadEvent> = new EventEmitter<UploadEvent>();
@@ -58,6 +62,8 @@ export class FileWrapperModel{
     private progressListener:(ev: Event) => void;
     private timeOutListener:(ev: Event) => void;
 
+    uploadTask:UploadTask;
+
     constructor(data?:any){
         if(data) {
             Object.assign(this, data);
@@ -68,6 +74,8 @@ export class FileWrapperModel{
             this.uploadCompleteSubscriber = subscriber;
         });
     }
+
+
 
     setXMLHttpRequest(xmlHttpRequest:XMLHttpRequest){
         this.xmlHttpRequest = xmlHttpRequest;

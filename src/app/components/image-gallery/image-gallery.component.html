@@ -1,30 +1,40 @@
 
-<template [ngIf]="dataTable">
+<template [ngIf]="true">
 
-    <template [ngIf]="data.length > 0">
+    <template [ngIf]="images.length > 0">
         <mp-loading *ngIf="isLoading"></mp-loading>
-        <div class="gallery-wrapper">
+        <div class="row gallery-wrapper clearfix">
+            <template ngFor let-image [ngForOf]="displayImages" ; let-last="last"; let-i="index">
 
-            <template ngFor let-item [ngForOf]="data" let-i="index">
-                <div class="gallery-item" (click)="select(item)" [style.background-imagex]="'url('+item.url+')'">
-
-                    <img [src]="item.url">
-
-                    <div class="gallery-item-data">
-                        <template ngFor let-column [ngForOf]="dataTable.columns" let-idx="index">
-                            <span>{{getValue(item, column)}}</span>
-                        </template>
+                <div class="col-md-4 gallery-item" (click)="select(image, i)" [style.background-imagex]="'url('+image.url+')'">
+                    <div class="gallery-item-inner">
+                        <img [src]="image.url" alt="{{image.url}}">
+                        <div class="gallery-item-data">
+                            <h3>{{image.name}}</h3>
+                            <p>{{image.description}}</p>
+                        </div>
                     </div>
+
+
                 </div>
+
             </template>
             <div class="clearfix"></div>
 
             <div class="gallery-load-more">
-                <button type="button" class="btn bg-primary" *ngIf="data.length < totalItems" (click)="loadMore()">
+                <button type="button" class="btn bg-primary" *ngIf="images.length < totalItems" (click)="loadMore()">
                     Load More
                 </button>
             </div>
         </div>
     </template>
+
+    <mp-modal *ngIf="selectedImage" (onClose)="selectedImage = null; selectedIndex = 0" [draggable]="true" [showOverlay]="true" [showFooter]="false" [showHeader]="false">
+        <div body class="modal-body-content">
+            <div style="width: 100%; height: 100%">
+                <mp-image-slider [images]="displayImages" [nameField]="'name'" [index]="selectedIndex" [srcField]="'url'" [backgroundColor]="'#CCC'"></mp-image-slider>
+            </div>
+        </div>
+    </mp-modal>
 
 </template>

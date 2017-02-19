@@ -1,10 +1,13 @@
 <div class="main-content">
     <div class="portfolio-sections">
-        <template ngFor let-section [ngForOf]="sections" let-i="index">
-            <a href="javascript:;" [class.section-selected]="selectedSection == section.name" (click)="selectSection(section)">{{section.name}}</a>
+        <template [ngIf]="categories && categories.length > 0">
+            <a href="javascript:;"  [class.section-selected]="!selectedCategory" (click)="selectCategory('')">All</a>
+            <template ngFor let-category [ngForOf]="categories" let-i="index">
+                <a href="javascript:;"  [class.section-selected]="selectedCategory == category.name" (click)="selectCategory(category)">{{category.name}}</a>
+            </template>
         </template>
     </div>
-    <mp-image-gallery [dataTable]="dataTable" ></mp-image-gallery>
+    <mp-image-gallery [category]="selectedCategory"></mp-image-gallery>
 </div>
 
 <!--<div class="sub-container">-->

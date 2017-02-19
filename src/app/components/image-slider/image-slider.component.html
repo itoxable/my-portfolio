@@ -1,0 +1,25 @@
+<div class="slider-viewport" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)" (touchmove)="onTouchMove($event)">
+    <ul class="slides" >
+        <template ngFor let-image [ngForOf]="displayImages" let-i="index">
+            <li [style.width]="liWidth+'%'" [ngClass]="{'active': isActive(i)}" >
+                <div class="slider-image" [style.background-color]="backgroundColor" [style.background-image]="'url('+image[srcField]+')'">
+                    <div *ngIf="image[nameField]" class="slide-caption {{slideCaptionStyleClass}}">{{image[nameField]}}</div>
+                    <div *ngIf="image[nameHtml]" class="slide-caption {{slideCaptionStyleClass}}" >
+                        <div [innerHtml]='image.html'></div>
+                    </div>
+                </div>
+            </li>
+        </template>
+    </ul>
+    <div class="clearfix"></div>
+    <a href="javascript:;" class="slider-button-left" (click)="goLeft()" *ngIf="images.length > 1 && (loop || showLeft())">&#10094;</a>
+    <a href="javascript:;" class="slider-button-right" (click)="goRight()"  *ngIf="images.length > 1 && (loop || showRight())">&#10095;</a>
+
+    <ul class="slides-balls" *ngIf="images.length > 1 && balls">
+        <template ngFor let-image [ngForOf]="images" let-i="index">
+            <li [ngClass]="{'active': isBallActive(i)}">
+                <span (click)="goToSlide(i)"></span>
+            </li>
+        </template>
+    </ul>
+</div>

@@ -27,6 +27,10 @@ import {EditPortfolioComponent} from "./components/edit-portfolio/edit-portfolio
 import {EditPortfolioService} from "./services/edit-portfolio.service";
 import {FileUploadComponent} from "./components/file-upload/file-upload.component";
 import {SizeFormatPipe, SafeURLPipe} from "./pipes/size-format.pipe";
+import {ModalComponent} from "./components/modal/modal.component";
+import {ImageSliderComponent} from "./components/image-slider/image-slider.component";
+import {TextEditorComponent} from "./components/text-editor/text-editor.component";
+import {BlogComponent} from "./components/blog/blog.component";
 
 const FIREBASE_APP_CONFIG = {
     apiKey: "AIzaSyB6Isl4f6D1onyF07NfZqDfhUV_thnLbdg",
@@ -49,7 +53,11 @@ const FIREBASE_APP_CONFIG = {
         EditPortfolioComponent,
         FileUploadComponent,
         SizeFormatPipe,
-        SafeURLPipe
+        SafeURLPipe,
+        ModalComponent,
+        ImageSliderComponent,
+        TextEditorComponent,
+        BlogComponent
     ],
     imports     : [
         BrowserModule, 

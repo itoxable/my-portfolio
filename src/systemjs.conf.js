@@ -44,7 +44,10 @@
             'core-js': 'n:core-js',
             'ie-shim': 'n:ie-shim',
             'angular2-in-memory-web-api': 'n:angular2-in-memory-web-api',
-            'moment': 'n:moment/min'
+            'moment': 'n:moment/min',
+            'exif':'n:exif-js',
+            'ckeditor':'n:ckeditor'
+
         },
 ///Users/ruic/Projects/webdev/my-portfolio/node_modules/firebase
         // packages tells the System loader how to load when no filename and/or no extension
@@ -62,6 +65,14 @@
             'ie-shim': {
                 defaultExtension: 'js',
                 main: 'index.js'
+            },
+            'ckeditor': {
+                defaultExtension: 'js',
+                main: 'ckeditor.js'
+            },
+            'exif': {
+                defaultExtension: 'js',
+                main: 'exif.js'
             },
             'moment': {
                 defaultExtension: 'js',
