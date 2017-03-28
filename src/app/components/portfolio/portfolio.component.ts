@@ -9,7 +9,7 @@ import {ApplicationService} from "../../services/application.service";
 import {DataRequestModel} from "../../models/data-request.model";
 import App = firebase.app.App;
 import {Query} from "angularfire2/interfaces";
-import {Category} from "../../models/models";
+import {Category, ImageModel} from "../../models/models";
 
 @Component({
     selector: 'mp-portfolio',
@@ -25,7 +25,7 @@ export class PortfolioComponent{
 
     category:string = '';
 
-    constructor(private applicationService:ApplicationService){
+    constructor(private applicationService:ApplicationService, private http:Http){
         this.applicationService.categoriesFirebaseListObservable.subscribe((data:any[]) => {
             this.categories = data;
             this.selectCategory('');
@@ -34,7 +34,7 @@ export class PortfolioComponent{
 
     selectCategory(category:Category){
         this.selectedCategory = category.name;
-        //this.query =
+        console.log('selectCategory');
     }
 
     init(){

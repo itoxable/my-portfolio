@@ -9,6 +9,8 @@ import {DataTableModel} from "../data-table/data-table.component";
 import {AngularFire, FirebaseListObservable} from "angularfire2";
 import {FirebaseListFactoryOpts, Query} from "angularfire2/interfaces";
 import Reference = firebase.storage.Reference;
+import {ApplicationService} from "../../services/application.service";
+import {ImageModel} from "../../models/models";
 
 @Component({
     selector: 'mp-home',
@@ -21,71 +23,37 @@ export class HomeComponent{
     portfolioFirebaseListObservable:FirebaseListObservable<any>;
     storageRef:Reference;
     x:any = {};
-    constructor(private angularFire:AngularFire) {
-        //this.init();
+    images:Array<ImageModel> = [];
 
-       //this.storageRef = firebase.storage().ref("");
+    constructor(private angularFire:AngularFire, private applicationService:ApplicationService) {
 
-// this.angularFire.
-//         let fire:firebase.storage()
-        // // {
-        //     "blpu_class": "C",
-        //     "primary": "C",
-        //     "description": "Commercial",
-        //     "added_date": "23-JUN-10"
-        // // },
-        // blpu_class
-        // primary
-        // secondary
-        // tertiary
-        // description
-        // added_date
-        //
-        // added_date
-        // for(let i = 0; i < this.data.items.length; i++){
-        //     this.x[this.data.items['blpu_class']] = {
-        //         "blpu_class": "C",
-        //         "primary": "C",
-        //         "description": "Commercial",
-        //     }
-        // }
-
-        let query: Query = {
-            key: "ruiCunha",
-            // orderByKey?: boolean | Observable<boolean>;
-            // orderByPriority?: boolean | Observable<boolean>;
-            // orderByChild?: string | Observable<string>;
-            // orderByValue?: boolean | Observable<boolean>;
-            // equalTo?: any | Observable<any>;
-            // startAt?: any | Observable<any>;
-            // endAt?: any | Observable<any>;
-            // limitToFirst?: number | Observable<number>;
-            // limitToLast?: number | Observable<number>;
-        };
-        let firebaseListFactoryOpts: FirebaseListFactoryOpts = {
-            preserveSnapshot: true,
-            query: query
-        };
-
-        this.portfolioFirebaseListObservable = this.angularFire.database.list('ruiCunha/portfolio', firebaseListFactoryOpts);
-        this.angularFire.database.object('ruiCunha').subscribe(x => {
-            console.log(x);
+        this.applicationService.imagesFirebaseListObservable.subscribe((data:ImageModel[]) => {
+            this.images = data.filter((image:ImageModel) => {
+                return image.featured;
+            });
         });
-       // this.portfolioFirebaseListObservable.
-        // .subscribe(data => {
-        //     console.log(data);
-        // });
-        // for (let i = 6; i < 30; i++) {
+        //this.init();
+        // let query: Query = {
+        //     key: "ruiCunha",
+        //     // orderByKey?: boolean | Observable<boolean>;
+        //     // orderByPriority?: boolean | Observable<boolean>;
+        //     // orderByChild?: string | Observable<string>;
+        //     // orderByValue?: boolean | Observable<boolean>;
+        //     // equalTo?: any | Observable<any>;
+        //     // startAt?: any | Observable<any>;
+        //     // endAt?: any | Observable<any>;
+        //     // limitToFirst?: number | Observable<number>;
+        //     // limitToLast?: number | Observable<number>;
+        // };
+        // let firebaseListFactoryOpts: FirebaseListFactoryOpts = {
+        //     preserveSnapshot: true,
+        //     query: query
+        // };
         //
-        //     this.firebaseListObservable.push({
-        //         "name": "image"+i,
-        //         "url": "",
-        //         "categories": [
-        //             "City",
-        //             "Portrait"
-        //         ]
-        //     })
-        // }
+        // this.portfolioFirebaseListObservable = this.angularFire.database.list('ruiCunha/portfolio', firebaseListFactoryOpts);
+        // this.angularFire.database.object('ruiCunha').subscribe(x => {
+        //     console.log(x);
+        // });
     }
 
 

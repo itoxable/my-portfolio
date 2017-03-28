@@ -27,9 +27,9 @@ var SystemJsBuilder = require('systemjs-builder');
 require('reflect-metadata');
 var tscWrapped = require('@angular/tsc-wrapped');
 var angularCompiler = require('@angular/compiler-cli');
-
+var gulpTemplate = require('gulp-template');
 var concat = require('gulp-concat');
-
+var appProps = require('./config/properties.json');
 var conf = require('./config/conf.json');
 
 var tsProject = gulpTypescript.createProject('tsconfig.json');
@@ -134,6 +134,7 @@ gulp.task('lib', function() {
         // './node_modules/ckeditor*/plugins*/*.*',
         './src/lib/**/*.*',
         './node_modules/isotope-layout/dist/isotope.pkgd.min.js',
+        './node_modules/masonry-layout/dist/masonry.pkgd.min.js',
 
         './node_modules/es6-shim/es6-shim.map',
         './node_modules/systemjs/dist/system-polyfills.map',
@@ -171,12 +172,19 @@ gulp.task('build:tests', function() {
 
 gulp.task('lib:prod', function() {
     var arrDev = [
-        './node_modules/proj4/dist/proj4.js',
-        './node_modules/openlayers/dist/ol.js',
+        './node_modules/isotope-layout/dist/isotope.pkgd.min.js',
     ];
     gulp.src(arrDev)
         .pipe(gulp.dest(conf.distFolder+'/lib'))
 });
+
+gulp.task('copy-html', function (cb) {
+    return gulp.src(['src/**/*.html'])
+        .pipe(gulpTemplate(appProps))
+        .pipe(gulp.dest('dist/'))
+});
+
+
 
 gulp.task('build:dev', function (cb) {
     gulpSequence('clean', 'lib', 'components',
@@ -185,7 +193,7 @@ gulp.task('build:dev', function (cb) {
 });
 
 gulp.task('build:normal', function (cb) {
-    gulpSequence('build:dev', 'copy-temp', cb);
+    gulpSequence('build:dev', 'copy-temp', 'copy-html', cb);
 });
 
 gulp.task('copy-temp', function (cb) {
@@ -223,7 +231,9 @@ gulp.task('bundle:app',function(done){
             'app': 'src/app',
             '@angular': 'n:@angular',
             'rxjs': 'n:rxjs',
-            'moment': 'n:moment'
+            'moment': 'n:moment',
+            'angularfire2':'n:angularfire2',
+            'firebase':'n:firebase'
         },
         packages: {
             'app': { main: 'main-aot', defaultExtension: 'js' },
@@ -237,7 +247,9 @@ gulp.task('bundle:app',function(done){
             '@angular/platform-browser-dynamic': { main: 'index.js', defaultExtension: 'js' },
             '@angular/router': { main: 'index.js', defaultExtension: 'js' },
             'rxjs': { main: 'Rx', defaultExtension: 'js' },
-            'moment': { defaultExtension: 'js', main: './moment' }
+            'moment': { defaultExtension: 'js', main: './moment' },
+            'angularfire2': {defaultExtension: 'js', main: 'bundles/angularFire2.umd.js'},
+            'firebase': {defaultExtension: 'js', main: 'firebase-browser.js'}
         }
     });
     builder.buildStatic('app', conf.distFolder+'/lib/app.js', options)
@@ -252,7 +264,9 @@ gulp.task('bundle:app',function(done){
 gulp.task('clean:aot', del.bind(null, ['./aot']));
 
 gulp.task('copy:aot-index',function(done){
-    return gulp.src('./config/index.html').pipe(gulp.dest(conf.distFolder));
+    return gulp.src('./config/index.html')
+        .pipe(gulpTemplate(appProps))
+        .pipe(gulp.dest(conf.distFolder));
 });
 
 gulp.task('compile:aot',function(done){
@@ -270,8 +284,9 @@ function compile(args, callback) {
         return callback;
 
     }).catch(function (e) {
+        console.error(e.stack);
         if (e instanceof tscWrapped.UserError || e instanceof angularCompiler.SyntaxError) {
-            console.error(e.message);
+            console.error(e.stack);
             return Promise.resolve(1);
         }
         else {
@@ -286,61 +301,70 @@ gulp.task('serve', function() {
         server: {
             port: 3000,
             baseDir: ["./src","./tmp/"],
+            // serveStaticOptions: {
+            //     extensions: ['html'] // pretty urls
+            // }
             middleware: [
-                {
-                    route: '/help',
-                    handle: function (req, res, next) {
-                        forward(req, res, next);
-                    }
-                },
-                {
-                    route: '/portfolio',
-                    handle: function (req, res, next) {
-                        forward(req, res, next);
-                    }
-                },
-                {
-                    route: '/forbidden',
-                    handle: function (req, res, next) {
-                        forward(req, res, next);
-                    }
-                },
-                {
-                    route: '/contact',
-                    handle: function (req, res, next) {
-                        forward(req, res, next);
-                    }
-                },
-                {
-                    route: '/about',
-                    handle: function (req, res, next) {
-                        forward(req, res, next);
-                    }
-                },
-                {
-                    route: '/blog',
-                    handle: function (req, res, next) {
-                        forward(req, res, next);
-                    }
-                },
-                {
-                    route: '/404',
-                    handle: function (req, res, next) {
-                        forward(req, res, next);
-                    }
-                },
-                {
-                    route: '/forbidden',
-                    handle: function (req, res, next) {
-                        forward(req, res, next);
-                    }
-                },
-                {
-                    route: '/edit-portfolio',
-                    handle: function (req, res, next) {
-                        forward(req, res, next);
-                    }
-                }
+                // {
+                //     route: '/',
+                //     handle: function (req, res, next) {
+                //         next();
+                //     }
+                // }
+                // {
+                //     route: '/help',
+                //     handle: function (req, res, next) {
+                //         forward(req, res, next);
+                //     }
+                // },
+                // {
+                //     route: '/portfolio',
+                //     handle: function (req, res, next) {
+                //         forward(req, res, next);
+                //     }
+                // },
+                // {
+                //     route: '/forbidden',
+                //     handle: function (req, res, next) {
+                //         forward(req, res, next);
+                //     }
+                // },
+                // {
+                //     route: '/contact',
+                //     handle: function (req, res, next) {
+                //         forward(req, res, next);
+                //     }
+                // },
+                // {
+                //     route: '/about',
+                //     handle: function (req, res, next) {
+                //         forward(req, res, next);
+                //     }
+                // },
+                // {
+                //     route: '/blog',
+                //     handle: function (req, res, next) {
+                //         forward(req, res, next);
+                //     }
+                // },
+                // {
+                //     route: '/404',
+                //     handle: function (req, res, next) {
+                //         forward(req, res, next);
+                //     }
+                // },
+                // {
+                //     route: '/forbidden',
+                //     handle: function (req, res, next) {
+                //         forward(req, res, next);
+                //     }
+                // },
+                // {
+                //     route: '/edit-portfolio',
+                //     handle: function (req, res, next) {
+                //         forward(req, res, next);
+                //     }
+                // }
 
             ]
         }

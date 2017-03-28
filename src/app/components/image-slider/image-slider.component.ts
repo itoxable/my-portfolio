@@ -4,7 +4,10 @@
 
 
 import {CommonModule} from '@angular/common'
-import {NgModule, Component, Input, HostListener, OnInit, ElementRef, AfterContentInit} from '@angular/core';
+import {
+    NgModule, Component, Input, HostListener, OnInit, ElementRef, AfterContentInit, Output,
+    EventEmitter
+} from '@angular/core';
 import {Router} from '@angular/router';
 import {Observable} from 'rxjs/Observable';
 import {timeout} from 'rxjs/operator/timeout';
@@ -50,14 +53,16 @@ export class ImageSliderComponent implements AfterContentInit{
     @Input() slide:boolean = true;
     @Input() loop:boolean = true;
     @Input() balls:boolean = true;
-
+    isLoading:boolean = false;
     @Input('images') set _images(images:Array<any>){
         this.images = images;
         this.initImages();
     }
 
-    constructor(private elementRef: ElementRef){
+    @Output() onSlideChange:EventEmitter<any> = new EventEmitter<any>();
 
+    constructor(private elementRef: ElementRef){
+        this.isLoading = true;
     }
 
     cancelTimeout(){
@@ -100,16 +105,23 @@ export class ImageSliderComponent implements AfterContentInit{
     }
 
     moveSlide(transitionDuration?:number){
+
         if(transitionDuration == undefined){
             transitionDuration = this.slideDuration;
         }
         this.transformSlide(this.liWidth * this.index, transitionDuration);
 
+
+
         if(Math.abs(this.index) > this.images.length){
             this.jumpToSlide(-1);
+
         }else if(this.index == 0){
             this.jumpToSlide(-1*(this.images.length));
+        }else{
+            this.onSlideChange.emit(Math.abs(this.index));
         }
+
     }
 
     transformSlide(translateXVal, transitionDuration?:number){
@@ -211,6 +223,7 @@ export class ImageSliderComponent implements AfterContentInit{
     ngAfterContentInit(){
 
         this.init();
+        this.isLoading = false;
 
     }
 }

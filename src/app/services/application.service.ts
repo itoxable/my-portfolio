@@ -18,12 +18,14 @@ export class ApplicationService {
     blogFirebaseListObservable:FirebaseListObservable<any[]>;
     aboutFirebaseListObservable:FirebaseListObservable<any[]>;
     contactFirebaseListObservable:FirebaseListObservable<any[]>;
+    settingsFirebaseListObservable:FirebaseListObservable<any>;
 
     constructor(private angularFire:AngularFire){
         this.onWindowResize = fromEvent(window, 'resize');
         this.onWindowScroll = fromEvent(document, 'scroll');
 
         this.imagesFirebaseListObservable = this.angularFire.database.list('users/rui-cunha/images');
+        this.settingsFirebaseListObservable = this.angularFire.database.list('users/rui-cunha/settings');
         this.categoriesFirebaseListObservable = this.angularFire.database.list('users/rui-cunha/categories');
         this.blogFirebaseListObservable = this.angularFire.database.list('users/rui-cunha/blog');
         this.aboutFirebaseListObservable = this.angularFire.database.list('users/rui-cunha/about');

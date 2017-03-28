@@ -1,0 +1,20 @@
+@font-face {
+    font-family: 'FaithAndGloryOne';
+    src: url('#{$faith-glory-font-path}/FaithAndGloryOne.eot');
+    src: url('#{$faith-glory-font-path}/FaithAndGloryOne.eot?#iefix') format('embedded-opentype'),
+         url('#{$faith-glory-font-path}/FaithAndGloryOne.woff') format('woff'),
+         url('#{$faith-glory-font-path}/FaithAndGloryOne.svg#FaithAndGloryOne') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'FaithAndGloryTwo';
+    src: url('#{$faith-glory-font-path}/FaithAndGloryTwo.eot');
+    src: url('#{$faith-glory-font-path}/FaithAndGloryTwo.eot?#iefix') format('embedded-opentype'),
+         url('#{$faith-glory-font-path}/FaithAndGloryTwo.woff') format('woff'),
+         url('#{$faith-glory-font-path}/FaithAndGloryTwo.svg#FaithAndGloryTwo') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+

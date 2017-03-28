@@ -1,3 +1,8 @@
 <div class="main-content">
-    <mp-image-gallery></mp-image-gallery>
+    <div class="main-page-slider">
+
+        <mp-image-slider [images]="images" [nameField]="'name'" [index]="0" [srcField]="'url'" [backgroundColor]="'#CCC'"></mp-image-slider>
+
+    </div>
+    <mp-image-gallery [images]="images" ></mp-image-gallery>
 </div>

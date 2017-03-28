@@ -3,6 +3,7 @@
  */
 
 export interface FirabaseBaseModel {
+    $exists?:()=>any;
     $key?:string;
 }
 
@@ -15,9 +16,10 @@ export interface Blog extends FirabaseBaseModel{
 }
 export interface Settings extends FirabaseBaseModel{
     social?:any;
+    siteName?:string;
 }
 
-export interface Image extends FirabaseBaseModel{
+export interface ImageModel extends FirabaseBaseModel{
     cdate?:string | Date;
     mdate?:string | Date;
     categories?: Array<string>;
@@ -25,9 +27,17 @@ export interface Image extends FirabaseBaseModel{
     url?:string;
     description?: string;
     featured?:boolean;
+    width?: string;
+    height?: string;
+    displayWidth?: string;
+    displayHeight?: string;
 }
 
 export interface Category extends FirabaseBaseModel{
     cdate?:string | Date;
     name?: string;
+}
+
+export interface Settings extends FirabaseBaseModel {
+    social?:any;
 }

@@ -8,8 +8,8 @@ import {Http} from "@angular/http";
 import {ApplicationService} from "../../services/application.service";
 import {FirebaseListObservable, AngularFire} from "angularfire2";
 import {FirebaseListFactoryOpts, Query} from "angularfire2/interfaces";
-import {Image} from "../../models/models";
-declare var Isotope:any
+import {ImageModel} from "../../models/models";
+declare var Isotope:any;
 
 @Component({
     selector: 'mp-image-gallery',
@@ -19,81 +19,126 @@ declare var Isotope:any
 
 export class ImageGalleryComponent implements OnInit, AfterViewInit{
 
+    _category:string = '';
     @Input() set category(category: string){
-        this.filter(category);
+        this._category = category?category.toLowerCase():category;
+        this.filter();
     };
     isLoading:boolean;
     imagesFirebaseListObservable:FirebaseListObservable<any[]>;
     firebaseListFactoryOpts:FirebaseListFactoryOpts;
 
-    images:Array<Image> = [];
+
+    @Input() images:Array<ImageModel> = [];
     totalItems:number = 0;
-    selectedImage:Image;
+    selectedImage:ImageModel;
     selectedIndex:number = 0;
-    displayImages:Array<Image> = [];
-    constructor(private _http:Http, private angularFire:AngularFire, private applicationService:ApplicationService, private elementRef: ElementRef){
+    displayImages:Array<ImageModel> = [];
+
+    isotope:any;
+
+    grid:HTMLDivElement;
+    imagesLoadedCount:number = 0;
+
+    constructor(private _http:Http, private applicationService:ApplicationService, private elementRef: ElementRef){
 
     }
-    isLast(last:boolean):boolean{
-        if(last){
-            setTimeout((()=>{
-                this.initGrid();
-            }).bind(this), 200);
+
+    getImageCategories(image:ImageModel):string{
+        if(image.categories && image.categories.length > 0){
+            return image.categories.join(" ").toLowerCase();
         }
-        return false
+        return '';
     }
 
-    filter(category:string){
-        if(category){
-            this.displayImages = this.images.filter((image:Image) => {
-                if(image.categories && image.categories.length > 0){
-                    let foundCat:string = image.categories.find((cat:string) => {
-                        return cat.toLowerCase() === category.toLowerCase();
-                    });
-                    console.log(foundCat);
-                    if(foundCat && foundCat){
-                        return true;
-                    }
-                }
-                return false;
-            });
-        }else{
-            this.displayImages = this.images.filter(() => {return true;});
+    onSlideChange(event){
+        console.log('onSlideChange: '+event);
+    }
+
+    filter(){
+        console.log('this._category: '+this._category);
+        if (this.isotope) {
+            if (this._category) {
+                this.isotope.arrange({
+                    filter: '.' + this._category
+                })
+            } else {
+                this.isotope.arrange({
+                    filter: '*'
+                });
+            }
         }
-
-
-
     }
+
     ngAfterViewInit(){
         console.log('ngAfterViewInit');
+        this.grid = this.elementRef.nativeElement.querySelector('.gallery-wrapper');
     }
-    initGrid(){
 
-        var grid = this.elementRef.nativeElement.querySelector('.gallery-wrapper');
-        console.log(grid);
-        var iso = new Isotope( grid, {
-            // options...
+    initGrid(){
+        this.isotope = new Isotope(this.grid);
+        let options = {
             itemSelector: '.gallery-item',
-            layoutMode: 'fitRows',
             masonry: {
-                // columnWidth: 200
+                // gutter: 10,
+                // columnWidth: 10,
+                transitionDuration: '0.8s',
+                itemSelector: '.gallery-item'
             }
-        });
+        };
+        this.isotope.arrange(options);
+        console.log(options);
+        console.log(this.isotope);
     }
+
+    // loadIsotope(){
+    //     if(window['Isotope']){
+    //        // this.loadScript();
+    //     }else{
+    //         let script = document.createElement('script');
+    //         script.src = '/lib/isotope.pkgd.min.js';
+    //         script.onload = script['onreadystatechange'] = function (event:Event) {
+    //             var rs = event.target['readyState'];
+    //             if (rs) if (rs != 'complete') if (rs != 'loaded') return;
+    //             //this.loadScript();
+    //         }.bind(this);
+    //         let scr = document.body;
+    //         scr.appendChild(script);
+    //     }
+    // }
 
     ngOnInit(){
-
+        this.isLoading = true;
         this.firebaseListFactoryOpts = {
             preserveSnapshot: false,
         }
-        this.imagesFirebaseListObservable = this.angularFire.database.list('users/rui-cunha/images', this.firebaseListFactoryOpts);
-        this.imagesFirebaseListObservable.subscribe((data:Image[]) => {
-            this.images = data;
-            this.filter('');
-        });
+        console.log(this.images);
+        if(!this.images || this.images.length == 0){
+            this.applicationService.imagesFirebaseListObservable.subscribe((data:ImageModel[]) => {
+                this.images = data;
+            });
+        }
     }
 
-    select(image:Image, index:number){
+    onImageLoad(event:Event, index:number, image:ImageModel){
+        this.imagesLoadedCount++;
+
+        image.height = event.target['naturalHeight'];
+        image.width = event.target['naturalWidth'];
+
+        image.displayHeight = event.target['height'];
+        image.displayWidth = event.target['width'];
+
+        if(this.imagesLoadedCount == this.images.length){
+            setTimeout((()=>{
+                this.initGrid();
+                this.grid.classList.add('visible');
+                this.isLoading = false;
+            }).bind(this), 100);
+        }
+    }
+
+    select(image:ImageModel, index:number){
         this.selectedIndex = index;
         this.selectedImage = image;
     }

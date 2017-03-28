@@ -6,14 +6,14 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <!-- Set the base href -->
         <base href="/">
-        <title>My Portfolio</title>
+        <title>'<%= app_title %>'</title>
 
         <meta content="initial-scale=1.0, width=device-width" name="viewport">
         <link rel="shortcut icon" type="image/png" href="/images/favicon.ico"/>
         <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico">
 
         <link rel="stylesheet" href="styles/style.css">
-
+        <script src='/lib/isotope.pkgd.min.js'></script>
         <script src="/lib/shims.js"></script>
         <script>window.module = 'aot';</script>
     </head>
@@ -22,6 +22,14 @@
         <mp-app>
         </mp-app>
         <script src="lib/app.js"></script>
-        <script src='https://www.google.com/recaptcha/api.js'></script>
+        <script async src='https://www.google.com/recaptcha/api.js'></script>
+        <script>
+            window.ga = window.ga || function(){
+                    (ga.q=ga.q||[]).push(arguments)
+                };
+            ga.l=+new Date;
+            ga('create', '<%= google_analytics_tracking_id %>', 'auto');
+        </script>
+        <script async src='https://www.google-analytics.com/analytics.js'></script>
     </body>
 </html>

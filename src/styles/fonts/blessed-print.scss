@@ -1,0 +1,23 @@
+@font-face {
+    font-family: 'TheSecretRegular';
+    src: url('#{$blessed-print-font-path}/regular/thesecret-regular-webfont.eot');
+    src: url('#{$blessed-print-font-path}/regular/thesecret-regular-webfont.eot?#iefix') format('embedded-opentype'),
+    	 url('#{$blessed-print-font-path}/regular/thesecret-regular-webfont.woff2') format('woff2'),
+         url('#{$blessed-print-font-path}/regular/thesecret-regular-webfont.woff') format('woff'),
+         url('#{$blessed-print-font-path}/regular/thesecret-regular-webfont.ttf?') format('truetype'),
+         url('#{$blessed-print-font-path}/regular/thesecret-regular-webfont.svg#TheSecretRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'TheSecretSwashes';
+    src: url('#{$blessed-print-font-path}/swashes/thesecret-swashes-webfont.eot');
+    src: url('#{$blessed-print-font-path}/swashes/thesecret-swashes-webfont.eot?#iefix') format('embedded-opentype'),
+     	 url('#{$blessed-print-font-path}/swashes/thesecret-swashes-webfont.woff2')  format('woff2'),
+         url('#{$blessed-print-font-path}/swashes/thesecret-swashes-webfont.woff') format('woff'),
+         url('#{$blessed-print-font-path}/swashes/thesecret-swashes-webfont.ttf?') format('truetype'),
+         url('#{$blessed-print-font-path}/swashes/thesecret-swashes-webfont.svg#gTheSecretSwashes') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}

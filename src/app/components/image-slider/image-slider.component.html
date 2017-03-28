@@ -1,3 +1,4 @@
+<mp-loading *ngIf="isLoading" style=""></mp-loading>
 <div class="slider-viewport" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)" (touchmove)="onTouchMove($event)">
     <ul class="slides" >
         <template ngFor let-image [ngForOf]="displayImages" let-i="index">

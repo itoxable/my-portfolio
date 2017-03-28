@@ -11,7 +11,7 @@
                     </div>
 
                     <div class="logo">
-                        <h1>My Portfolio</h1>
+                        <a [routerLink]="'/'"><h1>My Portfolio</h1></a>
                     </div>
                 </div>
             </div>
@@ -30,17 +30,17 @@
     </div>
     <div class="footer text-center">
         <section>
-            <span class="">© My Portfolio</span>
+            <span class="">© {{settings.siteName}} 2017</span>
         </section>
 
         <section>
-            <ul class="footer-social">
-                <li><a href="javascript:;" target="_blank"><i class="fa fa-facebook"></i></a></li>
-                <li><a href="javascript:;" target="_blank"><i class="fa fa-twitter"></i></a></li>
-                <li><a href="javascript:;" target="_blank"><i class="fa fa-instagram"></i></a></li>
-                <li><a href="javascript:;" target="_blank"><i class="fa fa-pinterest"></i></a></li>
-                <li><a href="javascript:;" target="_blank"><i class="fa fa-dribbble"></i></a></li>
-                <li><a href="javascript:;" target="_blank"><i class="fa fa-behance"></i></a></li>
+            <ul class="footer-social" *ngIf="settings && settings.social">
+                <li *ngIf="settings.social.facebook"><a [href]="'https://www.facebook.com/'+settings.social.facebook" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                <li *ngIf="settings.social.twitter"><a [href]="'https://twitter.com/'+settings.social.twitter" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                <li *ngIf="settings.social.instagram"><a [href]="'https://www.instagram.com/'+settings.social.instagram" target="_blank"><i class="fa fa-instagram"></i></a></li>
+                <li *ngIf="settings.social.pinterest"><a [href]="'https://uk.pinterest.com'+settings.social.pinterest" target="_blank"><i class="fa fa-pinterest"></i></a></li>
+                <li *ngIf="settings.social.dribbble"><a [href]="'https://dribbble.com/'+settings.social.dribbble" target="_blank"><i class="fa fa-dribbble"></i></a></li>
+                <li *ngIf="settings.social.behance"><a [href]="'https://www.behance.net/'+settings.social.behance" target="_blank"><i class="fa fa-behance"></i></a></li>
             </ul>
         </section>
 

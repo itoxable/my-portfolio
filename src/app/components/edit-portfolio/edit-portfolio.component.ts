@@ -9,7 +9,7 @@ import {FileUploadService} from "../../services/file-upload.service";
 import UploadTaskSnapshot = firebase.storage.UploadTaskSnapshot;
 import Reference = firebase.storage.Reference;
 import {ApplicationService} from "../../services/application.service";
-import {Image, Category} from "../../models/models";
+import {ImageModel, Category, Settings} from "../../models/models";
 
 
 @Component({
@@ -21,21 +21,58 @@ import {Image, Category} from "../../models/models";
 export class EditPortfolioComponent {
 
     files:Array<FileWrapperModel> = [];
-    images:Array<Image> = [];
-    selectedImage:Image;
+    images:Array<ImageModel> = [];
+    selectedImage:ImageModel;
     categories:Array<Category> = [];
     newCategory:string = '';
     isAddingCategory:boolean;
     text:string = 'qwerty';
+    settings:Settings = {};
+    selectedSetting:string = 'portfolio';
+    canvasContext:CanvasRenderingContext2D;
+    canvas:HTMLCanvasElement;
+    image:HTMLImageElement;
+
 
     constructor(private applicationService:ApplicationService, private fileUploadService:FileUploadService) {
         this.applicationService.imagesFirebaseListObservable.subscribe((data:any[]) => {
             this.images = data;
+        }, err => {
+            console.warn(err)
         });
 
         this.applicationService.categoriesFirebaseListObservable.subscribe((data:any[]) => {
             this.categories = data;
         });
+
+        this.applicationService.settingsFirebaseListObservable.subscribe((data:any[]) => {
+            // console.log(data);
+            if(data && data.length > 0) {
+                this.settings = data[0];
+            }
+            this.initSettings();
+        });
+    }
+
+    initSettings(){
+        if(!this.settings.social){
+            this.settings.social = {}
+        }
+    }
+
+    selectSetting(setting:string){
+        this.selectedSetting = setting;
+    }
+
+    saveSocialSettings(socialForm){
+        if(this.settings.$key){
+            let key:string = this.settings.$key;
+            delete this.settings['$exists'];
+            delete this.settings['$key'];
+            this.applicationService.settingsFirebaseListObservable.update(key, this.settings);
+        }else{
+            this.applicationService.settingsFirebaseListObservable.push(this.settings);
+        }
     }
 
     addNewCategory(){
@@ -56,12 +93,12 @@ export class EditPortfolioComponent {
         this.applicationService.categoriesFirebaseListObservable.remove(category.$key)
     }
 
-    edit(image:Image){
+    edit(image:ImageModel){
         this.selectedImage = image;
         console.log(image);
     }
 
-    delete(image:Image){
+    delete(image:ImageModel){
         this.fileUploadService.deleteFile(image.url).subscribe(data => {
             console.log(data);
             this.applicationService.imagesFirebaseListObservable.remove(image.$key)
@@ -77,26 +114,64 @@ export class EditPortfolioComponent {
         this.files.splice(index, 1);
     }
 
+    canvasRotate(degrees:number){
+
+        console.log('this.canvas.width: '+this.canvas.width);
+        console.log('this.canvas.height: '+this.canvas.height);
+
+        console.log('this.image.width: '+this.image.width);
+        console.log('this.image.height: '+this.image.height);
+
+        // this.canvasContext.rotate(degrees * Math.PI / 180);
+        this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.canvasContext.save();
+        this.canvasContext.translate(this.canvas.width/2,this.canvas.height/2);
+        //
+        this.canvasContext.drawImage(this.image, 0, 0, - this.canvas.width/2, -this.canvas.width/2);
+        this.canvasContext.restore();
+
+        //    drawImage(image: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement, offsetX: number, offsetY: number, width?: number, height?: number, canvasOffsetX?: number, canvasOffsetY?: number, canvasImageWidth?: number, canvasImageHeight?: number): void;
+
+    }
+
+
     setFile(fileWrapperArray:Array<FileWrapperModel>){
+        // this.canvasContext = null;
+        // this.image = null;
+        console.log('setFile');
         fileWrapperArray.forEach((fileWrapper:FileWrapperModel, index) => {
             fileWrapper.isLoading = true;
             let fileModel:FileModel = fileWrapper.files[0];
             fileWrapper.data.name = fileModel.title;
 
             let reader = new FileReader();
-            reader.addEventListener("load", (event:ProgressEvent) => {
+            reader.addEventListener("load", ((event:ProgressEvent) => {
                 var dataUri = (<FileReader>event.target).result;
-                fileModel.canvas = <HTMLCanvasElement>document.getElementsByClassName("uploaded-file-image-canvas-"+index)[0];
-                let context = fileModel.canvas.getContext("2d");
-                let img = new Image();
-                img.onload = (ev) => {
-                    context.drawImage(img, 0, 0, fileModel.canvas.getClientRects()[0].width, fileModel.canvas.getClientRects()[0].height);
+                //this.canvas.
+                if(!this.canvas){
+                    this.canvas = <HTMLCanvasElement>document.getElementsByClassName("uploaded-file-image-canvas-"+index)[0];
+                    this.canvasContext = this.canvas.getContext("2d");
+                }else{
+                    this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    this.canvasContext.save();
+                }
+
+                this.image = new Image();
+                this.image.src = dataUri;
+                this.image.onload = (ev) => {
+
+                    console.log(this.canvas);
+                    console.log(this.canvas.getClientRects());
+
+                    this.canvasContext.drawImage(this.image, 0, 0, this.canvas.getClientRects()[0].width, this.canvas.getClientRects()[0].height);
                 };
-                img.src = dataUri;
-                fileModel.previewURL = reader.result;
+                // console.log(fileModel.canvas);
+                // this.canvas = fileModel.canvas;
+
+                // fileModel.previewURL = reader.result;
                 fileWrapper.isLoading = false;
 
-            }, false);
+            }).bind(this), false);
             reader.readAsDataURL(fileModel.file);
             this.files.unshift(fileWrapper);
         })
@@ -124,18 +199,20 @@ export class EditPortfolioComponent {
     getPhotoMetadata(fileWrapper:FileWrapperModel){
         console.log(fileWrapper.files[0].file['exifdata']);
     }
-    saveImage(selectedImage:Image){
+
+    saveImage(selectedImage:ImageModel){
         let mdate:Date = new Date();
-        let image:Image = {
+        let image:ImageModel = {
             mdate: mdate.toString(),
             description: selectedImage.description,
             name: selectedImage.name,
-            categories: selectedImage.categories,
+            categories: selectedImage.categories?selectedImage.categories:[],
             featured: selectedImage.featured,
             url : selectedImage.url
         };
         this.applicationService.imagesFirebaseListObservable.update(selectedImage.$key, image);
     }
+
     saveFile(fileWrapper:FileWrapperModel){
         fileWrapper.uploadComplete = false;
         this.fileUploadService.uploadFile(fileWrapper).subscribe((snapshot:UploadTaskSnapshot) => {
@@ -143,7 +220,7 @@ export class EditPortfolioComponent {
             console.log(fileWrapper.data.categories);
             this.getPhotoMetadata(fileWrapper);
 
-            let image:Image = {
+            let image:ImageModel = {
                 cdate: cdate.toString(),
                 mdate: cdate.toString(),
                 description: fileWrapper.data.description?fileWrapper.data.description:'',

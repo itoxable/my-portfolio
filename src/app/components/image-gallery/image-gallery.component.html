@@ -1,23 +1,19 @@
 
 <template [ngIf]="true">
+    <mp-loading *ngIf="isLoading" style=""></mp-loading>
 
-    <template [ngIf]="images.length > 0">
-        <mp-loading *ngIf="isLoading"></mp-loading>
-        <div class="row gallery-wrapper clearfix">
-            <template ngFor let-image [ngForOf]="displayImages" ; let-last="last"; let-i="index">
-
-                <div class="col-md-4 gallery-item" (click)="select(image, i)" [style.background-imagex]="'url('+image.url+')'">
+    <div class="row gallery-wrapper">
+        <template [ngIf]="images.length > 0">
+            <template ngFor let-image [ngForOf]="images" ; let-last="last"; let-i="index">
+                <div class="col-md-3 gallery-item {{getImageCategories(image)}}"  (click)="select(image, i)"  [style.background-imagex]="'url('+image.url+')'">
                     <div class="gallery-item-inner">
-                        <img [src]="image.url" alt="{{image.url}}">
+                        <img [src]="image.url" alt="{{image.url}}" (load)="onImageLoad($event, i, image)">
                         <div class="gallery-item-data">
-                            <h3>{{image.name}}</h3>
+                            <h4>{{image.name}}</h4>
                             <p>{{image.description}}</p>
                         </div>
                     </div>
-
-
                 </div>
-
             </template>
             <div class="clearfix"></div>
 
@@ -26,13 +22,13 @@
                     Load More
                 </button>
             </div>
-        </div>
-    </template>
+        </template>
+    </div>
 
     <mp-modal *ngIf="selectedImage" (onClose)="selectedImage = null; selectedIndex = 0" [draggable]="true" [showOverlay]="true" [showFooter]="false" [showHeader]="false">
         <div body class="modal-body-content">
             <div style="width: 100%; height: 100%">
-                <mp-image-slider [images]="displayImages" [nameField]="'name'" [index]="selectedIndex" [srcField]="'url'" [backgroundColor]="'#CCC'"></mp-image-slider>
+                <mp-image-slider (onSlideChange)="onSlideChange($event)" [images]="images" [nameField]="'name'" [index]="selectedIndex" [srcField]="'url'" [backgroundColor]="'#CCC'"></mp-image-slider>
             </div>
         </div>
     </mp-modal>

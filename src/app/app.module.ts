@@ -15,7 +15,7 @@ import {PageNotFoundComponent} from "./components/page-not-found/page-not-found.
 import {NoPermissionsComponent} from "./components/no-permissions/no-permissions.component";
 import {AppComponent} from "./components/app.component";
 import {HomeComponent} from "./components/home/home.component";
-import {TopNavigationComponent} from "./components/top-navigation/top-navigation.component";
+import {NavDropDownDirective, TopNavigationComponent} from "./components/top-navigation/top-navigation.component";
 import {ApplicationService} from "./services/application.service";
 import {FileUploadService} from "./services/file-upload.service";
 import {DataTableComponent} from "./components/data-table/data-table.component";
@@ -31,6 +31,7 @@ import {ModalComponent} from "./components/modal/modal.component";
 import {ImageSliderComponent} from "./components/image-slider/image-slider.component";
 import {TextEditorComponent} from "./components/text-editor/text-editor.component";
 import {BlogComponent} from "./components/blog/blog.component";
+import {DataTablePaginationControlComponent} from "./components/data-table/data-table-pagination-control.component";
 
 const FIREBASE_APP_CONFIG = {
     apiKey: "AIzaSyB6Isl4f6D1onyF07NfZqDfhUV_thnLbdg",
@@ -46,8 +47,10 @@ const FIREBASE_APP_CONFIG = {
         PageNotFoundComponent,
         HomeComponent,
         TopNavigationComponent,
+        NavDropDownDirective,
         ImageGalleryComponent,
         DataTableComponent,
+        DataTablePaginationControlComponent,
         LoadingComponent,
         PortfolioComponent,
         EditPortfolioComponent,

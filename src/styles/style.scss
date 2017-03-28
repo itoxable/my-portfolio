@@ -3,13 +3,14 @@
 @import './node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
 @import 'mixins/flexbox';
 
-@import url(fonts/merloround.css);
-@import url(fonts/safina.css);
-@import url(fonts/faith-glory.css);
-@import url(fonts/stringbeans.css);
-@import url(fonts/hunterswood.css);
-@import url(fonts/graduate.css);
-@import url(fonts/blessed-print.css);
+
+@import 'fonts/merloround';
+@import 'fonts/safina';
+@import 'fonts/faith-glory';
+@import 'fonts/stringbeans';
+@import 'fonts/hunterswood';
+@import 'fonts/graduate';
+@import 'fonts/blessed-print';
 
 .cursor-pointer{
   cursor: pointer;
@@ -157,22 +158,44 @@ mp-top-navigation.mobile{
     }
 
   }
+  .modal-backdrop{
+    background-color: transparent;
+    transition: all 1s;
+    &.in{
+      background-color: #000;
+    }
+  }
+}
+
+.main-page-slider{
+  height: 300px;
+  margin-left: -15px;
+  margin-right: -15px;
+  margin-bottom: 40px;
 }
 
 mp-image-gallery{
   display: block;
-  margin: -10px;
+  //margin: -10px;
   position: relative;
+  min-height: 200px;
+  //border: 1px solid red;
   .gallery-wrapper{
+    visibility: hidden;
+    transition: all 200ms;
+    &.visible{
+      visibility: visible;
+    }
     .gallery-load-more{
       margin: 10px;
       text-align: center;
     }
     .gallery-item{
       cursor: pointer;
+      box-sizing: border-box;
+      margin-bottom: 30px;
       .gallery-item-inner{
         position: relative;
-        margin-bottom: 30px;
         width: 100%;
         overflow: hidden;
         img{
@@ -180,25 +203,26 @@ mp-image-gallery{
         }
         &:hover{
           .gallery-item-data{
-            //opacity: 1;
             transform: translateY(0);
           }
         }
         .gallery-item-data{
-          padding: 10px 0;
+          padding: 10px;
           background-color: rgba(68, 68, 68, 0.7);
           transform: translateY(100%);
           transition: all 200ms;
           position: absolute;
           bottom: 0;
           width: 100%;
-          text-align: center;
+          //text-align: center;
           color: #FFF;
           //opacity: 0;
-          h3{
+          h3, h4, p{
             margin: 0;
           }
-          p{}
+          p{
+            font-size: 80%;
+          }
         }
       }
 
@@ -223,7 +247,7 @@ mp-loading{
   display: block;
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: 100px;
   background-color: rgba(255,255,255,0.4);
   span{
     position: relative;
@@ -232,7 +256,7 @@ mp-loading{
     &.fa-spin{
       margin-left: -30px;
       margin-top: -23px;
-      animation: fa-spin 1s infinite linear;
+      animation: fa-spin 1.3s infinite linear;
     }
   }
 }
@@ -241,6 +265,8 @@ mp-loading{
   text-align: center;
   margin: 10px;
   margin-bottom: 20px;
+  height: 35px;
+
   a{
     display: inline-block;
     padding: 5px 10px;
@@ -267,11 +293,8 @@ mp-loading{
 .uploaded-files{
   .uploaded-file{
     position: relative;
-    width: 48%;
-    margin: 1%;
+    width: 100%;
     float: left;
-    padding: 10px;
-    border: 1px solid #ddd;
     .remove-uploaded-file{
       display: block;
       cursor: pointer;
@@ -321,7 +344,7 @@ mp-loading{
     margin: 0;
     padding: 0;
     li{
-      margin-right: 20px;
+      margin: 0 10px;
       float: left;
       &:hover{
         a{
@@ -379,7 +402,9 @@ mp-image-slider{
             bottom: 0;
             font-size: initial;
             padding: 3px 20px 15px;
-            background-color: rgba(210, 83, 83, 0.7);
+            //background-color: rgba(210, 83, 83, 0.7);
+            background-color: rgba(68,68,68,.7);
+
             left: 10px;
             color: #fff;
             margin-right: 10px;
@@ -472,6 +497,9 @@ mp-image-slider{
   &:last-child{
     border-bottom: none;
   }
+  h1{
+    margin-top: 0;
+  }
   button{
     margin-bottom: 10px;
   }
@@ -536,19 +564,50 @@ mp-text-editor{
     .logo{
       text-align: center;
       float: none;
-      h1{
-        font-size: 40px;
-        margin: 20px 0;
+      a{
+        color: $text-color;
+        h1{
+          font-size: 40px;
+          margin: 20px 0;
+        }
       }
     }
   }
 
+  ul.settings-list{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin-top: 20px;
+    li{
+      margin: 5px 0;
+      a{
+        padding: 5px 10px;
+        color: $text-color;
+        &:before{
+          content: "";
+          display: inline-block;
+          margin-right: 3px;
+          width: 7px;
+        }
+        &.selected-setting{
+          &:before{
+            font-family: FontAwesome;
+            content: "\f0da";
+            display: inline-block;
+            margin-right: 3px;
+            width: 7px;
+          }
+        }
+      }
+    }
+  }
 
   mp-top-navigation{
     text-align: center;
     height: 30px;
     display: block;
-    margin-bottom: 20px;
+    //margin-bottom: 20px;
     nav{
       display: inline-block;
       ul{
