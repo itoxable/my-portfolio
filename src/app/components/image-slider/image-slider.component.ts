@@ -47,7 +47,7 @@ export class ImageSliderComponent implements AfterContentInit{
 
     @Input() nameField = 'src';
     @Input() srcField = 'src';
-    @Input() slideDuration:number = 200;
+    @Input() slideDuration:number = 300;
     @Input() images:Array<any> = [];
 
     @Input() slide:boolean = true;

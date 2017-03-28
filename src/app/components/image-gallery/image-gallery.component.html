@@ -5,12 +5,14 @@
     <div class="row gallery-wrapper">
         <template [ngIf]="images.length > 0">
             <template ngFor let-image [ngForOf]="images" ; let-last="last"; let-i="index">
-                <div class="col-md-3 gallery-item {{getImageCategories(image)}}"  (click)="select(image, i)"  [style.background-imagex]="'url('+image.url+')'">
+                <div class="col-md-4 gallery-item {{getImageCategories(image)}}"  (click)="select(image, i)"  [style.background-imagex]="'url('+image.url+')'">
                     <div class="gallery-item-inner">
                         <img [src]="image.url" alt="{{image.url}}" (load)="onImageLoad($event, i, image)">
                         <div class="gallery-item-data">
-                            <h4>{{image.name}}</h4>
-                            <p>{{image.description}}</p>
+                            <div class="gallery-item-data-wrapper">
+                                <h3>{{image.name}}</h3>
+                                <p>{{image.description}}</p>
+                            </div>
                         </div>
                     </div>
                 </div>

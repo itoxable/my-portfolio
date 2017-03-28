@@ -91,24 +91,8 @@ export class ImageGalleryComponent implements OnInit, AfterViewInit{
         console.log(this.isotope);
     }
 
-    // loadIsotope(){
-    //     if(window['Isotope']){
-    //        // this.loadScript();
-    //     }else{
-    //         let script = document.createElement('script');
-    //         script.src = '/lib/isotope.pkgd.min.js';
-    //         script.onload = script['onreadystatechange'] = function (event:Event) {
-    //             var rs = event.target['readyState'];
-    //             if (rs) if (rs != 'complete') if (rs != 'loaded') return;
-    //             //this.loadScript();
-    //         }.bind(this);
-    //         let scr = document.body;
-    //         scr.appendChild(script);
-    //     }
-    // }
-
-    ngOnInit(){
-        this.isLoading = true;
+    init(){
+        // this.isLoading = true;
         this.firebaseListFactoryOpts = {
             preserveSnapshot: false,
         }
@@ -118,6 +102,27 @@ export class ImageGalleryComponent implements OnInit, AfterViewInit{
                 this.images = data;
             });
         }
+    }
+
+    loadIsotope(){
+        if(window['Isotope']){
+           this.init();
+        }else{
+            let script = document.createElement('script');
+            script.src = '/lib/isotope.pkgd.min.js';
+            script.onload = script['onreadystatechange'] = function (event:Event) {
+                var rs = event.target['readyState'];
+                if (rs) if (rs != 'complete') if (rs != 'loaded') return;
+                this.init();
+            }.bind(this);
+            let scr = document.body;
+            scr.appendChild(script);
+        }
+    }
+
+    ngOnInit(){
+        this.isLoading = true;
+        this.loadIsotope();
     }
 
     onImageLoad(event:Event, index:number, image:ImageModel){

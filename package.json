@@ -22,7 +22,8 @@
     "typings": "typings",
     "tslint": "tslint -c tslint.json ./src/app/**/*.ts",
     "build:aot": "ngc -p tsconfig.aot.json",
-    "build:prod": "gulp build:prod"
+    "build:prod": "gulp build:prod",
+    "build-deploy": "gulp build:prod && firebase deploy"
   },
   "author": "GeoPlace LLP",
   "license": "ISC",

@@ -301,70 +301,61 @@ gulp.task('serve', function() {
         server: {
             port: 3000,
             baseDir: ["./src","./tmp/"],
-            // serveStaticOptions: {
-            //     extensions: ['html'] // pretty urls
-            // }
             middleware: [
-                // {
-                //     route: '/',
-                //     handle: function (req, res, next) {
-                //         next();
-                //     }
-                // }
-                // {
-                //     route: '/help',
-                //     handle: function (req, res, next) {
-                //         forward(req, res, next);
-                //     }
-                // },
-                // {
-                //     route: '/portfolio',
-                //     handle: function (req, res, next) {
-                //         forward(req, res, next);
-                //     }
-                // },
-                // {
-                //     route: '/forbidden',
-                //     handle: function (req, res, next) {
-                //         forward(req, res, next);
-                //     }
-                // },
-                // {
-                //     route: '/contact',
-                //     handle: function (req, res, next) {
-                //         forward(req, res, next);
-                //     }
-                // },
-                // {
-                //     route: '/about',
-                //     handle: function (req, res, next) {
-                //         forward(req, res, next);
-                //     }
-                // },
-                // {
-                //     route: '/blog',
-                //     handle: function (req, res, next) {
-                //         forward(req, res, next);
-                //     }
-                // },
-                // {
-                //     route: '/404',
-                //     handle: function (req, res, next) {
-                //         forward(req, res, next);
-                //     }
-                // },
-                // {
-                //     route: '/forbidden',
-                //     handle: function (req, res, next) {
-                //         forward(req, res, next);
-                //     }
-                // },
-                // {
-                //     route: '/edit-portfolio',
-                //     handle: function (req, res, next) {
-                //         forward(req, res, next);
-                //     }
-                // }
+                {
+                    route: '/help',
+                    handle: function (req, res, next) {
+                        forward(req, res, next);
+                    }
+                },
+                {
+                    route: '/portfolio',
+                    handle: function (req, res, next) {
+                        forward(req, res, next);
+                    }
+                },
+                {
+                    route: '/forbidden',
+                    handle: function (req, res, next) {
+                        forward(req, res, next);
+                    }
+                },
+                {
+                    route: '/contact',
+                    handle: function (req, res, next) {
+                        forward(req, res, next);
+                    }
+                },
+                {
+                    route: '/about',
+                    handle: function (req, res, next) {
+                        forward(req, res, next);
+                    }
+                },
+                {
+                    route: '/blog',
+                    handle: function (req, res, next) {
+                        forward(req, res, next);
+                    }
+                },
+                {
+                    route: '/404',
+                    handle: function (req, res, next) {
+                        forward(req, res, next);
+                    }
+                },
+                {
+                    route: '/forbidden',
+                    handle: function (req, res, next) {
+                        forward(req, res, next);
+                    }
+                },
+                {
+                    route: '/edit-portfolio',
+                    handle: function (req, res, next) {
+                        forward(req, res, next);
+                    }
+                }
 
             ]
         }

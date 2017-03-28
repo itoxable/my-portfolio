@@ -2,7 +2,25 @@
 <div class="main-content">
     <div class="container">
         <div class="row">
-            <div class="col-md-9">
+
+            <div class="col-md-9" *ngIf="blogTitle">
+                <a class="btn btn-primary" [routerLink]="['/blog']" >Go Back</a>
+
+                <div class="blog">
+
+                    <h1>{{selectedBlog.title}}</h1>
+
+                    <p class="blog-date">{{selectedBlog.cdate | date}}</p>
+
+                    <p *ngIf="selectedBlog.summary">{{selectedBlog.summary}}</p>
+
+                    <div [innerHtml]="selectedBlog.text"></div>
+                </div>
+
+            </div>
+
+
+            <div class="col-md-9" *ngIf="!blogTitle">
                 <button  class="btn btn-default" (click)="addNewEntry()">New Entry +</button>
                 <div class="blog-list">
                     <template ngFor let-blog [ngForOf]="blogs" let-i="index">
@@ -19,7 +37,7 @@
                             <p *ngIf="blog.summary">{{blog.summary}}</p>
 
                             <div [innerHtml]="blog.text"></div>
-                            <a class="btn btn-primary">Read More</a>
+                            <a class="btn btn-primary" [routerLink]="['/blog/'+blog.title]">Read More</a>
                         </div>
                     </template>
                 </div>

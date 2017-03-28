@@ -13,6 +13,7 @@ import Reference = firebase.storage.Reference;
 import {NgForm} from "@angular/forms";
 import {ApplicationService} from "../../services/application.service";
 import {Blog} from "../../models/models";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
     selector: 'mp-blog',
@@ -25,13 +26,27 @@ export class BlogComponent{
     isLoading:boolean;
     newBlog:Blog;
     blogs:Array<Blog> = [];
+    blogTitle:string;
+    selectedBlog:Blog = {};
 
-    constructor(private applicationService:ApplicationService){
+
+    constructor(private applicationService:ApplicationService, private route: ActivatedRoute){
+        this.blogTitle = this.route.snapshot.params['blogTitle'];
+        console.log("1 - "+this.blogTitle );
         this.applicationService.blogFirebaseListObservable.subscribe((data:Array<Blog>) => {
             this.newBlog = null;
-            console.log(data);
             this.blogs = data;
+
+            console.log("2 - "+this.blogTitle );
+            if(this.blogTitle){
+                console.log("3 - "+this.blogTitle );
+                this.selectedBlog = this.blogs.filter((blog:Blog)=>{
+                    return blog.title.toLowerCase() == this.blogTitle.toLowerCase();
+                })[0];
+            }
+
         })
+
     }
 
     addNewEntry(){

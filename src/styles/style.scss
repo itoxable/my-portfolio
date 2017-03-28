@@ -17,12 +17,12 @@
 }
 
 .wrapper{
-  transition: transform 200ms;
+  transition: transform 300ms;
   .menu-mask{
     display: none;
   }
   &.nav-on{
-    transform: translate(300px);
+    transform: translate($sidebar-width);
     .menu-mask{
       display: block;
       position: fixed;
@@ -45,26 +45,56 @@
 }
 
 .header{
-  height: 50px;
-  max-height: 50px;
+  height: 70px;
+  max-height: 70px;
+  position: relative;
   >.container-fluid{
-    padding: 0;
+    //padding: 0;
   }
   .nav-menu{
-    display: inline-block;
-    font-size: 100%;
-    margin: 10px 15px;
+    position: absolute;
+    margin-top: 25px;
+    top: 0;
     .nav-menu-icon{
-      font-size: 2.4rem;
       cursor: pointer;
+      display: inline-block;
+      width: 25px;
+      position: relative;
+      span{
+        transition: all 0.8s;
+        display: block;
+        border-bottom: 2px solid black;
+        &:nth-child(2){
+          margin: 6px 0;
+        }
+      }
+      &.menu-on{
+        height: 20px;
+        span {
+          top: 50%;
+          width: 100%;
+          position: absolute;
+          &:nth-child(1) {
+            transform: rotate(45deg);
+          }
+          &:nth-child(3) {
+            transform: rotate(-45deg);
+            margin: 0;
+          }
+          &:nth-child(2) {
+            display: none;
+          }
+        }
+      }
     }
   }
   .logo{
-    margin: 10px 15px;
-    float: right;
+    margin-top: 25px;
     h1{
       font-size: 2rem;
       margin: 0;
+      text-align: center;
+      color: $text-color;
     }
   }
 }
@@ -74,38 +104,37 @@ mp-top-navigation.mobile{
   margin-right: 20px;
   position: fixed;
   height: 100%;
-  width: 300px;
+  width: $sidebar-width;
   top: 0;
   left: 0;
-  transform: translate(-300px);
-  transition: transform 200ms;
+  transition: all 300ms;
+  left: -$sidebar-width;
   z-index: 10;
   &.nav-on{
-    transform: translate(0);
-    @include box-shadow(0 6px 12px rgba(0,0,0,.8));
+    left: 0;
+    @include box-shadow(0px 0px 10px 0px rgba(0,0,0,.5));
   }
   nav{
     height: 100%;
-    padding: 15px;
     ul{
       padding: 0;
       list-style: none;
       li{
-        margin: 10px 0;
         font-size: 1.6rem;
         a{
+          display: block;
+          margin: 0;
+          padding: 15px;
           color: $text-color;
+          border-bottom: 1px solid #eee;
           &.header-link-active{
-
+            color: rgba(51, 51, 51, 0.3);
           }
         }
       }
     }
   }
 
-}
-.main-content{
-  margin-top: 20px;
 }
 
 .modal{
@@ -203,26 +232,47 @@ mp-image-gallery{
         }
         &:hover{
           .gallery-item-data{
-            transform: translateY(0);
+            opacity: 1;
+            .gallery-item-data-wrapper{
+              top: 40%;
+              opacity: 1;
+            }
           }
         }
         .gallery-item-data{
-          padding: 10px;
-          background-color: rgba(68, 68, 68, 0.7);
-          transform: translateY(100%);
-          transition: all 200ms;
+          opacity: 0;
+
+          background-color: rgba(0, 0, 0, 0.6);
+          transition: all 500ms;
           position: absolute;
-          bottom: 0;
+          top: 0;
+          left: 0;
+          height: 100%;
           width: 100%;
-          //text-align: center;
           color: #FFF;
-          //opacity: 0;
-          h3, h4, p{
-            margin: 0;
+          .gallery-item-data-wrapper{
+            position: absolute;
+            //border: 1px solid #FFF;
+            transition: top 600ms, opacity 1s ease-in-out;
+            text-align: center;
+            top: 0;
+            opacity: 0;
+
+            width: 100%;
+            h3, h4, p{
+              margin: 0;
+            }
+            p{
+              font-size: 90%;
+            }
+            &:after{
+              content: '';
+              width: 30%;
+              border-bottom: 1px solid #FFF;
+              display: inline-block;
+            }
           }
-          p{
-            font-size: 80%;
-          }
+
         }
       }
 
@@ -263,7 +313,7 @@ mp-loading{
 
 .portfolio-sections{
   text-align: center;
-  margin: 10px;
+  margin: 10px 20px;
   margin-bottom: 20px;
   height: 35px;
 
@@ -272,8 +322,8 @@ mp-loading{
     padding: 5px 10px;
     color: $text-color;
     &.section-selected{
-      background-color: #1b6d85;
-      color: #FFF;
+      background-color: #EEE;
+      //color: #FFF;
     }
   }
 }
@@ -375,7 +425,7 @@ mp-image-slider{
         font-size: 0;
         margin: 0px;
         padding: 0px;
-        background-color: #383434;
+        //background-color: #383434;
         background-size: contain;
         background-repeat: no-repeat;
         background-position: center;
@@ -399,15 +449,14 @@ mp-image-slider{
           }
           .slide-caption{
             position: absolute;
-            bottom: 0;
+            //bottom: 0;
             font-size: initial;
-            padding: 3px 20px 15px;
-            //background-color: rgba(210, 83, 83, 0.7);
-            background-color: rgba(68,68,68,.7);
-
-            left: 10px;
-            color: #fff;
-            margin-right: 10px;
+            //padding: 3px 20px 15px;
+            //background-color: rgba(68,68,68,.7);
+            //left: 10px;
+            top: 50%;
+            color: $text-color;
+            //margin-right: 10px;
           }
         }
 
@@ -512,10 +561,12 @@ mp-text-editor{
 
 .blog-list{
   .blog{
-    border-bottom: 1px solid #CCC;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
+    //border-bottom: 1px solid #CCC;
+    //padding-bottom: 20px;
+    margin: 20px 0;
     position: relative;
+    padding: 30px 20px;
+    box-shadow: 0 4px 16px -2px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.02);
     .blog-edit{
       position: absolute;
       top: 10px;
@@ -524,6 +575,9 @@ mp-text-editor{
     }
     .blog-title{
       color: $text-color;
+      h1{
+        margin-top: 0;
+      }
     }
     .blog-date{
 
@@ -568,10 +622,13 @@ mp-text-editor{
         color: $text-color;
         h1{
           font-size: 40px;
-          margin: 20px 0;
+          margin: 30px 0 40px;
         }
       }
     }
+  }
+  .main-content{
+    margin-top: 20px;
   }
 
   ul.settings-list{
@@ -667,3 +724,5 @@ mp-text-editor{
 }
 
 
+//margin-left: -15px;
+//margin-right: -15px;
