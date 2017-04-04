@@ -33,6 +33,7 @@ import {TextEditorComponent} from "./components/text-editor/text-editor.componen
 import {BlogComponent} from "./components/blog/blog.component";
 import {DataTablePaginationControlComponent} from "./components/data-table/data-table-pagination-control.component";
 import {ContactComponent} from "./components/contact/contact.component";
+import {AboutComponent} from "./components/about/about.component";
 
 const FIREBASE_APP_CONFIG = {
     apiKey: "AIzaSyB6Isl4f6D1onyF07NfZqDfhUV_thnLbdg",
@@ -62,7 +63,8 @@ const FIREBASE_APP_CONFIG = {
         ImageSliderComponent,
         TextEditorComponent,
         BlogComponent,
-        ContactComponent
+        ContactComponent,
+        AboutComponent
     ],
     imports     : [
         BrowserModule, 

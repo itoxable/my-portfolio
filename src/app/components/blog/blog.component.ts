@@ -5,10 +5,6 @@
 
 
 import {Component} from '@angular/core';
-import {DataRequestModel} from "../../models/data-request.model";
-import {DataTableModel} from "../data-table/data-table.component";
-import {AngularFire, FirebaseListObservable} from "angularfire2";
-import {FirebaseListFactoryOpts, Query} from "angularfire2/interfaces";
 import Reference = firebase.storage.Reference;
 import {NgForm} from "@angular/forms";
 import {ApplicationService} from "../../services/application.service";
@@ -31,22 +27,26 @@ export class BlogComponent{
 
 
     constructor(private applicationService:ApplicationService, private route: ActivatedRoute){
+        this.isLoading = true;
         this.blogTitle = this.route.snapshot.params['blogTitle'];
-        console.log("1 - "+this.blogTitle );
         this.applicationService.blogFirebaseListObservable.subscribe((data:Array<Blog>) => {
             this.newBlog = null;
             this.blogs = data;
-
-            console.log("2 - "+this.blogTitle );
             if(this.blogTitle){
-                console.log("3 - "+this.blogTitle );
-                this.selectedBlog = this.blogs.filter((blog:Blog)=>{
-                    return blog.title.toLowerCase() == this.blogTitle.toLowerCase();
-                })[0];
+                setTimeout((()=>{
+                    let blogs:Array<Blog> = this.blogs.filter((blog:Blog)=>{
+                        return blog.title.toLowerCase() == this.blogTitle.toLowerCase();
+                    });
+                    if(blogs && blogs.length > 0){
+                        this.selectedBlog = blogs[0];
+                    }
+                    this.isLoading = false;
+                }), 500);
+
+            }else{
+                this.isLoading = false;
             }
-
         })
-
     }
 
     addNewEntry(){

@@ -1,5 +1,8 @@
 
 <div class="main-content">
+
+    <mp-loading *ngIf="isLoading" style=""></mp-loading>
+
     <div class="container">
         <div class="row">
 
@@ -7,11 +10,8 @@
                 <a class="btn btn-primary" [routerLink]="['/blog']" >Go Back</a>
 
                 <div class="blog">
-
                     <h1>{{selectedBlog.title}}</h1>
-
                     <p class="blog-date">{{selectedBlog.cdate | date}}</p>
-
                     <p *ngIf="selectedBlog.summary">{{selectedBlog.summary}}</p>
 
                     <div [innerHtml]="selectedBlog.text"></div>

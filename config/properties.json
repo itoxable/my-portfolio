@@ -5,5 +5,5 @@
   "firebase_app_authDomain": "my-portfolio-d2da7.firebaseapp.com",
   "firebase_app_databaseURL": "https://my-portfolio-d2da7.firebaseio.com",
   "firebase_app_storageBucket": "my-portfolio-d2da7.appspot.com",
-  "app_version": "0.0.1"
+  "app_version": "0.0.4"
 }

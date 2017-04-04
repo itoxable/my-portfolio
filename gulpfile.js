@@ -264,8 +264,11 @@ gulp.task('bundle:app',function(done){
 gulp.task('clean:aot', del.bind(null, ['./aot']));
 
 gulp.task('copy:aot-index',function(done){
+    var buildTime = (new Date()).getTime();
     return gulp.src('./config/index.html')
-        .pipe(gulpTemplate(appProps))
+        .pipe(gulpTemplate({
+            buildTime: buildTime
+        }))
         .pipe(gulp.dest(conf.distFolder));
 });
 

@@ -354,6 +354,9 @@ mp-loading{
     }
     .uploaded-file-image-wrapper{
       .uploaded-file-image{
+        img{
+          height: 300px;
+        }
         .uploaded-file-image-canvas {
           border: 1px solid #CCC;
           float: left;
@@ -561,12 +564,12 @@ mp-text-editor{
 
 .blog-list{
   .blog{
-    //border-bottom: 1px solid #CCC;
+    border: 1px solid #eee;
     //padding-bottom: 20px;
     margin: 20px 0;
     position: relative;
     padding: 30px 20px;
-    box-shadow: 0 4px 16px -2px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.02);
+    //box-shadow: 0 4px 16px -2px rgba(0,0,0,.1), 0 0 0 1px rgba(0,0,0,.02);
     .blog-edit{
       position: absolute;
       top: 10px;
@@ -629,6 +632,7 @@ mp-text-editor{
   }
   .main-content{
     margin-top: 20px;
+    position: relative;
   }
 
   ul.settings-list{
@@ -726,3 +730,11 @@ mp-text-editor{
 
 //margin-left: -15px;
 //margin-right: -15px;
+
+.image-canvas{
+  //height: 600px;
+
+  //width: 900px;
+  border: 1px solid #CCC;
+
+}

@@ -22,7 +22,7 @@ export class AppComponent{
         this.mobileView = window.innerWidth < 992;
         this.applicationService.onWindowResize.subscribe(ev => {
             this.mobileView = window.innerWidth < 992;
-            console.log(window.innerWidth+" this.mobileView: "+this.mobileView);
+            // console.log(window.innerWidth+" this.mobileView: "+this.mobileView);
         });
 
         this.applicationService.settingsFirebaseListObservable.subscribe((data:any[]) => {
@@ -30,16 +30,16 @@ export class AppComponent{
             if(data && data.length > 0) {
                 this.settings = data[0];
             }
-            console.log(this.settings);
+            // console.log(this.settings);
         });
 
         this.router.events.subscribe((event:Event) => {
 
             if(event instanceof NavigationEnd){
-                console.log(window['ga']);
-                if(window['ga']){
-                    window['ga']('send', 'pageview');
-                    console.log(event.url);
+                let ga = window['ga'];
+                if(ga){
+                    ga('set', 'page', event.url);
+                    ga('send', 'pageview');
                 }
 
 

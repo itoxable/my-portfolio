@@ -3,11 +3,10 @@
  */
 
 import {Component, Input, OnInit, AfterViewInit, ElementRef} from '@angular/core';
-import {DataTableComponent} from "../data-table/data-table.component";
 import {Http} from "@angular/http";
 import {ApplicationService} from "../../services/application.service";
-import {FirebaseListObservable, AngularFire} from "angularfire2";
-import {FirebaseListFactoryOpts, Query} from "angularfire2/interfaces";
+import {FirebaseListObservable} from "angularfire2";
+import {FirebaseListFactoryOpts} from "angularfire2/interfaces";
 import {ImageModel} from "../../models/models";
 declare var Isotope:any;
 

@@ -15,7 +15,7 @@ export interface Blog extends FirabaseBaseModel{
     summary?:string;
 }
 export interface Settings extends FirabaseBaseModel{
-    social?:any;
+    social?:{[key:string]:string;};
     siteName?:string;
 }
 
@@ -38,6 +38,6 @@ export interface Category extends FirabaseBaseModel{
     name?: string;
 }
 
-export interface Settings extends FirabaseBaseModel {
-    social?:any;
+export interface GallerySettings extends FirabaseBaseModel {
+    displayType?:string;
 }

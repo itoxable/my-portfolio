@@ -11,6 +11,7 @@ import {PortfolioComponent} from "./components/portfolio/portfolio.component";
 import {EditPortfolioComponent} from "./components/edit-portfolio/edit-portfolio.component";
 import {BlogComponent} from "./components/blog/blog.component";
 import {ContactComponent} from "./components/contact/contact.component";
+import {AboutComponent} from "./components/about/about.component";
 
 
 export const appRoutes: Routes = [
@@ -21,6 +22,7 @@ export const appRoutes: Routes = [
     {path: "blog", component: BlogComponent},
     {path: "blog/:blogTitle", component: BlogComponent},
     {path: "forbidden", component: NoPermissionsComponent},
+    {path: "about", component: AboutComponent},
     {path: "404", component: PageNotFoundComponent},
     {path: '**', component: PageNotFoundComponent},
 ];

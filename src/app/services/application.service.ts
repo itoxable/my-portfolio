@@ -19,7 +19,7 @@ export class ApplicationService {
     aboutFirebaseListObservable:FirebaseListObservable<any[]>;
     contactFirebaseListObservable:FirebaseListObservable<any[]>;
     settingsFirebaseListObservable:FirebaseListObservable<any>;
-
+    // gallerySettingsFirebaseListObservable:FirebaseListObservable<any>;
     constructor(private angularFire:AngularFire){
         this.onWindowResize = fromEvent(window, 'resize');
         this.onWindowScroll = fromEvent(document, 'scroll');
@@ -29,6 +29,5 @@ export class ApplicationService {
         this.categoriesFirebaseListObservable = this.angularFire.database.list('users/rui-cunha/categories');
         this.blogFirebaseListObservable = this.angularFire.database.list('users/rui-cunha/blog');
         this.aboutFirebaseListObservable = this.angularFire.database.list('users/rui-cunha/about');
-        this.contactFirebaseListObservable = this.angularFire.database.list('users/rui-cunha/contact');
     }
 }

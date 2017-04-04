@@ -2,14 +2,15 @@
  * Created by ruic on 15/02/2017.
  */
 
-import {Component} from '@angular/core';
+import {AfterViewInit, Component} from '@angular/core';
 import {AngularFire, FirebaseListObservable} from "angularfire2";
 import {FileWrapperModel, FileModel} from "../../models/file-wrapper.model";
 import {FileUploadService} from "../../services/file-upload.service";
 import UploadTaskSnapshot = firebase.storage.UploadTaskSnapshot;
 import Reference = firebase.storage.Reference;
 import {ApplicationService} from "../../services/application.service";
-import {ImageModel, Category, Settings} from "../../models/models";
+import {ImageModel, Category, Settings, GallerySettings} from "../../models/models";
+import {NgForm} from "@angular/forms";
 
 
 @Component({
@@ -18,7 +19,7 @@ import {ImageModel, Category, Settings} from "../../models/models";
     templateUrl: 'edit-portfolio.component.html'
 })
 
-export class EditPortfolioComponent {
+export class EditPortfolioComponent implements AfterViewInit{
 
     files:Array<FileWrapperModel> = [];
     images:Array<ImageModel> = [];
@@ -32,7 +33,7 @@ export class EditPortfolioComponent {
     canvasContext:CanvasRenderingContext2D;
     canvas:HTMLCanvasElement;
     image:HTMLImageElement;
-
+    gallerySettings:GallerySettings;
 
     constructor(private applicationService:ApplicationService, private fileUploadService:FileUploadService) {
         this.applicationService.imagesFirebaseListObservable.subscribe((data:any[]) => {
@@ -52,6 +53,16 @@ export class EditPortfolioComponent {
             }
             this.initSettings();
         });
+
+        // this.applicationService.gallerySettingsFirebaseListObservable.subscribe((data:any[]) => {
+        //     // console.log(data);
+        //     if(data && data.length > 0) {
+        //         this.settings = data[0];
+        //     }
+        //     this.initSettings();
+        // });
+
+
     }
 
     initSettings(){
@@ -64,7 +75,7 @@ export class EditPortfolioComponent {
         this.selectedSetting = setting;
     }
 
-    saveSocialSettings(socialForm){
+    saveSocialSettings(socialForm:NgForm){
         if(this.settings.$key){
             let key:string = this.settings.$key;
             delete this.settings['$exists'];
@@ -134,6 +145,54 @@ export class EditPortfolioComponent {
 
     }
 
+    // setDummyFile(){
+    //     console.log('setDummyFile');
+    //     if(!this.canvas){
+    //         this.canvas = <HTMLCanvasElement>document.getElementsByClassName("image-canvas")[0];
+    //         this.canvasContext = this.canvas.getContext("2d");
+    //     }else{
+    //         this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    //         this.canvasContext.save();
+    //     }
+    //
+    //     //this.image = new Image();
+    //     this.image = document.createElement("img");
+    //     this.image.onload = ((ev) => {
+    //
+    //
+    //         let canvasWidth:number = this.canvas.getClientRects()[0].width;
+    //         let canvasHeight:number = this.canvas.getClientRects()[0].height;
+    //
+    //         let imageWidth:number = this.image.width;
+    //         let imageHeight:number = this.image.height;
+    //
+    //         console.log('canvasWidth: '+canvasWidth);
+    //         console.log('canvasHeight: '+canvasHeight);
+    //
+    //         console.log('imageWidth: '+imageWidth);
+    //         console.log('imageHeight: '+imageHeight);
+    //
+    //
+    //         let imageRatio:number = imageWidth/imageHeight;
+    //
+    //         // this.image.height = 100;
+    //         this.image.width = 300;
+    //         this.image.height = 100;
+    //         // console.log('2 imageHeight: '+this.image.height);
+    //         this.canvas.width = 600;
+    //         // this.canvas.height = 600;
+    //         console.log('2 imageHeight: '+this.image.height);
+    //         // this.canvasContext.drawImage(this.image, 0, 0, 600, 600);
+    //         this.canvasContext.drawImage(this.image, 0, 0, 600, 600, 0, 0, 600, 600);
+    //
+    //     });
+    //     this.image.src = '/images/1.JPG';
+    //     // this.image.src = 'https://mdn.mozillademos.org/files/5397/rhino.jpg';
+    //
+    // }
+    saveGallerySettings(gallerySettingsForm:NgForm){
+
+    }
 
     setFile(fileWrapperArray:Array<FileWrapperModel>){
         // this.canvasContext = null;
@@ -148,27 +207,27 @@ export class EditPortfolioComponent {
             reader.addEventListener("load", ((event:ProgressEvent) => {
                 var dataUri = (<FileReader>event.target).result;
                 //this.canvas.
-                if(!this.canvas){
-                    this.canvas = <HTMLCanvasElement>document.getElementsByClassName("uploaded-file-image-canvas-"+index)[0];
-                    this.canvasContext = this.canvas.getContext("2d");
-                }else{
-                    this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                    this.canvasContext.save();
-                }
+                // if(!this.canvas){
+                //     this.canvas = <HTMLCanvasElement>document.getElementsByClassName("uploaded-file-image-canvas-"+index)[0];
+                //     this.canvasContext = this.canvas.getContext("2d");
+                // }else{
+                //     this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                //     this.canvasContext.save();
+                // }
 
-                this.image = new Image();
-                this.image.src = dataUri;
-                this.image.onload = (ev) => {
-
-                    console.log(this.canvas);
-                    console.log(this.canvas.getClientRects());
-
-                    this.canvasContext.drawImage(this.image, 0, 0, this.canvas.getClientRects()[0].width, this.canvas.getClientRects()[0].height);
-                };
+                // this.image = new Image();
+                // this.image.src = dataUri;
+                // this.image.onload = (ev) => {
+                //
+                //     console.log(this.canvas);
+                //     console.log(this.canvas.getClientRects());
+                //
+                //     this.canvasContext.drawImage(this.image, 0, 0, this.canvas.getClientRects()[0].width, this.canvas.getClientRects()[0].height);
+                // };
                 // console.log(fileModel.canvas);
                 // this.canvas = fileModel.canvas;
 
-                // fileModel.previewURL = reader.result;
+                fileModel.previewURL = reader.result;
                 fileWrapper.isLoading = false;
 
             }).bind(this), false);
@@ -241,5 +300,8 @@ export class EditPortfolioComponent {
         });
     }
 
+    ngAfterViewInit(){
+        // this.setDummyFile();
+    }
 
 }

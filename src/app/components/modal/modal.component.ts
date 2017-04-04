@@ -99,6 +99,8 @@ export class ModalComponent implements AfterViewInit{
             }
         }
 
+        this.onLoad.emit({});
+
 
     }
 
@@ -323,7 +325,7 @@ export class ModalComponent implements AfterViewInit{
     // }
     //
     // ngAfterViewInit(){
-    //     super.ngAfterViewInit();
+    //     // super.ngAfterViewInit();
     //     this.onLoad.emit({});
     // }
 }

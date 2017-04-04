@@ -1,3 +1,24 @@
+<!--<div class="main-content">-->
+<!--&lt;!&ndash;<mp-modal [draggable]="true" [showOverlay]="true" [showFooter]="false" (onLoad)="setDummyFile()">&ndash;&gt;-->
+
+    <!--&lt;!&ndash;<div body>&ndash;&gt;-->
+        <!--<div class="uploaded-file-image-wrapper">-->
+            <!--<div class="uploaded-file-image">-->
+                <!--<canvas class="image-canvas"></canvas>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div>-->
+            <!--<button type="button" class="btn" (click)="canvasRotate(-10)" title="Rotate left">-->
+                <!--<i class="fa fa-undo" aria-hidden="true"></i>-->
+            <!--</button>-->
+            <!--<button type="button" class="btn" (click)="canvasRotate(10)" title="Rotate right">-->
+                <!--<i class="fa fa-repeat" aria-hidden="true"></i>-->
+            <!--</button>-->
+        <!--</div>-->
+    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</mp-modal>&ndash;&gt;-->
+<!--</div>-->
+
 <div class="main-content">
 
     <div class="row">
@@ -114,6 +135,25 @@
 
                 </mp-file-upload>
 
+
+
+                <form id="gallerySettings" #gallerySettingsForm="ngForm" (ngSubmit)="saveGallerySettings(gallerySettingsForm)" novalidate>
+                    <div class="form-group">
+                        <label for="displayType">Display Type</label>
+                        <select class="form-control" [(ngModel)]="gallerySettings.displayType" id="displayType" multiple>
+                            <option value="masonry">Masonry</option>
+                            <option value="fixed">Fixed</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </div>
+                </form>
+
+
+
+
                 <table class="table table-bordered table-striped">
                     <thead>
                     <tr>
@@ -151,6 +191,7 @@
                 </table>
 
 
+
                 <mp-modal *ngIf="files && files.length > 0"  (onClose)="files = []" [draggable]="true" [showOverlay]="true" [showFooter]="false">
                     <div body>
                         <div class="uploaded-files" >
@@ -162,8 +203,8 @@
                                     <mp-loading *ngIf="file.isLoading"></mp-loading>
                                     <div class="uploaded-file-image-wrapper">
                                         <div class="uploaded-file-image">
-                                            <!--<img [attr.src]='file.files[0].previewURL' >-->
-                                            <canvas class="uploaded-file-image-canvas uploaded-file-image-canvas-{{i}}"></canvas>
+                                            <img [attr.src]='file.files[0].previewURL' >
+                                            <!--<canvas class="uploaded-file-image-canvas uploaded-file-image-canvas-{{i}}"></canvas>-->
                                         </div>
                                     </div>
 
@@ -171,14 +212,14 @@
 
                                     <div>
 
-                                        <div>
-                                            <button type="button" class="btn" (click)="canvasRotate(-10)" title="Rotate left">
-                                                <i class="fa fa-undo" aria-hidden="true"></i>
-                                            </button>
-                                            <button type="button" class="btn" (click)="canvasRotate(10)" title="Rotate right">
-                                                <i class="fa fa-repeat" aria-hidden="true"></i>
-                                            </button>
-                                        </div>
+                                        <!--<div>-->
+                                            <!--<button type="button" class="btn" (click)="canvasRotate(-10)" title="Rotate left">-->
+                                                <!--<i class="fa fa-undo" aria-hidden="true"></i>-->
+                                            <!--</button>-->
+                                            <!--<button type="button" class="btn" (click)="canvasRotate(10)" title="Rotate right">-->
+                                                <!--<i class="fa fa-repeat" aria-hidden="true"></i>-->
+                                            <!--</button>-->
+                                        <!--</div>-->
 
 
                                         <div class="form-group">
