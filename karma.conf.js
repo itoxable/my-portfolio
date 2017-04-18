@@ -47,20 +47,14 @@ module.exports = function(config) {
 
         files: [
             // Polyfills.
-            //'node_modules/es6-shim/es6-shim.js',
-            // 'node_modules/es6-shim/es6-shim.js.map',
-
             'node_modules/core-js/client/shim.js',
             'node_modules/ie-shim/index.js',
 
             'node_modules/reflect-metadata/Reflect.js',
-            // 'node_modules/reflect-metadata/Reflect.js.map',
 
             // System.js for module loading
             'node_modules/systemjs/dist/system-polyfills.js',
-            // 'node_modules/systemjs/dist/system-polyfills.js.map',
             'node_modules/systemjs/dist/system.src.js',
-            // 'node_modules/systemjs/dist/system.src.js.map',
 
             // Zone.js dependencies
             'node_modules/zone.js/dist/zone.js',
@@ -81,12 +75,15 @@ module.exports = function(config) {
             {pattern: 'karma-test-shim.js', included: true, watched: true},
             //{pattern: 'built/test/matchers.js', included: true, watched: true},
 
-            {pattern: 'node_modules/angular2-in-memory-web-api/*.js', included: false, watched: true},
-
             // paths loaded via module imports
             // Angular itself
             {pattern: 'node_modules/@angular/**/*.js', included: false, watched: true},
             {pattern: 'node_modules/@angular/**/*.js.map', included: false, watched: true},
+///Users/ruic/Projects/webdev/my-portfolio/node_modules/angularfire2
+            {pattern: 'node_modules/angularfire2/**/*.js', included: false, watched: true},
+            // {pattern: 'node_modules/angularfire2/**/*.js.map', included: false, watched: true},
+
+            {pattern: 'node_modules/firebase/**/*.js', included: false, watched: true},
 
             // Our built application code
             {pattern: appBase+'**/*.js', included: false, watched: false},

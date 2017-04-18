@@ -7,9 +7,9 @@
 import {Component} from '@angular/core';
 import Reference = firebase.storage.Reference;
 import {NgForm} from "@angular/forms";
-import {ApplicationService} from "../../services/application.service";
-import {Blog} from "../../models/models";
 import {ActivatedRoute} from "@angular/router";
+import {Blog} from "../../../models/models";
+import {ApplicationService} from "../../../services/application.service";
 
 @Component({
     selector: 'mp-blog',

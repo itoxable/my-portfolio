@@ -31,12 +31,14 @@ export class ImageSliderComponent implements AfterContentInit{
     displayImages:Array<any> = [];
     slideTimeOut:any;
 
+    private swipePercentage:number = 0;
+    private currentSlidePositionPercentage:number = 0;
     private touchStartX:number;
     private touchEndX:number;
     private touchDirection:string;
-
+    private htmlElement:HTMLElement;
     index:number = 0;
-
+    @Input() minimumSwipe:number = 25;
     @Input() backgroundColor:string ='#383434';
     @Input() slideCaptionStyleClass:string = '';
     @Input() styleClass:string = '';
@@ -111,8 +113,6 @@ export class ImageSliderComponent implements AfterContentInit{
         }
         this.transformSlide(this.liWidth * this.index, transitionDuration);
 
-
-
         if(Math.abs(this.index) > this.images.length){
             this.jumpToSlide(-1);
 
@@ -132,6 +132,8 @@ export class ImageSliderComponent implements AfterContentInit{
         this.ul.style['-ms-transform'] =  value;
         if(transitionDuration != undefined){
             this.ul.style['transition-duration'] =  `${transitionDuration}ms`;
+        }else{
+            this.ul.style['transition-duration'] =  `0ms`;
         }
 
     }
@@ -161,33 +163,45 @@ export class ImageSliderComponent implements AfterContentInit{
             return;
         }
         let viewPortWidth:number = event.currentTarget.clientWidth;
-        let percentage = this.liWidth * this.index;
+        this.currentSlidePositionPercentage = this.liWidth * this.index;
 
         this.touchEndX = event.touches[0].clientX;
         let swipeLenght:number = this.touchStartX - this.touchEndX;
 
-        let swipePercentage:number = (swipeLenght * percentage)/viewPortWidth;
-        this.transformSlide(percentage+swipePercentage);
+        this.swipePercentage = (swipeLenght * this.currentSlidePositionPercentage)/viewPortWidth;
+        this.transformSlide(this.currentSlidePositionPercentage + this.swipePercentage);
+        console.log(this.currentSlidePositionPercentage + ": " + this.swipePercentage);
+
         if(swipeLenght < 0){
-            //Right
             this.touchDirection = 'LEFT';
         }else if(swipeLenght > 0){
-            //Left
             this.touchDirection = 'RIGHT';
         }
+
+    }
+
+    private swipedMoreThanMinimum():boolean{
+        let imagePercentage:number = 100/this.displayImages.length;
+        let swipeTotalPercentage:number = Math.abs((this.swipePercentage * 100)/(imagePercentage));
+        return (swipeTotalPercentage >= this.minimumSwipe);
     }
 
     onTouchEnd(event:TouchEvent){
         if(!this.slide){
             return;
         }
-        if(this.touchDirection === 'RIGHT'){
-            this.goRight();
-            this.touchDirection = '';
-        }else if(this.touchDirection === 'LEFT'){
-            this.goLeft();
-            this.touchDirection = '';
+        if(this.swipedMoreThanMinimum()){
+            if(this.touchDirection === 'RIGHT'){
+                this.goRight();
+                this.touchDirection = '';
+            }else if(this.touchDirection === 'LEFT'){
+                this.goLeft();
+                this.touchDirection = '';
+            }
+        }else{
+            this.transformSlide(this.currentSlidePositionPercentage, this.slideDuration);
         }
+
     }
 
     onTouchStart(event){
@@ -198,21 +212,22 @@ export class ImageSliderComponent implements AfterContentInit{
     }
 
     init(){
+        console.log(this.displayImages.length);
+        this.htmlElement = this.elementRef.nativeElement;
         this.liWidth= 100 / this.displayImages.length;
-        this.ul = this.elementRef.nativeElement.querySelector('ul');
+        this.ul = this.htmlElement.querySelector('ul');
         if(this.ul){
             this.ul.style.width = `${100 * this.displayImages.length}%`;
         }
 
-        let sliderViewport:HTMLElement = this.elementRef.nativeElement.querySelector('.slider-viewport');
+        let sliderViewport:HTMLElement = this.htmlElement.querySelector('.slider-viewport')[0];
         if(sliderViewport){
             if(this.styleClass){
                 sliderViewport.classList.add(this.styleClass);
             }
-
             this.sliderViewportSize = sliderViewport.clientWidth;
         }
-        let lis = this.elementRef.nativeElement.querySelector('li');
+        let lis = this.htmlElement.querySelector('li');
         if(this.index > 0){
             this.goRight(0);
         }else{
@@ -221,9 +236,36 @@ export class ImageSliderComponent implements AfterContentInit{
     }
 
     ngAfterContentInit(){
-
         this.init();
         this.isLoading = false;
-
     }
 }
+
+// @NgModule({
+//     declarations: [
+//         SearchComponent,
+//         SearchDetailsComponent,
+//         SearchResultTableComponent,
+//         RecentSearchComponent,
+//         OnMapSearchViewComponent,
+//         PropertyDetailComponent,
+//         StreetDetailComponent,
+//         DataDictionaryPipe
+//     ],
+//     providers:[
+//         MapService,
+//         SearchService,
+//         AlpsService
+//     ],
+//     exports: [
+//         SearchComponent,
+//     ],
+//     imports : [
+//         GPCoreComponentsModule,
+//         GPMapModule,
+//         GPRightSiderbarModule,
+//         CommonModule,
+//         GPPipesModule,
+//         FormsModule
+//     ]
+// })

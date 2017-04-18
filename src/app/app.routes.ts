@@ -4,15 +4,16 @@
 
 
 import {Routes, RouterModule} from '@angular/router';
-import {NoPermissionsComponent} from "./components/no-permissions/no-permissions.component";
-import {PageNotFoundComponent} from "./components/page-not-found/page-not-found.component";
-import {HomeComponent} from "./components/home/home.component";
-import {PortfolioComponent} from "./components/portfolio/portfolio.component";
-import {EditPortfolioComponent} from "./components/edit-portfolio/edit-portfolio.component";
-import {BlogComponent} from "./components/blog/blog.component";
-import {ContactComponent} from "./components/contact/contact.component";
-import {AboutComponent} from "./components/about/about.component";
-
+import {
+    AboutComponent,
+    ContactComponent,
+    BlogComponent,
+    EditPortfolioComponent,
+    PortfolioComponent,
+    HomeComponent,
+    PageNotFoundComponent,
+    NoPermissionsComponent
+} from "./components/pages/index.d";
 
 export const appRoutes: Routes = [
     {path: "", component: HomeComponent},

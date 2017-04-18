@@ -3,13 +3,13 @@
  */
 
 import {Component} from '@angular/core';
-import {DataTableComponent, DataTableModel} from "../data-table/data-table.component";
 import {Http} from "@angular/http";
-import {ApplicationService} from "../../services/application.service";
-import {DataRequestModel} from "../../models/data-request.model";
 import App = firebase.app.App;
 import {Query} from "angularfire2/interfaces";
-import {Category, ImageModel} from "../../models/models";
+import {DataTableModel} from "../../data-table/data-table.component";
+import {ApplicationService} from "../../../services/application.service";
+import {Category} from "../../../models/models";
+import {DataRequestModel} from "../../../models/data-request.model";
 
 @Component({
     selector: 'mp-portfolio',

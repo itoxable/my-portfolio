@@ -4,13 +4,13 @@
 
 
 import {Component} from '@angular/core';
-import {DataRequestModel} from "../../models/data-request.model";
-import {DataTableModel} from "../data-table/data-table.component";
 import {AngularFire, FirebaseListObservable} from "angularfire2";
-import {FirebaseListFactoryOpts, Query} from "angularfire2/interfaces";
+import {DataTableModel} from "../../data-table/data-table.component";
+import {DataRequestModel} from "../../../models/data-request.model";
+import {ApplicationService} from "../../../services/application.service";
+import {ImageModel} from "../../../models/models";
 import Reference = firebase.storage.Reference;
-import {ApplicationService} from "../../services/application.service";
-import {ImageModel} from "../../models/models";
+
 
 @Component({
     selector: 'mp-home',

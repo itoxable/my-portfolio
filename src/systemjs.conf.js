@@ -43,7 +43,6 @@
             'rxjs': 'n:rxjs',
             'core-js': 'n:core-js',
             'ie-shim': 'n:ie-shim',
-            'angular2-in-memory-web-api': 'n:angular2-in-memory-web-api',
             'moment': 'n:moment/min',
             'exif':'n:exif-js',
             'ckeditor':'n:ckeditor'
@@ -53,6 +52,7 @@
         // packages tells the System loader how to load when no filename and/or no extension
         packages: {
             'app': {
+                main: 'index.d.js',
                 defaultExtension: 'js',
                 format: 'cjs'
             },
@@ -80,7 +80,7 @@
             },
             'angularfire2': {
                 defaultExtension: 'js',
-                main: 'bundles/angularFire2.umd.js'
+                main: 'bundles/angularfire2.umd.js'
             },
             'firebase': {
                 defaultExtension: 'js',

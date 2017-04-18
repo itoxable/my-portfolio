@@ -6,8 +6,6 @@
 Error.stackTraceLimit = Infinity;
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000;
 
-//var distFolder = "dist/META-INF/resources";
-
 __karma__.loaded = function () {
 };
 
@@ -43,6 +41,14 @@ var packages = {
     'moment': {
         defaultExtension: 'js',
         main: 'moment-with-locales.min.js'
+    },
+    'angularfire2': {
+        defaultExtension: 'js',
+        main: 'bundles/angularfire2.umd.js'
+    },
+    'firebase': {
+        defaultExtension: 'js',
+        main: 'firebase-browser.js'
     }
 };
 
@@ -73,9 +79,9 @@ System.config(
             '@angular/http/testing': 'n:@angular/http/bundles/http-testing.umd.js',
             '@angular/router/testing': 'n:@angular/router/bundles/router-testing.umd.js',
             '@angular/forms/testing': 'n:@angular/forms/bundles/forms-testing.umd.js',
+            'angularfire2':'n:angularfire2',
+            'firebase':'n:firebase',
 
-
-            'angular2-in-memory-web-api': 'n:angular2-in-memory-web-api',
             'moment': 'n:moment/min',
             'app': 'src/app'
         },
@@ -98,3 +104,5 @@ Promise.all([
             return System.import(moduleName);
         }));
 }).then(__karma__.start, __karma__.error);
+///node_modules/angularfire2/bundles/angularfire2.umd.js
+///node_modules/firebase/firebase-browser.js

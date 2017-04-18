@@ -3,14 +3,13 @@
  */
 
 import {AfterViewInit, Component} from '@angular/core';
-import {AngularFire, FirebaseListObservable} from "angularfire2";
-import {FileWrapperModel, FileModel} from "../../models/file-wrapper.model";
-import {FileUploadService} from "../../services/file-upload.service";
 import UploadTaskSnapshot = firebase.storage.UploadTaskSnapshot;
 import Reference = firebase.storage.Reference;
-import {ApplicationService} from "../../services/application.service";
-import {ImageModel, Category, Settings, GallerySettings} from "../../models/models";
 import {NgForm} from "@angular/forms";
+import {FileModel, FileWrapperModel} from "../../../models/file-wrapper.model";
+import {Category, GallerySettings, ImageModel, Settings} from "../../../models/models";
+import {ApplicationService} from "../../../services/application.service";
+import {FileUploadService} from "../../../services/file-upload.service";
 
 
 @Component({
