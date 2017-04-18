@@ -4,7 +4,6 @@ var csso = require('gulp-csso');
 var browserSync = require('browser-sync').create();
 var autoprefixer = require('gulp-autoprefixer');
 var gulpSequence = require('gulp-sequence');
-var template = require('gulp-template');
 var plumber = require('gulp-plumber');
 var uglify = require('gulp-uglify');
 var del = require('del');
@@ -14,7 +13,6 @@ var $ = require('gulp-load-plugins')();
 var iconfont = require('gulp-iconfont');
 var url = require('url');
 var proxy = require('proxy-middleware');
-var iconfontCss = require('gulp-iconfont-css');
 var gulpTypescript = require('gulp-typescript');
 var sourcemaps = require('gulp-sourcemaps');
 var filter = require("stream-filter");
@@ -265,10 +263,9 @@ gulp.task('clean:aot', del.bind(null, ['./aot']));
 
 gulp.task('copy:aot-index',function(done){
     var buildTime = (new Date()).getTime();
+    appProps.buildTime = buildTime;
     return gulp.src('./config/index.html')
-        .pipe(gulpTemplate({
-            buildTime: buildTime
-        }))
+        .pipe(gulpTemplate(appProps))
         .pipe(gulp.dest(conf.distFolder));
 });
 
