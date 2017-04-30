@@ -18,11 +18,11 @@
                 </a>
             </li>
 
-            <template [ngIf]="pagination.showPaginationNumbers">
+            <ng-template [ngIf]="pagination.showPaginationNumbers">
                 <li *ngFor="let page of pagination.pagesOnDisplay; let idx = index" [ngClass]="{'active': currentPage == page}">
                     <a href="javascript:;" (click)="goToPage(page)" class="go-to-page-{{idx}}">{{page + 1}}</a>
                 </li>
-            </template>
+            </ng-template>
 
             <li [ngClass]="{'disabled':currentPage >= (totalPages -1)}" *ngIf="pagination.showPaginationArrows">
                 <a href="javascript:;" aria-label="Next" (click)="goToNext()" class="go-to-next">

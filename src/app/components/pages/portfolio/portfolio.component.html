@@ -1,11 +1,11 @@
 <div class="main-content">
     <div class="portfolio-sections">
-        <template [ngIf]="categories && categories.length > 0">
+        <ng-template [ngIf]="categories && categories.length > 0">
             <a href="javascript:;"  [class.section-selected]="!selectedCategory" (click)="selectCategory('')">All</a>
-            <template ngFor let-category [ngForOf]="categories" let-i="index">
+            <ng-template ngFor let-category [ngForOf]="categories" let-i="index">
                 <a href="javascript:;"  [class.section-selected]="selectedCategory == category.name" (click)="selectCategory(category)">{{category.name}}</a>
-            </template>
-        </template>
+            </ng-template>
+        </ng-template>
     </div>
 
     <mp-image-gallery [category]="selectedCategory"></mp-image-gallery>

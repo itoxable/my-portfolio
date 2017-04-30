@@ -8,7 +8,7 @@
 
         <span *ngIf="showFileName">{{fileLabel}}</span>
 
-        <template [ngIf]="showPreview && fileWrapper.files.length > 0">
+        <ng-template [ngIf]="showPreview && fileWrapper.files.length > 0">
             <div class="file-upload-preview-wrapper">
                 <div *ngFor="let file of fileWrapper.files; let i = index" class="file-upload-preview">
                     <img [src]="file.previewURL" alt="{{file.title}}" />
@@ -16,15 +16,15 @@
                     <span class="fa fa-trash file-upload-remove-file" (click)="removeFile(i,$event)"></span>
                 </div>
             </div>
-        </template>
+        </ng-template>
 
-        <template [ngIf]="showErrorMessages && errorMessages.length > 0">
+        <ng-template [ngIf]="showErrorMessages && errorMessages.length > 0">
             <div class="file-upload-error-messages-wrapper">
                 <div *ngFor="let errorMessage of errorMessages; let i = index" class="file-upload-error-message">
                     {{errorMessage}}
                 </div>
             </div>
-        </template>
+        </ng-template>
 
         <ng-content></ng-content>
     </div>

@@ -43,12 +43,12 @@
             <div class="setting-section" *ngIf="selectedSetting == 'basic'">
                 <h1>Basic Settings</h1>
 
-                <!--<template ngFor let-category [ngForOf]="socialLinks" let-i="index">-->
+                <!--<ng-template ngFor let-category [ngForOf]="socialLinks" let-i="index">-->
                 <!--<div class="form-group">&ndash;&gt;-->
                 <!--<label for=""></label>-->
                 <!--<input type="text" [(ngModel)]="settings.facebook" class="form-control" placeholder="">-->
                 <!--</div>-->
-                <!--</template>-->
+                <!--</ng-template>-->
                 <div>
                     <div class="form-group">
                         <label for="siteName"></label>
@@ -108,7 +108,7 @@
 
                 <table class="table table-bordered table-striped" style="width: auto">
                     <tbody>
-                    <template ngFor let-category [ngForOf]="categories" let-i="index">
+                    <ng-template ngFor let-category [ngForOf]="categories" let-i="index">
                         <tr>
                             <td>
                                 {{category.name}}
@@ -118,7 +118,7 @@
                             </td>
                         </tr>
 
-                    </template>
+                    </ng-template>
                     </tbody>
                 </table>
             </div>
@@ -167,17 +167,17 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <template ngFor let-image [ngForOf]="images" let-i="index">
+                    <ng-template ngFor let-image [ngForOf]="images" let-i="index">
                         <tr>
                             <td>{{image.name}}</td>
                             <td>{{image.description}}</td>
                             <td>{{image.featured}}</td>
                             <td>
-                                <template [ngIf]="image.categories">
+                                <ng-template [ngIf]="image.categories">
                                 <span *ngFor="let category of image.categories; let i = index;" class="category">
                                     {{category}}
                                 </span>
-                                </template>
+                                </ng-template>
                             </td>
                             <td>{{image.cdate | date}}</td>
                             <td> <img [src]="image.url" style="height: 100px"></td>
@@ -186,7 +186,7 @@
                                 <span class="fa fa-trash cursor-pointer" aria-hidden="true" (click)="delete(image)"></span>
                             </td>
                         </tr>
-                    </template>
+                    </ng-template>
                     </tbody>
                 </table>
 
@@ -195,7 +195,7 @@
                 <mp-modal *ngIf="files && files.length > 0"  (onClose)="files = []" [draggable]="true" [showOverlay]="true" [showFooter]="false">
                     <div body>
                         <div class="uploaded-files" >
-                            <template ngFor let-file [ngForOf]="files" let-i="index">
+                            <ng-template ngFor let-file [ngForOf]="files" let-i="index">
                                 <div class="uploaded-file">
                                 <span class="remove-uploaded-file" (click)="removeFile(i)">
                                     <i class="fa fa-trash" aria-hidden="true"></i>
@@ -232,11 +232,11 @@
 
                                         <div class="form-group">
                                             <select class="form-control" [(ngModel)]="file.data.categories" id="category" multiple>
-                                                <template ngFor let-category [ngForOf]="categories" let-i="index">
+                                                <ng-template ngFor let-category [ngForOf]="categories" let-i="index">
                                                     <option value="{{category.name}}">
                                                         {{category.name}}
                                                     </option>
-                                                </template>
+                                                </ng-template>
                                             </select>
                                         </div>
 
@@ -262,7 +262,7 @@
                                     </div>
 
                                 </div>
-                            </template>
+                            </ng-template>
                             <div class="clearfix"></div>
                         </div>
                     </div>
@@ -294,11 +294,11 @@
                     </div>
                     <div class="form-group">
                         <select class="form-control" [(ngModel)]="selectedImage.categories" multiple>
-                            <template ngFor let-category [ngForOf]="categories" let-i="index">
+                            <ng-template ngFor let-category [ngForOf]="categories" let-i="index">
                                 <option value="{{category.name}}">
                                     {{category.name}}
                                 </option>
-                            </template>
+                            </ng-template>
                         </select>
                     </div>
                     <div class="checkbox">

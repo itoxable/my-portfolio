@@ -23,7 +23,7 @@
             <div class="col-md-9" *ngIf="!blogTitle">
                 <button  class="btn btn-default" (click)="addNewEntry()">New Entry +</button>
                 <div class="blog-list">
-                    <template ngFor let-blog [ngForOf]="blogs" let-i="index">
+                    <ng-template ngFor let-blog [ngForOf]="blogs" let-i="index">
                         <div class="blog">
 
                             <span class="blog-edit fa fa-pencil-square" (click)="addNewEntry()"></span>
@@ -39,7 +39,7 @@
                             <div [innerHtml]="blog.text"></div>
                             <a class="btn btn-primary" [routerLink]="['/blog/'+blog.title]">Read More</a>
                         </div>
-                    </template>
+                    </ng-template>
                 </div>
             </div>
             <div class="col-md-3">

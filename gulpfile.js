@@ -16,7 +16,6 @@ var proxy = require('proxy-middleware');
 var gulpTypescript = require('gulp-typescript');
 var sourcemaps = require('gulp-sourcemaps');
 var filter = require("stream-filter");
-var cleanCSS = require('gulp-clean-css');
 var tslint = require('gulp-tslint');
 var fileSystem = require('fs');
 var path = require('path');
@@ -227,7 +226,14 @@ gulp.task('bundle:app',function(done){
         },
         map: {
             'app': 'src/app',
-            '@angular': 'n:@angular',
+            '@angular/core': 'n:@angular/core/bundles/core.umd.js',
+            '@angular/common': 'n:@angular/common/bundles/common.umd.js',
+            '@angular/compiler': 'n:@angular/compiler/bundles/compiler.umd.js',
+            '@angular/platform-browser': 'n:@angular/platform-browser/bundles/platform-browser.umd.js',
+            '@angular/platform-browser-dynamic': 'n:@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js',
+            '@angular/http': 'n:@angular/http/bundles/http.umd.js',
+            '@angular/router': 'n:@angular/router/bundles/router.umd.js',
+            '@angular/forms': 'n:@angular/forms/bundles/forms.umd.js',
             'rxjs': 'n:rxjs',
             'moment': 'n:moment',
             'angularfire2':'n:angularfire2',
@@ -235,15 +241,6 @@ gulp.task('bundle:app',function(done){
         },
         packages: {
             'app': { main: 'main-aot', defaultExtension: 'js' },
-            '@angular/common': { main: 'index.js', defaultExtension: 'js' },
-            '@angular/compiler': { main: 'index.js', defaultExtension: 'js' },
-            '@angular/core/testing': { main: 'index.js', defaultExtension: 'js' },
-            '@angular/core': { main: 'index.js', defaultExtension: 'js' },
-            '@angular/forms': { main: 'index.js', defaultExtension: 'js' },
-            '@angular/http': { main: 'index.js', defaultExtension: 'js' },
-            '@angular/platform-browser': { main: 'index.js', defaultExtension: 'js' },
-            '@angular/platform-browser-dynamic': { main: 'index.js', defaultExtension: 'js' },
-            '@angular/router': { main: 'index.js', defaultExtension: 'js' },
             'rxjs': { main: 'Rx', defaultExtension: 'js' },
             'moment': { defaultExtension: 'js', main: './moment' },
             'angularfire2': {defaultExtension: 'js', main: 'bundles/angularFire2.umd.js'},

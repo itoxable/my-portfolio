@@ -23,7 +23,10 @@ import {EditPortfolioService} from "./services/edit-portfolio.service";
 import {FileUploadComponent} from "./components/file-upload/file-upload.component";
 import {SizeFormatPipe, SafeURLPipe} from "./pipes/size-format.pipe";
 import {ModalComponent} from "./components/modal/modal.component";
-import {ImageSliderComponent} from "./components/image-slider/image-slider.component";
+import {
+    ImageSliderBalls, ImageSliderComponent,
+    MPImageSliderModule
+} from "./components/image-slider/image-slider.component";
 import {TextEditorComponent} from "./components/text-editor/text-editor.component";
 import {DataTablePaginationControlComponent} from "./components/data-table/data-table-pagination-control.component";
 import {
@@ -62,7 +65,6 @@ const FIREBASE_APP_CONFIG = {
         SizeFormatPipe,
         SafeURLPipe,
         ModalComponent,
-        ImageSliderComponent,
         TextEditorComponent,
         BlogComponent,
         ContactComponent,
@@ -74,6 +76,7 @@ const FIREBASE_APP_CONFIG = {
         HttpModule,
         routing,
         AngularFireModule.initializeApp(FIREBASE_APP_CONFIG),
+        MPImageSliderModule
     ],
     providers   : [
         ApplicationService,

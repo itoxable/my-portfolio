@@ -1,26 +1,28 @@
-<mp-loading *ngIf="isLoading" style=""></mp-loading>
-<div class="slider-viewport" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)" (touchmove)="onTouchMove($event)">
+<span *ngIf="isLoading" class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></span>`
+<div class="slider-viewport" (touchstart)="onDragStart($event)" (touchend)="onDragEnd($event)" (touchmove)="onDragSlide($event)">
     <ul class="slides" >
-        <template ngFor let-image [ngForOf]="displayImages" let-i="index">
-            <li [style.width]="liWidth+'%'" [ngClass]="{'active': isActive(i)}" >
+        <ng-template ngFor let-image [ngForOf]="displayImages" let-i="index">
+            <li [style.width]="liWidth+'px'" [ngClass]="{'active': isActive(i)}" >
                 <div class="slider-image" [style.background-color]="backgroundColor" [style.background-image]="'url('+image[srcField]+')'">
-                    <div *ngIf="image[nameField]" class="slide-caption {{slideCaptionStyleClass}}">{{image[nameField]}}</div>
-                    <div *ngIf="image[nameHtml]" class="slide-caption {{slideCaptionStyleClass}}" >
-                        <div [innerHtml]='image.html'></div>
+                    <div *ngIf="captionField && image[captionField]" class="slide-caption {{slideCaptionStyleClass}}" >
+                        <div [innerHtml]='image[captionField]'></div>
                     </div>
                 </div>
             </li>
-        </template>
+        </ng-template>
     </ul>
     <div class="clearfix"></div>
-    <a href="javascript:;" class="slider-button-left" (click)="goLeft()" *ngIf="images.length > 1 && (loop || showLeft())">&#10094;</a>
-    <a href="javascript:;" class="slider-button-right" (click)="goRight()"  *ngIf="images.length > 1 && (loop || showRight())">&#10095;</a>
-
-    <ul class="slides-balls" *ngIf="images.length > 1 && balls">
-        <template ngFor let-image [ngForOf]="images" let-i="index">
-            <li [ngClass]="{'active': isBallActive(i)}">
-                <span (click)="goToSlide(i)"></span>
-            </li>
-        </template>
-    </ul>
 </div>
+<a href="javascript:;" class="slider-button-left" (click)="goLeftClick($event)" *ngIf="images.length > 1 && (loop || showLeft())">&#10094;</a>
+<a href="javascript:;" class="slider-button-right" (click)="goRightClick($event)"  *ngIf="images.length > 1 && (loop || showRight())">&#10095;</a>
+
+<ul class="slides-balls" *ngIf="images.length > 1 && balls && false">
+    <ng-template ngFor let-image [ngForOf]="images" let-i="index">
+        <li [ngClass]="{'active': isBallActive(i)}">
+            <span (click)="goToSlide(i)"></span>
+        </li>
+    </ng-template>
+</ul>
+
+<mp-image-slides-balls [images]="images" [index]="index" [dragPercentage]="dragPercentage"
+                       [transitionDuration]="transitionDuration*2" *ngIf="images.length > 1 && balls"></mp-image-slides-balls>

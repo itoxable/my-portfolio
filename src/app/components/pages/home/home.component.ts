@@ -25,48 +25,53 @@ export class HomeComponent{
     x:any = {};
     images:Array<ImageModel> = [];
 
+    selectedImage:ImageModel;
+
     constructor(private angularFire:AngularFire, private applicationService:ApplicationService) {
 
         this.applicationService.imagesFirebaseListObservable.subscribe((data:ImageModel[]) => {
             this.images = data.filter((image:ImageModel) => {
                 return image.featured;
             });
-            this.images['']
+            //this.images['']
         });
     }
 
-
-    init(){
-        let data:Array<any> = [];
-
-        for(let i = 1; i < 22 ; i++){
-            data.push({
-                url: '/images/'+i+'.JPG',
-                name: 'something'+i
-            })
-        }
-        console.log(data);
-        this.dataTable = new DataTableModel({
-            data: 'ruiCunha/portfolio',
-            noDataMessageStyleClass: "error-message",
-            firebaseListObservable: this.portfolioFirebaseListObservable,
-            liveScroll: true,
-            //isFirebase: true,
-            columns:[
-                {
-                    field:'Filename',
-                    displayName: 'Filename',
-                    sortable: true,
-                    sortField: 'filename'
-                },
-                {
-                    field:'Status',
-                    displayName: 'Status'
-                }
-            ],
-            dataRequestModel:new DataRequestModel({
-                pageSize: 6
-            })
-        })
+    onSlideChange(event){
+        //console.log(event);
+        this.selectedImage = this.images[event];
     }
+    // init(){
+    //     // let data:Array<any> = [];
+    //     //
+    //     // for(let i = 1; i < 22 ; i++){
+    //     //     data.push({
+    //     //         url: '/images/'+i+'.JPG',
+    //     //         name: 'something'+i
+    //     //     })
+    //     // }
+    //     // console.log(data);
+    //     this.dataTable = new DataTableModel({
+    //         data: 'ruiCunha/portfolio',
+    //         noDataMessageStyleClass: "error-message",
+    //         firebaseListObservable: this.portfolioFirebaseListObservable,
+    //         liveScroll: true,
+    //         //isFirebase: true,
+    //         columns:[
+    //             {
+    //                 field:'Filename',
+    //                 displayName: 'Filename',
+    //                 sortable: true,
+    //                 sortField: 'filename'
+    //             },
+    //             {
+    //                 field:'Status',
+    //                 displayName: 'Status'
+    //             }
+    //         ],
+    //         dataRequestModel:new DataRequestModel({
+    //             pageSize: 6
+    //         })
+    //     })
+    // }
 }

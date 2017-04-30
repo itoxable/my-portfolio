@@ -1,8 +1,9 @@
 <div class="main-content">
     <div class="main-page-slider">
 
-        <mp-image-slider [images]="images" [nameField]="'name'" [index]="0" [srcField]="'url'" [backgroundColor]="'#eee'"></mp-image-slider>
+        <mp-image-slider (onSlideChange)="onSlideChange($event)" [backgroundColor]="'#EEE'" [images]="images" [captionField]="'name'" [index]="0" [srcField]="'url'"></mp-image-slider>
 
     </div>
+
     <mp-image-gallery [images]="images" ></mp-image-gallery>
 </div>

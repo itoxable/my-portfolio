@@ -1,10 +1,10 @@
 
-<template [ngIf]="true">
+<ng-template [ngIf]="true">
     <mp-loading *ngIf="isLoading" style=""></mp-loading>
 
     <div class="row gallery-wrapper">
-        <template [ngIf]="images.length > 0">
-            <template ngFor let-image [ngForOf]="images" ; let-last="last"; let-i="index">
+        <ng-template [ngIf]="images.length > 0">
+            <ng-template ngFor let-image [ngForOf]="images" ; let-last="last"; let-i="index">
                 <div class="col-md-4 gallery-item {{getImageCategories(image)}}"  (click)="select(image, i)"  [style.background-imagex]="'url('+image.url+')'">
                     <div class="gallery-item-inner">
                         <img [src]="image.url" alt="{{image.url}}" (load)="onImageLoad($event, i, image)">
@@ -16,7 +16,7 @@
                         </div>
                     </div>
                 </div>
-            </template>
+            </ng-template>
             <div class="clearfix"></div>
 
             <div class="gallery-load-more">
@@ -24,7 +24,7 @@
                     Load More
                 </button>
             </div>
-        </template>
+        </ng-template>
     </div>
 
     <mp-modal *ngIf="selectedImage" (onClose)="selectedImage = null; selectedIndex = 0" [draggable]="true" [showOverlay]="true" [showFooter]="false" [showHeader]="false">
@@ -35,4 +35,4 @@
         </div>
     </mp-modal>
 
-</template>
+</ng-template>
