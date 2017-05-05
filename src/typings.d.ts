@@ -27,3 +27,7 @@ export = exif;
 //     var saveAs: any;
 //     export = exif;
 // }
+
+interface flexImages {
+
+}

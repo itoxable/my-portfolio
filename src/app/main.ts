@@ -1,4 +1,5 @@
 /// <reference path="../../typings/browser.d.ts" />
+/// <reference path="../typings.d.ts" />
 
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { enableProdMode } from "@angular/core";

@@ -1,9 +1,16 @@
-<div class="main-content">
-    <div class="main-page-slider">
+<div class="container">
+    <div class="main-content">
+        <div class="main-page-slider">
+            <mp-image-slider (onSlideChange)="onSlideChange($event)" [backgroundColor]="'#EEE'"
+                             [loop]="true" [images]="images" [captionField]="'name'"
+                             [srcField]="'url'"></mp-image-slider>
 
-        <mp-image-slider (onSlideChange)="onSlideChange($event)" [backgroundColor]="'#EEE'" [images]="images" [captionField]="'name'" [index]="0" [srcField]="'url'"></mp-image-slider>
-
+        </div>
     </div>
-
-    <mp-image-gallery [images]="images" ></mp-image-gallery>
 </div>
+<div class="container">
+    <div class="row">
+        <mp-flex-images [rowHeight]="250" [images]="images"></mp-flex-images>
+    </div>
+</div>
+

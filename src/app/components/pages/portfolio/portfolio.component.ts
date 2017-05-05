@@ -2,14 +2,15 @@
  * Created by ruic on 12/02/2017.
  */
 
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {Http} from "@angular/http";
 import App = firebase.app.App;
-import {Query} from "angularfire2/interfaces";
+import {FirebaseListFactoryOpts, Query} from "angularfire2/interfaces";
 import {DataTableModel} from "../../data-table/data-table.component";
 import {ApplicationService} from "../../../services/application.service";
-import {Category} from "../../../models/models";
+import {Category, ImageModel} from "../../../models/models";
 import {DataRequestModel} from "../../../models/data-request.model";
+import {FirebaseListObservable} from "angularfire2";
 
 @Component({
     selector: 'mp-portfolio',
@@ -25,11 +26,19 @@ export class PortfolioComponent{
 
     category:string = '';
 
+
+    images:Array<ImageModel> = [];
+    isLoading:boolean;
+    imagesFirebaseListObservable:FirebaseListObservable<any[]>;
+    firebaseListFactoryOpts:FirebaseListFactoryOpts;
+
     constructor(private applicationService:ApplicationService, private http:Http){
         this.applicationService.categoriesFirebaseListObservable.subscribe((data:any[]) => {
             this.categories = data;
             this.selectCategory('');
         });
+
+        this.init();
     }
 
     selectCategory(category:Category){
@@ -38,32 +47,16 @@ export class PortfolioComponent{
     }
 
     init(){
-        let data:Array<any> = [];
 
-        for(let i = 1; i < 22 ; i++){
-            data.push({
-                url: '/images/'+i+'.JPG'
-            })
+        this.firebaseListFactoryOpts = {
+            preserveSnapshot: false,
         }
-
-        this.dataTable = new DataTableModel({
-            data: data,
-            liveScroll: true,
-            columns:[
-                {
-                    field:'Filename',
-                    displayName: 'Filename',
-                    sortable: true,
-                    sortField: 'filename'
-                },
-                {
-                    field:'Status',
-                    displayName: 'Status'
-                }
-            ],
-            dataRequestModel:new DataRequestModel({
-                pageSize: 6
-            })
-        })
+        console.log(this.images);
+        if(!this.images || this.images.length == 0){
+            this.applicationService.imagesFirebaseListObservable.subscribe((data:ImageModel[]) => {
+                console.log('imagesFirebaseListObservable');
+                this.images = data;
+            });
+        }
     }
 }

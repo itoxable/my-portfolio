@@ -6,13 +6,11 @@
 import {CommonModule} from '@angular/common'
 import {
     NgModule, Component, Input, OnInit, ElementRef, AfterContentInit, Output,
-    EventEmitter
+    EventEmitter, OnDestroy
 } from '@angular/core';
 
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/do';
-import { fromEvent } from "rxjs/observable/fromEvent";
-import { Subscription } from "rxjs/Subscription";
+import {fromEvent} from "rxjs/observable/fromEvent";
+import {Subscription} from "rxjs/Subscription";
 
 
 @Component({
@@ -21,7 +19,7 @@ import { Subscription } from "rxjs/Subscription";
     templateUrl: 'image-slider.component.html'
 })
 
-export class ImageSliderComponent<T> implements AfterContentInit{
+export class ImageSliderComponent<T> implements AfterContentInit, OnDestroy{
     ul:HTMLElement;
     liWidth:number = 0;
 
@@ -38,9 +36,9 @@ export class ImageSliderComponent<T> implements AfterContentInit{
     private touchDirection:string;
     private htmlElement:HTMLElement;
     index:number = 0;
-
+    private resizeSubscription:Subscription;
     private currentSlidePosition:number;
-
+    dragPercentage:number = 0;
     isLoading:boolean = false;
 
     @Input() minimumSwipe:number = 25;
@@ -80,15 +78,8 @@ export class ImageSliderComponent<T> implements AfterContentInit{
     isActive(index:number):boolean{
         return Math.abs(this.index) == index;
     }
-    isBallActive(index:number):boolean{
-        if((Math.abs(this.index) - 1) == index){
-            return true;
-        }
-        if(this.index == 0){
-            return index == (this.images.length -1);
-        }
-        return false;
-    }
+
+
     showLeft():boolean{
         return this.index < -1;
     }
@@ -207,7 +198,7 @@ export class ImageSliderComponent<T> implements AfterContentInit{
         this.dragPercentage = (100*this.swipeLength)/(this.liWidth/2);
         this.transformSlide(this.currentSlidePosition - this.swipeLength);
     }
-    dragPercentage:number = 0
+
     onDragEnd(event:TouchEvent | MouseEvent){
         if(!this.slide){
             return;
@@ -260,25 +251,27 @@ export class ImageSliderComponent<T> implements AfterContentInit{
         }
     }
 
-    init(){
+    setULSize(){
+        if(!this.ul){
+            this.ul = this.htmlElement.querySelector('ul');
+        }
+        if(this.ul){
+            this.ul.style.width = `${this.sliderViewport.getClientRects()[0].width * this.displayImages.length}px`;
+            this.liWidth = this.sliderViewport.getClientRects()[0].width;
+        }
+    }
+
+    init(isResize?:boolean){
         this.htmlElement = this.elementRef.nativeElement;
 
-        this.ul = this.htmlElement.querySelector('ul');
-
         this.sliderViewport = this.htmlElement.querySelector('.slider-viewport');
-
         if(this.sliderViewport){
             if(this.styleClass){
                 this.sliderViewport.classList.add(this.styleClass);
             }
             this.sliderViewportSize = this.sliderViewport.clientWidth;
-
             this.attachInteractionEvents();
-            if(this.ul){
-                this.ul.style.width = `${this.sliderViewport.getClientRects()[0].width * this.displayImages.length}px`;
-                this.liWidth= this.sliderViewport.getClientRects()[0].width;
-            }
-
+            this.setULSize();
         }
 
         if(this.index > 0){
@@ -286,10 +279,17 @@ export class ImageSliderComponent<T> implements AfterContentInit{
         }else{
             this.goRight(0);
         }
+        if(!this.resizeSubscription){
+            this.resizeSubscription = fromEvent(window, 'resize').subscribe((moveEvent) => {
+                this.setULSize();
+            });
+        }
+    }
 
-        fromEvent(window, 'resize').subscribe((moveEvent) => {
-            this.init();
-        })
+    ngOnDestroy(){
+        if(this.resizeSubscription){
+            this.resizeSubscription.unsubscribe();
+        }
     }
 
     ngAfterContentInit(){
@@ -302,8 +302,8 @@ export class ImageSliderComponent<T> implements AfterContentInit{
     selector: 'mp-image-slides-balls',
     moduleId: module.id,
     template: `
-        <ng-template ngFor let-image [ngForOf]="images" let-i="index">
-            <div class="ball" [style.width]="ballPercentage+'%'"></div>
+        <ng-template ngFor let-image [ngForOf]="images" let-idx="index">
+            <div class="ball" [style.width]="ballPercentage+'%'" (click)="ballClick(idx)"></div>
         </ng-template>
         <div class="index-ball" [style.width]="ballPercentage+'%'">
         </div>
@@ -333,6 +333,8 @@ export class ImageSliderBalls<T> implements AfterContentInit, OnInit{
         this.setIndexPosition();
     }
 
+    @Output() ballClicked:EventEmitter<number> = new EventEmitter<number>();
+
     constructor(private elementRef: ElementRef){}
 
     ngAfterContentInit(){
@@ -354,6 +356,10 @@ export class ImageSliderBalls<T> implements AfterContentInit, OnInit{
             this.indexBall.style.transform = `translateX(${this.currentPercentage}%)`;
             this.indexBall.style['transition-duration'] =  0;
         }
+    }
+
+    ballClick(index:number){
+        this.ballClicked.emit(index);
     }
 }
 

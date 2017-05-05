@@ -23,10 +23,7 @@ import {EditPortfolioService} from "./services/edit-portfolio.service";
 import {FileUploadComponent} from "./components/file-upload/file-upload.component";
 import {SizeFormatPipe, SafeURLPipe} from "./pipes/size-format.pipe";
 import {ModalComponent} from "./components/modal/modal.component";
-import {
-    ImageSliderBalls, ImageSliderComponent,
-    MPImageSliderModule
-} from "./components/image-slider/image-slider.component";
+import {MPImageSliderModule} from "./components/image-slider/image-slider.component";
 import {TextEditorComponent} from "./components/text-editor/text-editor.component";
 import {DataTablePaginationControlComponent} from "./components/data-table/data-table-pagination-control.component";
 import {
@@ -39,6 +36,7 @@ import {
     PageNotFoundComponent,
     NoPermissionsComponent
 } from "./components/pages/index.d";
+import {FlexImages} from "./components/flex-images/flex-images.component";
 
 const FIREBASE_APP_CONFIG = {
     apiKey: "AIzaSyB6Isl4f6D1onyF07NfZqDfhUV_thnLbdg",
@@ -68,7 +66,8 @@ const FIREBASE_APP_CONFIG = {
         TextEditorComponent,
         BlogComponent,
         ContactComponent,
-        AboutComponent
+        AboutComponent,
+        FlexImages
     ],
     imports     : [
         BrowserModule, 

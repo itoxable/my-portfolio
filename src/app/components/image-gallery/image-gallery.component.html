@@ -27,12 +27,12 @@
         </ng-template>
     </div>
 
-    <mp-modal *ngIf="selectedImage" (onClose)="selectedImage = null; selectedIndex = 0" [draggable]="true" [showOverlay]="true" [showFooter]="false" [showHeader]="false">
-        <div body class="modal-body-content">
-            <div style="width: 100%; height: 100%">
-                <mp-image-slider (onSlideChange)="onSlideChange($event)" [images]="images" [nameField]="'name'" [index]="selectedIndex" [srcField]="'url'" [backgroundColor]="'#CCC'"></mp-image-slider>
-            </div>
-        </div>
-    </mp-modal>
+    <!--<mp-modal *ngIf="selectedImage" (onClose)="selectedImage = null; selectedIndex = 0" [draggable]="true" [showOverlay]="true" [showFooter]="false" [showHeader]="false">-->
+        <!--<div body class="modal-body-content">-->
+            <!--<div style="width: 100%; height: 100%">-->
+                <!--<mp-image-slider (onSlideChange)="onSlideChange($event)" [images]="images" [nameField]="'name'" [index]="selectedIndex" [srcField]="'url'" [backgroundColor]="'#CCC'"></mp-image-slider>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</mp-modal>-->
 
 </ng-template>
