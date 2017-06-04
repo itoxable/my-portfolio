@@ -42,7 +42,7 @@ export class FlexImages<T> implements AfterContentInit, OnDestroy{
     @Input() nameField = 'src';
     @Input() srcField = 'url';
     @Input() captionField = 'caption';
-    @Input() rowHeight = 200;
+    @Input() rowHeight = 250;
     @Output() onReady:EventEmitter<any> = new EventEmitter<any>();
     items:Array<any> = [];
 

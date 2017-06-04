@@ -37,6 +37,7 @@ import {
     NoPermissionsComponent
 } from "./components/pages/index.d";
 import {FlexImages} from "./components/flex-images/flex-images.component";
+import { ImageSlider } from "./components/image-slider-2/image-slider-new.component";
 
 const FIREBASE_APP_CONFIG = {
     apiKey: "AIzaSyB6Isl4f6D1onyF07NfZqDfhUV_thnLbdg",
@@ -67,7 +68,8 @@ const FIREBASE_APP_CONFIG = {
         BlogComponent,
         ContactComponent,
         AboutComponent,
-        FlexImages
+        FlexImages,
+        ImageSlider
     ],
     imports     : [
         BrowserModule, 

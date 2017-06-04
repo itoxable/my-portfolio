@@ -1,8 +1,8 @@
-<div class="container">
+<div class="container-fluid">
     <div class="main-content">
         <div class="main-page-slider">
             <mp-image-slider (onSlideChange)="onSlideChange($event)" [backgroundColor]="'#EEE'"
-                             [loop]="true" [images]="images" [captionField]="'name'"
+                             [loop]="true" [images]="images" [descriptionField]="'description'" [nameField]="'name'"
                              [srcField]="'url'"></mp-image-slider>
 
         </div>

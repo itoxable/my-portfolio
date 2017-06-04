@@ -10,6 +10,7 @@
     <p class="bg-danger data-table-message" *ngIf="instantErrorMessage">{{instantErrorMessage}} <span class="close-data-table-message" (click)="instantErrorMessage = null">&times;</span></p>
 
     <ng-template [ngIf]="data.length > 0">
+        <div class="column-resize-ref"></div>
         <table class="table data-table {{dataTable.tableStyleClass}}" [ngClass]="{'table-hover':dataTable.selectable && dataTable.selectionType != 'checkbox'}">
             <ng-template [ngIf]="dataTable.caption != undefined">
                 <caption>
@@ -20,7 +21,9 @@
             <thead *ngIf="dataTable.showHeader">
                 <tr>
                    <ng-template ngFor let-column [ngForOf]="dataTable.columns" let-i="index">
-                        <td *ngIf="!column.actionType" [width]="column.width">
+                        <th *ngIf="!column.actionType" [width]="column.width">
+                            <div *ngIf="column.resizable" class="column-resize-handler" (mousedown)="setColumnResize($event)"></div>
+
                             {{ column.displayName }}
 
                             <ng-template [ngIf]="column.sortable">
@@ -37,7 +40,7 @@
                                 </div>
                             </ng-template>
 
-                        </td>
+                        </th>
                         <td *ngIf="column.actionType" [width]="column.width">
                             <input *ngIf="dataTable.showSelectAll && column.actionType == 'checkbox'" type="checkbox" (change)="toggleSelectRows($event)">
                         </td>
@@ -50,17 +53,8 @@
                 <tr [ngClass]="{'info':item.isSelected}" (click)="toggleSelectRow(i)">
 
                     <ng-template ngFor let-column [ngForOf]="dataTable.columns" let-idx="index">
-                        <td *ngIf="!column.actionType" id="row-{{i}}-column-{{idx}}" class="{{column.columnClass}}" [width]="column.width">
-                            <ng-template [ngIf]="!column.innerHTML">
-                                <span class="{{column.class}}" [class.editable-value]="column.editable" (dblclick)="setToEdit(column, item)">{{getValue(item, column)}}</span>
-                            </ng-template>
-
-                            <div *ngIf="column.innerHTML" class="{{column.class}}" [innerHTML]="column.innerHTML"></div>
-                        </td>
-                        <td *ngIf="column.actionType" class="{{column.columnClass}}" [width]="column.width">
-                            <input *ngIf="column.actionType == 'checkbox'" type="checkbox" (change)="toggleSelectRow(i, column.action)">
-                            <span *ngIf="column.actionType == 'edit'" class="fa fa-pencil-square table-cell-action" (click)="select(item)"></span>
-                            <span *ngIf="column.actionType == 'view'" class="gp gp-nav-cou-report table-cell-action" style="cursor: pointer" (click)="select(item)"></span>
+                        <td id="row-{{i}}-column-{{idx}}" class="{{column.columnClass}}" [style.width]="column.width">
+                            <span class="{{column.class}}" (click)="setToEdit(column, item)">{{getValue(item, column)}}</span>
                         </td>
                     </ng-template>
                 </tr>
@@ -68,14 +62,14 @@
             </tbody>
         </table>
 
-        <!--<mp-data-table-pagination-control *ngIf="totalItems > 0" [totalItems]="totalItems"-->
-                                       <!--[pageSize]="dataTable.dataRequestModel.pageSize"-->
-                                       <!--[pagination]="dataTable.pagination"-->
-                                       <!--[currentPage]="dataTable.dataRequestModel.page"-->
-                                       <!--(goToPageEvent)="goToPage($event)"-->
-                                       <!--(changePageSizeEvent)="changePageSize($event)">-->
+        <mp-data-table-pagination-control *ngIf="totalItems > 0" [totalItems]="totalItems"
+                                       [pageSize]="dataTable.dataRequestModel.pageSize"
+                                       [pagination]="dataTable.pagination"
+                                       [currentPage]="dataTable.dataRequestModel.page"
+                                       (goToPageEvent)="goToPage($event)"
+                                       (changePageSizeEvent)="changePageSize($event)">
 
-        <!--</mp-data-table-pagination-control>-->
+        </mp-data-table-pagination-control>
 
         <div class="clearfix"></div>
     </ng-template>

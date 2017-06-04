@@ -19,6 +19,7 @@ declare var Isotope:any;
 export class ImageGalleryComponent implements OnInit, AfterViewInit{
 
     _category:string = '';
+    @Input() images:Array<ImageModel> = [];
     @Input() set category(category: string){
         this._category = category?category.toLowerCase():category;
         this.filter();
@@ -27,8 +28,6 @@ export class ImageGalleryComponent implements OnInit, AfterViewInit{
     imagesFirebaseListObservable:FirebaseListObservable<any[]>;
     firebaseListFactoryOpts:FirebaseListFactoryOpts;
 
-
-    @Input() images:Array<ImageModel> = [];
     totalItems:number = 0;
     selectedImage:ImageModel;
     selectedIndex:number = 0;
@@ -86,8 +85,6 @@ export class ImageGalleryComponent implements OnInit, AfterViewInit{
             }
         };
         this.isotope.arrange(options);
-        console.log(options);
-        console.log(this.isotope);
     }
 
     init(){

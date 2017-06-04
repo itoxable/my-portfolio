@@ -3,7 +3,7 @@
  */
 
 
-import {Component, Input, EventEmitter, Output, OnDestroy} from '@angular/core';
+import { Component, Input, EventEmitter, Output, OnDestroy, ElementRef } from '@angular/core';
 import {Http, Response} from "@angular/http";
 
 import {DataTablePaginationModel} from "./data-table-pagination-control.component";
@@ -11,6 +11,7 @@ import {DataRequestModel} from "../../models/data-request.model";
 import {Subscription} from "rxjs";
 import {AngularFire, FirebaseListObservable} from 'angularfire2';
 import {FirebaseListFactoryOpts, Query} from "angularfire2/interfaces";
+import { fromEvent } from "rxjs/observable/fromEvent";
 
 
 @Component({
@@ -75,7 +76,13 @@ export class DataTableComponent implements OnDestroy{
     getDataSubscription:Subscription;
     getTotalItemsSubscription:Subscription;
 
-    constructor(private http: Http, private angularFire:AngularFire){
+    resizingColumn: HTMLTableCellElement;
+    resizingRightColumn: HTMLTableCellElement;
+    resizeStartPosition:number;
+    resizeStartSize:number;
+    resizeRightStartSize:number;
+
+    constructor(private http: Http, private elementRef:ElementRef, private angularFire:AngularFire){
     }
 
     setDataTable(dataTable:DataTableModel) {
@@ -722,6 +729,42 @@ export class DataTableComponent implements OnDestroy{
         }
     }
 
+    setColumnResize(event: MouseEvent) {
+        this.resizingColumn = event.target['parentNode'];
+        this.resizingRightColumn = <HTMLTableCellElement>this.resizingColumn.nextElementSibling;
+
+        this.resizeStartPosition = event.screenX;
+        this.resizeStartSize = this.resizingColumn.getClientRects()[0].width;
+        this.resizeRightStartSize = this.resizingRightColumn.getClientRects()[0].width;
+
+        const columnResizeRef: HTMLDivElement = this.elementRef.nativeElement.querySelector('.column-resize-ref');
+        columnResizeRef.style.display = 'block';
+        const columnResizeRefPosition: number = (event.pageX - this.elementRef.nativeElement.getClientRects()[0].left - 2);
+        columnResizeRef.style.left = columnResizeRefPosition + 'px';
+
+
+        const mouseMoveSubscription: Subscription = fromEvent(document, 'mousemove').subscribe((ev: MouseEvent) => {
+            if (this.resizingColumn) {
+                const diff: number = ev.screenX - this.resizeStartPosition;
+                columnResizeRef.style.left = (columnResizeRefPosition + diff) + 'px';
+
+                this.resizingColumn.style.width = this.resizeStartSize + diff + 'px';
+
+                if (this.resizingRightColumn) {
+                    this.resizingRightColumn.style.width = this.resizeRightStartSize - diff + 'px';
+                }
+            }
+        });
+
+        const mouseUpSubscription: Subscription = fromEvent(document, 'mouseup').subscribe((ev: MouseEvent) => {
+            mouseMoveSubscription.unsubscribe();
+            mouseUpSubscription.unsubscribe();
+            this.resizingRightColumn = null;
+            this.resizingColumn = null;
+            columnResizeRef.style.display = 'none';
+        });
+    }
+
 }
 
 export class DataTableModel {
@@ -761,7 +804,7 @@ export class DataTableModel {
     /**
      *
      */
-    dataRequestModel:DataRequestModel = new DataRequestModel();// = new DataRequestModel({pageSize: 0});
+    dataRequestModel:DataRequestModel = new DataRequestModel();
 
     pageCaching:boolean = true;
 
@@ -789,12 +832,11 @@ export interface ColumnModel {
     sortField?:string;
     filterValue?:string;
     filter?:boolean;
-    actionType?:string;
-    actionIcon?:string;
     editable?:boolean;
     columnClass?:string;
     width?:string | number;
     filterFunction?: (column:ColumnModel, filterValue:string, dataArray:Array<any>) => Array<any>;
+    resizable?: boolean;
 }
 
 export interface FilterModel {

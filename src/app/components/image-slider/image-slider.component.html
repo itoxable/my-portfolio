@@ -1,12 +1,17 @@
-<span *ngIf="isLoading" class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></span>`
+<span *ngIf="isLoading" class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></span>
 <div class="slider-viewport" (touchstart)="onDragStart($event)" (touchend)="onDragEnd($event)" (touchmove)="onDragSlide($event)">
     <ul class="slides" >
         <ng-template ngFor let-image [ngForOf]="displayImages" let-i="index">
-            <li [style.width]="liWidth+'px'" [ngClass]="{'active': isActive(i)}" >
+            <li [style.width]="liWidth+'px'" [ngClass]="{'active-slide': isActive(i)}" (load)="onload($event)">
                 <div class="slider-image" [style.background-color]="backgroundColor" [style.background-image]="'url('+image[srcField]+')'">
-                    <div *ngIf="captionField && image[captionField]" class="slide-caption {{slideCaptionStyleClass}}" >
-                        <div [innerHtml]='image[captionField]'></div>
+
+                    <div  class="slide-caption {{slideCaptionStyleClass}}" >
+                        <h2 *ngIf="nameField && image[nameField]" class="slide-name">
+                            {{image[nameField]}}
+                        </h2>
+                        <p *ngIf="descriptionField && image[descriptionField]">{{image[descriptionField]}}</p>
                     </div>
+
                 </div>
             </li>
         </ng-template>

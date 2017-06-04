@@ -45,8 +45,8 @@
             'ie-shim': 'n:ie-shim',
             'moment': 'n:moment/min',
             'exif':'n:exif-js',
-            'ckeditor':'n:ckeditor'
-
+            'ckeditor':'n:ckeditor',
+            'flex-images': 'n:flexImages'
         },
 ///Users/ruic/Projects/webdev/my-portfolio/node_modules/firebase
         // packages tells the System loader how to load when no filename and/or no extension
@@ -85,6 +85,10 @@
             'firebase': {
                 defaultExtension: 'js',
                 main: 'firebase-browser.js'
+            },
+            'flex-images': {
+                defaultExtension: 'js',
+                main: 'flex-images.js'
             }
         }
     });

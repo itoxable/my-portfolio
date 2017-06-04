@@ -46,9 +46,9 @@ export class ImageSliderComponent<T> implements AfterContentInit, OnDestroy{
     @Input() slideCaptionStyleClass:string = '';
     @Input() styleClass:string = '';
 
-    @Input() nameField = 'src';
+    @Input() nameField = 'name';
     @Input() srcField = 'src';
-    @Input() captionField = 'caption';
+    @Input() descriptionField = 'description';
     @Input() transitionDuration:number = 200;
     @Input() images:T[] = [];
     @Input() slide:boolean = true;
@@ -70,13 +70,14 @@ export class ImageSliderComponent<T> implements AfterContentInit, OnDestroy{
         this.isLoading = true;
     }
 
-    cancelTimeout(){
+    private cancelTimeout(){
         if(this.slideTimeOut){
             clearTimeout(this.slideTimeOut);
         }
     }
+
     isActive(index:number):boolean{
-        return Math.abs(this.index) == index;
+        return Math.abs(this.index) === index;
     }
 
 
@@ -282,10 +283,13 @@ export class ImageSliderComponent<T> implements AfterContentInit, OnDestroy{
         if(!this.resizeSubscription){
             this.resizeSubscription = fromEvent(window, 'resize').subscribe((moveEvent) => {
                 this.setULSize();
+                this.moveSlide(0);
             });
         }
     }
-
+    onload(event){
+        console.log(event);
+    }
     ngOnDestroy(){
         if(this.resizeSubscription){
             this.resizeSubscription.unsubscribe();
@@ -301,6 +305,7 @@ export class ImageSliderComponent<T> implements AfterContentInit, OnDestroy{
 @Component({
     selector: 'mp-image-slides-balls',
     moduleId: module.id,
+    //styleUrls: ['image-slides-balls.component.scss'],
     template: `
         <ng-template ngFor let-image [ngForOf]="images" let-idx="index">
             <div class="ball" [style.width]="ballPercentage+'%'" (click)="ballClick(idx)"></div>
