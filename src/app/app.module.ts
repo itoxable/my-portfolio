@@ -15,7 +15,10 @@ import {AppComponent} from "./components/app.component";
 import {NavDropDownDirective, TopNavigationComponent} from "./components/top-navigation/top-navigation.component";
 import {ApplicationService} from "./services/application.service";
 import {FileUploadService} from "./services/file-upload.service";
-import {DataTableComponent} from "./components/data-table/data-table.component";
+import {
+    ColumnComponent, ColumnHolderDirective, ColumnOutletDirective,
+    DataTableComponent, RowOutletDirective
+} from "./components/data-table/data-table.component";
 import {ImageGalleryComponent} from "./components/image-gallery/image-gallery.component";
 import {LoadingComponent} from "./components/loading/loading.component";
 import {AngularFireModule} from "angularfire2";
@@ -23,7 +26,7 @@ import {EditPortfolioService} from "./services/edit-portfolio.service";
 import {FileUploadComponent} from "./components/file-upload/file-upload.component";
 import {SizeFormatPipe, SafeURLPipe} from "./pipes/size-format.pipe";
 import {ModalComponent} from "./components/modal/modal.component";
-import {MPImageSliderModule} from "./components/image-slider/image-slider.component";
+import { MPImageSliderModule, SlidePlaceholderDirective } from "./components/image-slider/image-slider.component";
 import {TextEditorComponent} from "./components/text-editor/text-editor.component";
 import {DataTablePaginationControlComponent} from "./components/data-table/data-table-pagination-control.component";
 import {
@@ -57,6 +60,10 @@ const FIREBASE_APP_CONFIG = {
         ImageGalleryComponent,
         DataTableComponent,
         DataTablePaginationControlComponent,
+        ColumnComponent,
+        ColumnHolderDirective,
+        ColumnOutletDirective,
+        RowOutletDirective,
         LoadingComponent,
         PortfolioComponent,
         EditPortfolioComponent,

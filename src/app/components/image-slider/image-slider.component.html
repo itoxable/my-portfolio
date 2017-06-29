@@ -3,16 +3,22 @@
     <ul class="slides" >
         <ng-template ngFor let-image [ngForOf]="displayImages" let-i="index">
             <li [style.width]="liWidth+'px'" [ngClass]="{'active-slide': isActive(i)}" (load)="onload($event)">
-                <div class="slider-image" [style.background-color]="backgroundColor" [style.background-image]="'url('+image[srcField]+')'">
 
-                    <div  class="slide-caption {{slideCaptionStyleClass}}" >
-                        <h2 *ngIf="nameField && image[nameField]" class="slide-name">
-                            {{image[nameField]}}
-                        </h2>
-                        <p *ngIf="descriptionField && image[descriptionField]">{{image[descriptionField]}}</p>
-                    </div>
 
-                </div>
+                <ng-template mpSlidePlaceholder >
+                </ng-template>
+
+
+                <!--<div class="slider-image" [style.background-color]="backgroundColor" [style.background-image]="'url('+image[srcField]+')'">-->
+
+                    <!--<div  class="slide-caption {{slideCaptionStyleClass}}" >-->
+                        <!--<h2 *ngIf="nameField && image[nameField]" class="slide-name">-->
+                            <!--{{image[nameField]}}-->
+                        <!--</h2>-->
+                        <!--<p *ngIf="descriptionField && image[descriptionField]">{{image[descriptionField]}}</p>-->
+                    <!--</div>-->
+
+                <!--</div>-->
             </li>
         </ng-template>
     </ul>

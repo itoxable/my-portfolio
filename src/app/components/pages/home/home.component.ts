@@ -10,6 +10,7 @@ import {DataRequestModel} from "../../../models/data-request.model";
 import {ApplicationService} from "../../../services/application.service";
 import {ImageModel} from "../../../models/models";
 import Reference = firebase.storage.Reference;
+import { DataTablePaginationModel } from "../../data-table/data-table-pagination-control.component";
 
 
 @Component({
@@ -24,7 +25,7 @@ export class HomeComponent{
     storageRef:Reference;
     x:any = {};
     images:Array<ImageModel> = [];
-
+    dataTableModel: DataTableModel;
     selectedImage:ImageModel;
 
     constructor(private angularFire:AngularFire, private applicationService:ApplicationService) {
@@ -34,6 +35,57 @@ export class HomeComponent{
                 return image.featured;
             });
             //this.images['']
+        });
+
+        this.dataTableModel = new DataTableModel({
+            data: `/styles/lpis.json`,
+            noDataMessageStyleClass: "error-message",
+            dataArrayField: '_embedded.AddressProperty',
+            totalItemsField: 'page.totalElements',
+            errorMessage: 'Error searching!',
+            columns: [
+                // {
+                //     field:'logicalStatus',
+                //     displayName: 'Status',
+                //     sortable:true,
+                //     resizable: true,
+                //     width: '80px',
+                // },
+                {
+                    field: 'uprn',
+                    displayName: 'UPRN',
+                    sortable: true,
+                    resizable: true,
+                    width: '120px',
+                },
+                // {
+                //     field:'saoStartNo',
+                //     displayName: 'saoStartNo',
+                //     resizable: true,
+                //     sortable:true
+                // },
+                // {
+                //     field:'saoEndNo',
+                //     displayName: 'saoEndNo',
+                //     resizable: true
+                // },
+                {
+                    field:'authName',
+                    displayName: 'Organization',
+                    sortField: 'auth_name',
+                    sortable:true,
+                    width: '175px',
+                    resizable: true
+                }
+            ],
+            dataRequestModel: new DataRequestModel({
+                pageSize: 10
+            }),
+            pagination: new DataTablePaginationModel({
+                pageSizes: [20, 50, 75, 100],
+                paginationNumbersSize: 5,
+                legendTemplate: "Page {CURRENT_PAGE} of {CURRENT_NR_OF_PAGES}"
+            }),
         });
     }
 

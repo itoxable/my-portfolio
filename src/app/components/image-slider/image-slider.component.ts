@@ -6,25 +6,54 @@
 import {CommonModule} from '@angular/common'
 import {
     NgModule, Component, Input, OnInit, ElementRef, AfterContentInit, Output,
-    EventEmitter, OnDestroy
+    EventEmitter, OnDestroy, Directive, ViewContainerRef, ViewChild, ViewChildren, ContentChildren, QueryList,
+    TemplateRef, ChangeDetectionStrategy, ViewEncapsulation
 } from '@angular/core';
 
 import {fromEvent} from "rxjs/observable/fromEvent";
 import {Subscription} from "rxjs/Subscription";
 
 
+@Directive({ selector: '[mpSlide]'})
+export class SlidePlaceholderDirective {
+    constructor(public templateRef: TemplateRef<any>, public viewContainer: ViewContainerRef) {
+        console.log(' **SlidePlaceholder** ');
+        // const context = {$implicit: rowData};
+        // this.templateRef.createEmbeddedView(row.template, context);
+    }
+}
+@Directive({ selector: '[mpSlidePlaceholder]'})
+export class SliderPlaceholderDirective {
+    constructor(public templateRef: TemplateRef<any>, public viewContainer: ViewContainerRef) {
+        console.log('SliderPlaceholderDirective+++++');
+    }
+}
+
+@Component({
+    selector: 'mp-image-slide',
+    template: `<ng-container *mpSlide></ng-container>`,
+})
+export class ImageSlideComponent {
+    @ViewChild(SlidePlaceholderDirective) slide: SlidePlaceholderDirective;
+    constructor() {}
+    ngAfterViewInit() {
+        console.log('ImageSlideComponent: '+this.slide);
+    }
+}
+
 @Component({
     selector: 'mp-image-slider',
     moduleId: module.id,
-    templateUrl: 'image-slider.component.html'
+    templateUrl: 'image-slider.component.html',
+    encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
-export class ImageSliderComponent<T> implements AfterContentInit, OnDestroy{
+export class ImageSliderComponent implements AfterContentInit, OnDestroy{
     ul:HTMLElement;
     liWidth:number = 0;
 
     sliderViewportSize = 0;
-    displayImages:T[] = [];
+    displayImages:any[] = [];
     slideTimeOut:any;
     sliderViewport:Element;
 
@@ -50,7 +79,7 @@ export class ImageSliderComponent<T> implements AfterContentInit, OnDestroy{
     @Input() srcField = 'src';
     @Input() descriptionField = 'description';
     @Input() transitionDuration:number = 200;
-    @Input() images:T[] = [];
+    @Input() images:any[] = [];
     @Input() slide:boolean = true;
     @Input() loop:boolean = false;
     @Input() balls:boolean = true;
@@ -59,12 +88,17 @@ export class ImageSliderComponent<T> implements AfterContentInit, OnDestroy{
         this.index = -(index-1);
 
     }
-    @Input('images') set _images(images:Array<T>){
+    @Input('images') set _images(images:Array<any>){
         this.images = images.filter(()=>{return true});
         this.initImages();
     }
 
     @Output() onSlideChange:EventEmitter<any> = new EventEmitter<any>();
+
+    @ViewChildren(SliderPlaceholderDirective) sliderPlaceholders: QueryList<SliderPlaceholderDirective>;
+
+    @ContentChildren(ImageSlideComponent) imageSlides: QueryList<ImageSlideComponent>;
+
 
     constructor(private elementRef: ElementRef){
         this.isLoading = true;
@@ -100,6 +134,8 @@ export class ImageSliderComponent<T> implements AfterContentInit, OnDestroy{
     goRightClick(event:Event){
         event.stopPropagation();
         this.goRight();
+        console.log('goRightClick: '+ this.sliderPlaceholders);
+        console.log('goRightClick2: '+ this.imageSlides);
 
     }
 
@@ -263,6 +299,7 @@ export class ImageSliderComponent<T> implements AfterContentInit, OnDestroy{
     }
 
     init(isResize?:boolean){
+        console.log('init: '+ this.imageSlides);
         this.htmlElement = this.elementRef.nativeElement;
 
         this.sliderViewport = this.htmlElement.querySelector('.slider-viewport');
@@ -297,8 +334,40 @@ export class ImageSliderComponent<T> implements AfterContentInit, OnDestroy{
     }
 
     ngAfterContentInit(){
-        this.init();
+        // this.init();
+        // console.log('ngAfterContentInit: '+ this._slidePlaceholders);
         this.isLoading = false;
+    }
+
+    ngAfterViewInit() {
+        console.log('ngAfterViewInit sliderPlaceholders: '+ this.sliderPlaceholders);
+        this.sliderPlaceholders.forEach((placeHolder: SliderPlaceholderDirective, index: number) => {
+
+            const context = {$implicit: this.images[index]};
+            const templateRef: TemplateRef<any> = this.imageSlides.first.slide.templateRef;
+            // ublic viewContainer: ViewContainerRef
+            console.log(templateRef.elementRef.nativeElement);
+            placeHolder.viewContainer.createEmbeddedView(templateRef, context);
+            // placeHolder.
+
+        });
+        console.log('ngAfterViewInit2 imageSlides: '+ this.imageSlides);
+        // console.log('ngAfterViewInit: '+ this._slidePlaceholders);
+        //console.log('ngAfterViewInit: ');
+        // // TODO(andrewseguin): Re-render the header when the header's columns change.
+        // this.renderHeaderRow();
+        //
+        // // TODO(andrewseguin): Re-render rows when their list of columns change.
+        // // TODO(andrewseguin): If the data source is not
+        // //   present after view init, connect it when it is defined.
+        // // TODO(andrewseguin): Unsubscribe from this on destroy.
+        // this.dataSource.connect(this).subscribe((rowsData: any[]) => {
+        //     // TODO(andrewseguin): Add a differ that will check if the data has changed,
+        //     //   rather than re-rendering all rows
+        //     this._rowPlaceholder.viewContainer.clear();
+        //     rowsData.forEach(rowData => this.insertRow(rowData));
+        //     this._changeDetectorRef.markForCheck();
+        // });
     }
 }
 
@@ -372,10 +441,15 @@ export class ImageSliderBalls<T> implements AfterContentInit, OnInit{
     declarations: [
         ImageSliderComponent,
         ImageSliderBalls,
+        SlidePlaceholderDirective,
+        ImageSlideComponent,
+        SliderPlaceholderDirective
     ],
     providers:[],
     exports: [
         ImageSliderComponent,
+        ImageSlideComponent,
+        SlidePlaceholderDirective
     ],
     imports : [
         CommonModule,

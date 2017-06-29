@@ -352,6 +352,24 @@ gulp.task('serve', function() {
                     handle: function (req, res, next) {
                         forward(req, res, next);
                     }
+                },
+                {
+                    route: '/lpis',
+                    handle: function (req, res, next) {
+                        var url = require('url');
+                        var url_parts = url.parse(request.url, true);
+                        var query = url_parts.query;
+
+                        // fileSystem.readFile('./lpi.json', 'utf8', function (err, data) {
+                        //     if (err) {
+                        //         res.statusCode = 401;
+                        //     }else{
+                        //         res.setHeader("Content-Type", "application/json");
+                        //         res.write(data);
+                        //     }
+                        //     res.end();
+                        // });
+                    }
                 }
 
             ]

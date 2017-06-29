@@ -3,7 +3,11 @@
  */
 
 
-import { Component, Input, EventEmitter, Output, OnDestroy, ElementRef } from '@angular/core';
+import {
+    Component, Input, EventEmitter, Output, OnDestroy, ElementRef, ContentChildren,
+    QueryList, OnInit, AfterContentInit, Directive, TemplateRef, ViewContainerRef, AfterViewInit, ContentChild,
+    ViewChildren, ViewEncapsulation, ChangeDetectionStrategy, ViewChild
+} from '@angular/core';
 import {Http, Response} from "@angular/http";
 
 import {DataTablePaginationModel} from "./data-table-pagination-control.component";
@@ -12,18 +16,64 @@ import {Subscription} from "rxjs";
 import {AngularFire, FirebaseListObservable} from 'angularfire2';
 import {FirebaseListFactoryOpts, Query} from "angularfire2/interfaces";
 import { fromEvent } from "rxjs/observable/fromEvent";
+import 'rxjs/add/operator/map';
 
+
+
+@Directive({
+    selector: '[mpColumnHolder]',
+})
+export class ColumnHolderDirective {
+    @Input() mpColumnHolder: any;
+    constructor(public template: TemplateRef<any>, public viewContainer: ViewContainerRef) { }
+}
+
+@Directive({
+    selector: '[mpRowOutlet]',
+})
+export class RowOutletDirective {
+    constructor(public template: TemplateRef<any>, public viewContainerRef: ViewContainerRef) {
+    }
+}
+
+@Directive({
+    selector: 'mpColumnOutlet',
+})
+export class ColumnOutletDirective {
+    constructor(public template: TemplateRef<any>, public viewContainerRef: ViewContainerRef) {
+    }
+}
+
+
+@Component({
+    selector: 'mp-column',
+    moduleId: module.id,
+    template: `
+        <td>
+            <ng-container *mpColumnOutlet></ng-container>
+        </td>
+    `
+})
+export class ColumnComponent implements OnInit {
+    @Input() columnDef: ColumnModel;
+    @ContentChild(ColumnOutletDirective) outlet: ColumnOutletDirective;
+    constructor(public viewContainerRef: ViewContainerRef) {
+    }
+    ngOnInit() {
+    }
+}
 
 @Component({
     selector: 'mp-data-table',
     moduleId: module.id,
-    templateUrl: 'data-table.component.html'
+    templateUrl: 'data-table.component.html',
+    // encapsulation: ViewEncapsulation.None,
+    // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class DataTableComponent implements OnDestroy{
+export class DataTableComponent implements OnDestroy, AfterContentInit, AfterViewInit {
     ASCENDING:string = "asc";
     DESCENDING:string = "desc";
-
     private isStatic:boolean = false;
 
     totalItems:number;
@@ -43,6 +93,16 @@ export class DataTableComponent implements OnDestroy{
     isFiltering:boolean = false;
     originalData:Array<any> = [];
     filters:any = {};
+
+    columns: ColumnComponent[] = [];
+    @ContentChildren(ColumnComponent) columnList: QueryList<ColumnComponent>;
+
+
+    @ViewChild(RowOutletDirective) rowOutlet: RowOutletDirective;
+    @ViewChildren(RowOutletDirective) rowOutlets: QueryList<RowOutletDirective>;
+
+    @ViewChildren(ColumnHolderDirective) columnHolders: QueryList<ColumnHolderDirective>;
+    @ViewChild(ColumnHolderDirective) columnHolder: ColumnHolderDirective;
 
     @Input('dataTable') set _dataTable(dataTable:DataTableModel) {
         this.data = [];
@@ -83,6 +143,71 @@ export class DataTableComponent implements OnDestroy{
     resizeRightStartSize:number;
 
     constructor(private http: Http, private elementRef:ElementRef, private angularFire:AngularFire){
+        this.onDataChange.subscribe((data: any[]) => {
+
+            
+            // this.columnList.forEach((column, index) => {
+            //     const context = {$implicit: holder.mpColumnHolder};
+            //     this.columnHolder.viewContainer.createEmbeddedView()
+            // });
+            //
+            // console.log(this.columnHolders);
+            // this.columnHolders.forEach((holder, index) => {
+            //     holder.viewContainer.createEmbeddedView(this.columns[index].outlet.viewContainerRef, context);
+            // });
+
+            // console.log(this.columnHolders);
+            //
+            // console.log(this.rowOutlet);
+            //
+            // console.log(this.rowOutlets);
+            console.log(this.columnList);
+            data.forEach(row => {
+
+               this.rowOutlet.viewContainerRef.createEmbeddedView(this.rowOutlet.template);
+               //
+                this.columnHolders.forEach((holder, index) => {
+                    const context = {$implicit: row};
+                    // console.log(index);
+                    const column = this.columnList.toArray()[index];
+                    console.log(column.viewContainerRef);
+
+                    // column.viewContainerRef.createEmbeddedView()
+
+
+                    // holder.viewContainer.createEmbeddedView(this.columnList.toArray()[index].viewContainerRef, context);
+                });
+            });
+        })
+    }
+    //
+    // getCellTemplatesForRow(rowDef: CdkRowDef, row: any): CdkCellDef[] {
+    //     return rowDef.columns.map(columnId => {
+    //         // TODO(andrewseguin): Throw an error if there is no column with this columnId
+    //         return this._columnDefinitionsByName.get(columnId).cell;
+    //     });
+    // }
+
+
+    ngAfterViewInit() {
+        console.log('ngAfterViewInit');
+    }
+
+    ngAfterContentInit() {
+        console.log('ngAfterContentInit');
+        // this.initColumns();
+        // this.columnsSubscription =
+        // console.log(this.columnList);
+        // console.log(this.columnHolders);
+
+        // this.columnList.forEach(col => {
+        //     this.columns.push(col);
+        // })
+        // this.columnList.changes.subscribe(_ => {
+        //     console.log(_);
+        //     // this.initColumns();
+        //     // this.changeDetector.markForCheck();
+        // });
     }
 
     setDataTable(dataTable:DataTableModel) {
