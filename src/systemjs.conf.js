@@ -37,17 +37,22 @@
             '@angular/http/testing': 'n:@angular/http/bundles/http-testing.umd.js',
             '@angular/router/testing': 'n:@angular/router/bundles/router-testing.umd.js',
             '@angular/forms/testing': 'n:@angular/forms/bundles/forms-testing.umd.js',
+            'angularfire2':'n:angularfire2',
+            'firebase':'n:firebase',
 
             'rxjs': 'n:rxjs',
             'core-js': 'n:core-js',
             'ie-shim': 'n:ie-shim',
-            'angular2-in-memory-web-api': 'n:angular2-in-memory-web-api',
-            'moment': 'n:moment/min'
+            'moment': 'n:moment/min',
+            'exif':'n:exif-js',
+            'ckeditor':'n:ckeditor',
+            'flex-images': 'n:flexImages'
         },
-
+///Users/ruic/Projects/webdev/my-portfolio/node_modules/firebase
         // packages tells the System loader how to load when no filename and/or no extension
         packages: {
             'app': {
+                main: 'index.d.js',
                 defaultExtension: 'js',
                 format: 'cjs'
             },
@@ -61,9 +66,29 @@
                 defaultExtension: 'js',
                 main: 'index.js'
             },
+            'ckeditor': {
+                defaultExtension: 'js',
+                main: 'ckeditor.js'
+            },
+            'exif': {
+                defaultExtension: 'js',
+                main: 'exif.js'
+            },
             'moment': {
                 defaultExtension: 'js',
                 main: 'moment-with-locales.min.js'
+            },
+            'angularfire2': {
+                defaultExtension: 'js',
+                main: 'bundles/angularfire2.umd.js'
+            },
+            'firebase': {
+                defaultExtension: 'js',
+                main: 'firebase-browser.js'
+            },
+            'flex-images': {
+                defaultExtension: 'js',
+                main: 'flex-images.js'
             }
         }
     });

@@ -1,0 +1,322 @@
+<!--<div class="main-content">-->
+<!--&lt;!&ndash;<mp-modal [draggable]="true" [showOverlay]="true" [showFooter]="false" (onLoad)="setDummyFile()">&ndash;&gt;-->
+
+    <!--&lt;!&ndash;<div body>&ndash;&gt;-->
+        <!--<div class="uploaded-file-image-wrapper">-->
+            <!--<div class="uploaded-file-image">-->
+                <!--<canvas class="image-canvas"></canvas>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div>-->
+            <!--<button type="button" class="btn" (click)="canvasRotate(-10)" title="Rotate left">-->
+                <!--<i class="fa fa-undo" aria-hidden="true"></i>-->
+            <!--</button>-->
+            <!--<button type="button" class="btn" (click)="canvasRotate(10)" title="Rotate right">-->
+                <!--<i class="fa fa-repeat" aria-hidden="true"></i>-->
+            <!--</button>-->
+        <!--</div>-->
+    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</mp-modal>&ndash;&gt;-->
+<!--</div>-->
+
+<div class="main-content">
+
+    <div class="row">
+        <div class="col-md-2">
+            <ul class="settings-list">
+                <li>
+                    <a href="javascript:;" (click)="selectSetting('basic')" [class.selected-setting]="selectedSetting == 'basic'">Basic Settings</a>
+                </li>
+                <li>
+                    <a href="javascript:;" (click)="selectSetting('categories')" [class.selected-setting]="selectedSetting == 'categories'">Categories</a>
+                </li>
+                <li>
+                    <a href="javascript:;" (click)="selectSetting('portfolio')" [class.selected-setting]="selectedSetting == 'portfolio'">Portfolio</a>
+                </li>
+                <li>
+                    <a href="javascript:;" (click)="selectSetting('blog')" [class.selected-setting]="selectedSetting == 'blog'">Blog</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-10">
+
+            <div class="setting-section" *ngIf="selectedSetting == 'basic'">
+                <h1>Basic Settings</h1>
+
+                <!--<ng-template ngFor let-category [ngForOf]="socialLinks" let-i="index">-->
+                <!--<div class="form-group">&ndash;&gt;-->
+                <!--<label for=""></label>-->
+                <!--<input type="text" [(ngModel)]="settings.facebook" class="form-control" placeholder="">-->
+                <!--</div>-->
+                <!--</ng-template>-->
+                <div>
+                    <div class="form-group">
+                        <label for="siteName"></label>
+                        <input type="text" id="siteName" name="facebook" [(ngModel)]="settings.siteName" class="form-control" placeholder="Site Name">
+                        <!--<span class="clear-input-box" *ngIf="searchValue" (click)="searchValue = ''">&times;</span>-->
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-default" (click)="saveSocialSettings('')">Save</button>
+                    </div>
+                </div>
+
+                <form *ngIf="settings && settings.social" id="socialForm" #socialForm="ngForm" (ngSubmit)="saveSocialSettings(socialForm)" novalidate>
+                    <div class="form-group">
+                        <label for="facebook"></label>
+                        <input type="text" id="facebook" name="facebook" [(ngModel)]="settings.social.facebook" class="form-control" placeholder="Facebook">
+                    </div>
+                    <div class="form-group">
+                        <label for="instagram"></label>
+                        <input type="text" id="instagram" name="instagram" [(ngModel)]="settings.social.instagram" class="form-control" placeholder="Instagram">
+                    </div>
+                    <div class="form-group">
+                        <label for="twitter"></label>
+                        <input type="text" id="twitter" name="twitter" [(ngModel)]="settings.social.twitter" class="form-control" placeholder="twitter">
+                    </div>
+                    <div class="form-group">
+                        <label for="pinterest"></label>
+                        <input type="text" id="pinterest" name="pinterest" [(ngModel)]="settings.social.pinterest" class="form-control" placeholder="Pinterest">
+                    </div>
+                    <div class="form-group">
+                        <label for="dribbble"></label>
+                        <input type="text" id="dribbble" name="dribbble" [(ngModel)]="settings.social.dribbble" class="form-control" placeholder="Dribbble">
+                    </div>
+                    <div class="form-group">
+                        <label for="behance"></label>
+                        <input type="text" id="behance" name="behance" [(ngModel)]="settings.social.behance" class="form-control" placeholder="Behance">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </div>
+                </form>
+
+            </div>
+
+
+
+            <div class="setting-section" *ngIf="selectedSetting == 'categories'">
+                <h1>Categories</h1>
+                <button  class="btn btn-default" (click)="addNewCategory()">New Category +</button>
+
+                <div *ngIf="isAddingCategory">
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="newCategory" class="form-control" id="categoryName" placeholder="Category Name">
+                    </div>
+                    <button type="button" class="btn btn-primary" (click)="saveCategory()">Save</button>
+                    <button type="button" class="btn btn-default" (click)="isAddingCategory = false">Cancel</button>
+                </div>
+
+                <table class="table table-bordered table-striped" style="width: auto">
+                    <tbody>
+                    <ng-template ngFor let-category [ngForOf]="categories" let-i="index">
+                        <tr>
+                            <td>
+                                {{category.name}}
+                            </td>
+                            <td>
+                                <span class="fa fa-trash cursor-pointer" aria-hidden="true" (click)="deleteCategory(category)"></span>
+                            </td>
+                        </tr>
+
+                    </ng-template>
+                    </tbody>
+                </table>
+            </div>
+
+
+
+            <div class="setting-section setting-section-portfolio" *ngIf="selectedSetting == 'portfolio'">
+                <h1>Portfolio</h1>
+
+                <mp-file-upload [accept]="'image/*'"
+                                [showFileName]="true" [multiple]="true" [dragAndDrop]="true"
+                                [dropElementSelector]="'.setting-section-portfolio'"
+                                [showPreview]="true" [buttonText]="'Add Images +'" (fileSelected)="setFile($event)" >
+
+                </mp-file-upload>
+
+
+
+                <form id="gallerySettings" #gallerySettingsForm="ngForm" (ngSubmit)="saveGallerySettings(gallerySettingsForm)" novalidate>
+                    <!--<div class="form-group">-->
+                        <!--<label for="displayType">Display Type</label>-->
+                        <!--<select class="form-control" [(ngModel)]="gallerySettings.displayType" id="displayType" multiple>-->
+                            <!--<option value="masonry">Masonry</option>-->
+                            <!--<option value="fixed">Fixed</option>-->
+                        <!--</select>-->
+                    <!--</div>-->
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </div>
+                </form>
+
+
+
+
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Description</td>
+                        <td>Featured</td>
+                        <td>Categories</td>
+                        <td>Added</td>
+                        <td width="100" style="width: 100px">Image</td>
+                        <td></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <ng-template ngFor let-image [ngForOf]="images" let-i="index">
+                        <tr>
+                            <td>{{image.name}}</td>
+                            <td>{{image.description}}</td>
+                            <td>{{image.featured}}</td>
+                            <td>
+                                <ng-template [ngIf]="image.categories">
+                                <span *ngFor="let category of image.categories; let i = index;" class="category">
+                                    {{category}}
+                                </span>
+                                </ng-template>
+                            </td>
+                            <td>{{image.cdate | date}}</td>
+                            <td> <img [src]="image.url" style="height: 100px"></td>
+                            <td>
+                                <span class="fa fa-pencil cursor-pointer" (click)="edit(image)"></span>
+                                <span class="fa fa-trash cursor-pointer" aria-hidden="true" (click)="delete(image)"></span>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    </tbody>
+                </table>
+
+
+
+                <mp-modal *ngIf="files && files.length > 0"  (onClose)="files = []" [draggable]="true" [showOverlay]="true" [showFooter]="false">
+                    <div body>
+                        <div class="uploaded-files" >
+                            <ng-template ngFor let-file [ngForOf]="files" let-i="index">
+                                <div class="uploaded-file">
+                                <span class="remove-uploaded-file" (click)="removeFile(i)">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </span>
+                                    <mp-loading *ngIf="file.isLoading"></mp-loading>
+                                    <div class="uploaded-file-image-wrapper">
+                                        <div class="uploaded-file-image">
+                                            <img [attr.src]='file.files[0].previewURL' >
+                                            <!--<canvas class="uploaded-file-image-canvas uploaded-file-image-canvas-{{i}}"></canvas>-->
+                                        </div>
+                                    </div>
+
+
+
+                                    <div>
+
+                                        <!--<div>-->
+                                            <!--<button type="button" class="btn" (click)="canvasRotate(-10)" title="Rotate left">-->
+                                                <!--<i class="fa fa-undo" aria-hidden="true"></i>-->
+                                            <!--</button>-->
+                                            <!--<button type="button" class="btn" (click)="canvasRotate(10)" title="Rotate right">-->
+                                                <!--<i class="fa fa-repeat" aria-hidden="true"></i>-->
+                                            <!--</button>-->
+                                        <!--</div>-->
+
+
+                                        <div class="form-group">
+                                            <input type="text" [(ngModel)]="file.data.name" class="form-control" id="name" placeholder="Name">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <textarea class="form-control" [(ngModel)]="file.data.description" id="description" placeholder="Description"></textarea>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <select class="form-control" [(ngModel)]="file.data.categories" id="category" multiple>
+                                                <ng-template ngFor let-category [ngForOf]="categories" let-i="index">
+                                                    <option value="{{category.name}}">
+                                                        {{category.name}}
+                                                    </option>
+                                                </ng-template>
+                                            </select>
+                                        </div>
+
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" [(ngModel)]="file.data.featured"> Featured
+                                            </label>
+                                        </div>
+                                        <button type="button" class="btn btn-primary" (click)="saveFile(file)">Submit</button>
+                                    </div>
+
+                                    <div class="uploaded-file-progress" *ngIf="file.uploadStatus">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" [style.width]="file.uploadStatus.percentage+'%'">
+                                                <span>{{file.uploadStatus.percentage}}% </span>
+                                            </div>
+                                        </div>
+                                        <div class="uploaded-file-progress-actions">
+                                            <button type="button" class="btn btn-danger btn-sm" (click)="cancel(file)">Cancel</button>
+                                            <button type="button" class="btn btn-warning btn-sm" (click)="pauseUpload(file)">Pause</button>
+                                            <button type="button" class="btn btn-primary btn-sm" (click)="resumeUpload(file)">Resume</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </ng-template>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </mp-modal>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <!--<div class="setting-section setting-section-portfolio">-->
+        <!--<mp-text-editor [(ngModel)]="text"></mp-text-editor>-->
+    <!--</div>-->
+    <!--{{text}}-->
+
+    <mp-modal *ngIf="selectedImage"  (onClose)="selectedImage = null" [draggable]="true" [showOverlay]="true" [showFooter]="false">
+        <span header>
+            {{selectedImage.name}}
+        </span>
+        <div body>
+
+                <div>
+                    <div class="form-group">
+                        <input type="text" [(ngModel)]="selectedImage.name" class="form-control" placeholder="Name">
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" [(ngModel)]="selectedImage.description"placeholder="Description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" [(ngModel)]="selectedImage.categories" multiple>
+                            <ng-template ngFor let-category [ngForOf]="categories" let-i="index">
+                                <option value="{{category.name}}">
+                                    {{category.name}}
+                                </option>
+                            </ng-template>
+                        </select>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" [(ngModel)]="selectedImage.featured"> Featured
+                        </label>
+                    </div>
+                    <button type="button" class="btn btn-default" (click)="saveImage(selectedImage)">Save</button>
+                </div>
+
+        </div>
+    </mp-modal>
+
+
+</div>
+
+
+
+
+
+

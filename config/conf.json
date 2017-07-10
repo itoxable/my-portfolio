@@ -1,6 +1,6 @@
 {
-  "distFolder": "dist/META-INF/resources",
-  "testDistFolder": "dist/META-INF/resources",
+  "distFolder": "dist",
+  "testDistFolder": "dist",
 
   "existingBrowsers": {
     "chrome": "Chrome",
@@ -9,3 +9,4 @@
     "safari": "Safari"
   }
 }
+

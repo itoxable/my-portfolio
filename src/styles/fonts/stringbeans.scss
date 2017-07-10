@@ -1,0 +1,11 @@
+@font-face {
+    font-family: 'Stringbeans';
+    src: url('#{$stringbeans-font-path}/stringbeans-regular-webfont.eot');
+    src: url('#{$stringbeans-font-path}/stringbeans-regular-webfont.eot?#iefix') format('embedded-opentype'),
+ 		 url('#{$stringbeans-font-path}/stringbeans-regular-webfont.woff2')  format('woff2'),
+         url('#{$stringbeans-font-path}/stringbeans-regular-webfont.woff') format('woff'),
+         url('#{$stringbeans-font-path}/stringbeans-regular-webfont.ttf?') format('truetype'),
+         url('#{$stringbeans-font-path}/stringbeans-regular-webfont.svg#Stringbeans') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}

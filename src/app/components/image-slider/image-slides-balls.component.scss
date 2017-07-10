@@ -1,0 +1,48 @@
+mp-image-slides-balls{
+    display: block;
+    width: 80px;
+    position: relative;
+    font-size: 0;
+    height: 10px;
+    margin: -20px auto 0;
+    .ball{
+        display: inline-block;
+        height: 100%;
+        position: relative;
+        cursor: pointer;
+    &:after {
+         content: "";
+         background-color: rgba(255,255,255,0.6);
+         display: inline-block;
+         height: 10px;
+         width: 10px;
+         border-radius: 50%;
+         position: absolute;
+         top: 0;
+         left: 50%;
+         transform: translateX(-50%);
+     }
+
+    }
+.index-ball{
+    display: inline-block;
+    top: 0;
+    left: 0;
+    position: absolute;
+    height: 100%;
+&:after {
+     content: "";
+     box-shadow: rgba(52, 52, 52, 0.7) 1px 3px 8px;
+     background-color: #fff;
+     display: inline-block;
+     height: 10px;
+     width: 10px;
+     border-radius: 50%;
+     position: absolute;
+
+     top: 0;
+     left: 50%;
+     transform: translateX(-50%);
+ }
+}
+}

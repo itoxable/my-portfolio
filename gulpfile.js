@@ -4,7 +4,6 @@ var csso = require('gulp-csso');
 var browserSync = require('browser-sync').create();
 var autoprefixer = require('gulp-autoprefixer');
 var gulpSequence = require('gulp-sequence');
-var template = require('gulp-template');
 var plumber = require('gulp-plumber');
 var uglify = require('gulp-uglify');
 var del = require('del');
@@ -14,11 +13,9 @@ var $ = require('gulp-load-plugins')();
 var iconfont = require('gulp-iconfont');
 var url = require('url');
 var proxy = require('proxy-middleware');
-var iconfontCss = require('gulp-iconfont-css');
 var gulpTypescript = require('gulp-typescript');
 var sourcemaps = require('gulp-sourcemaps');
 var filter = require("stream-filter");
-var cleanCSS = require('gulp-clean-css');
 var tslint = require('gulp-tslint');
 var fileSystem = require('fs');
 var path = require('path');
@@ -27,9 +24,9 @@ var SystemJsBuilder = require('systemjs-builder');
 require('reflect-metadata');
 var tscWrapped = require('@angular/tsc-wrapped');
 var angularCompiler = require('@angular/compiler-cli');
-
+var gulpTemplate = require('gulp-template');
 var concat = require('gulp-concat');
-
+var appProps = require('./config/properties.json');
 var conf = require('./config/conf.json');
 
 var tsProject = gulpTypescript.createProject('tsconfig.json');
@@ -122,6 +119,19 @@ gulp.task('lib', function() {
         './node_modules/moment*/min/moment-with-locales.min.js',
         './node_modules/intl*/dist/Intl.min.js',
         './node_modules/intl*/locale-data/jsonp/en-GB.js',
+        './node_modules/angularfire2*/**/*.js',
+        './node_modules/firebase*/**/*.js',
+        './node_modules/exif-js*/exif.js',
+        // './node_modules/ckeditor*/ckeditor.js',
+        // './node_modules/ckeditor*/config.js',
+        // './node_modules/ckeditor*/styles.js',
+        // './node_modules/ckeditor*/contents.css',
+        // './node_modules/ckeditor*/skins/**/*.*',
+        // './node_modules/ckeditor*/lang/en.js',
+        // './node_modules/ckeditor*/plugins*/*.*',
+        './src/lib/**/*.*',
+        './node_modules/isotope-layout/dist/isotope.pkgd.min.js',
+        './node_modules/masonry-layout/dist/masonry.pkgd.min.js',
 
         './node_modules/es6-shim/es6-shim.map',
         './node_modules/systemjs/dist/system-polyfills.map',
@@ -159,12 +169,19 @@ gulp.task('build:tests', function() {
 
 gulp.task('lib:prod', function() {
     var arrDev = [
-        './node_modules/proj4/dist/proj4.js',
-        './node_modules/openlayers/dist/ol.js',
+        './node_modules/isotope-layout/dist/isotope.pkgd.min.js',
     ];
     gulp.src(arrDev)
         .pipe(gulp.dest(conf.distFolder+'/lib'))
 });
+
+gulp.task('copy-html', function (cb) {
+    return gulp.src(['src/**/*.html'])
+        .pipe(gulpTemplate(appProps))
+        .pipe(gulp.dest('dist/'))
+});
+
+
 
 gulp.task('build:dev', function (cb) {
     gulpSequence('clean', 'lib', 'components',
@@ -173,7 +190,7 @@ gulp.task('build:dev', function (cb) {
 });
 
 gulp.task('build:normal', function (cb) {
-    gulpSequence('build:dev', 'copy-temp', cb);
+    gulpSequence('build:dev', 'copy-temp', 'copy-html', cb);
 });
 
 gulp.task('copy-temp', function (cb) {
@@ -209,23 +226,25 @@ gulp.task('bundle:app',function(done){
         },
         map: {
             'app': 'src/app',
-            '@angular': 'n:@angular',
+            '@angular/core': 'n:@angular/core/bundles/core.umd.js',
+            '@angular/common': 'n:@angular/common/bundles/common.umd.js',
+            '@angular/compiler': 'n:@angular/compiler/bundles/compiler.umd.js',
+            '@angular/platform-browser': 'n:@angular/platform-browser/bundles/platform-browser.umd.js',
+            '@angular/platform-browser-dynamic': 'n:@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js',
+            '@angular/http': 'n:@angular/http/bundles/http.umd.js',
+            '@angular/router': 'n:@angular/router/bundles/router.umd.js',
+            '@angular/forms': 'n:@angular/forms/bundles/forms.umd.js',
             'rxjs': 'n:rxjs',
-            'moment': 'n:moment'
+            'moment': 'n:moment',
+            'angularfire2':'n:angularfire2',
+            'firebase':'n:firebase'
         },
         packages: {
             'app': { main: 'main-aot', defaultExtension: 'js' },
-            '@angular/common': { main: 'index.js', defaultExtension: 'js' },
-            '@angular/compiler': { main: 'index.js', defaultExtension: 'js' },
-            '@angular/core/testing': { main: 'index.js', defaultExtension: 'js' },
-            '@angular/core': { main: 'index.js', defaultExtension: 'js' },
-            '@angular/forms': { main: 'index.js', defaultExtension: 'js' },
-            '@angular/http': { main: 'index.js', defaultExtension: 'js' },
-            '@angular/platform-browser': { main: 'index.js', defaultExtension: 'js' },
-            '@angular/platform-browser-dynamic': { main: 'index.js', defaultExtension: 'js' },
-            '@angular/router': { main: 'index.js', defaultExtension: 'js' },
             'rxjs': { main: 'Rx', defaultExtension: 'js' },
-            'moment': { defaultExtension: 'js', main: './moment' }
+            'moment': { defaultExtension: 'js', main: './moment' },
+            'angularfire2': {defaultExtension: 'js', main: 'bundles/angularFire2.umd.js'},
+            'firebase': {defaultExtension: 'js', main: 'firebase-browser.js'}
         }
     });
     builder.buildStatic('app', conf.distFolder+'/lib/app.js', options)
@@ -240,7 +259,11 @@ gulp.task('bundle:app',function(done){
 gulp.task('clean:aot', del.bind(null, ['./aot']));
 
 gulp.task('copy:aot-index',function(done){
-    return gulp.src('./config/index.html').pipe(gulp.dest(conf.distFolder));
+    var buildTime = (new Date()).getTime();
+    appProps.buildTime = buildTime;
+    return gulp.src('./config/index.html')
+        .pipe(gulpTemplate(appProps))
+        .pipe(gulp.dest(conf.distFolder));
 });
 
 gulp.task('compile:aot',function(done){
@@ -258,8 +281,9 @@ function compile(args, callback) {
         return callback;
 
     }).catch(function (e) {
+        console.error(e.stack);
         if (e instanceof tscWrapped.UserError || e instanceof angularCompiler.SyntaxError) {
-            console.error(e.message);
+            console.error(e.stack);
             return Promise.resolve(1);
         }
         else {
@@ -282,6 +306,36 @@ gulp.task('serve', function() {
                     }
                 },
                 {
+                    route: '/portfolio',
+                    handle: function (req, res, next) {
+                        forward(req, res, next);
+                    }
+                },
+                {
+                    route: '/forbidden',
+                    handle: function (req, res, next) {
+                        forward(req, res, next);
+                    }
+                },
+                {
+                    route: '/contact',
+                    handle: function (req, res, next) {
+                        forward(req, res, next);
+                    }
+                },
+                {
+                    route: '/about',
+                    handle: function (req, res, next) {
+                        forward(req, res, next);
+                    }
+                },
+                {
+                    route: '/blog',
+                    handle: function (req, res, next) {
+                        forward(req, res, next);
+                    }
+                },
+                {
                     route: '/404',
                     handle: function (req, res, next) {
                         forward(req, res, next);
@@ -292,7 +346,32 @@ gulp.task('serve', function() {
                     handle: function (req, res, next) {
                         forward(req, res, next);
                     }
+                },
+                {
+                    route: '/edit-portfolio',
+                    handle: function (req, res, next) {
+                        forward(req, res, next);
+                    }
+                },
+                {
+                    route: '/lpis',
+                    handle: function (req, res, next) {
+                        var url = require('url');
+                        var url_parts = url.parse(request.url, true);
+                        var query = url_parts.query;
+
+                        // fileSystem.readFile('./lpi.json', 'utf8', function (err, data) {
+                        //     if (err) {
+                        //         res.statusCode = 401;
+                        //     }else{
+                        //         res.setHeader("Content-Type", "application/json");
+                        //         res.write(data);
+                        //     }
+                        //     res.end();
+                        // });
+                    }
                 }
+
             ]
         }
     });

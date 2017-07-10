@@ -1,0 +1,38 @@
+
+<ng-template [ngIf]="true">
+    <mp-loading *ngIf="isLoading" style=""></mp-loading>
+
+    <div class="row gallery-wrapper">
+        <ng-template [ngIf]="images.length > 0">
+            <ng-template ngFor let-image [ngForOf]="images" ; let-last="last"; let-i="index">
+                <div class="col-md-4 gallery-item {{getImageCategories(image)}}"  (click)="select(image, i)"  [style.background-imagex]="'url('+image.url+')'">
+                    <div class="gallery-item-inner">
+                        <img [src]="image.url" alt="{{image.url}}" (load)="onImageLoad($event, i, image)">
+                        <div class="gallery-item-data">
+                            <div class="gallery-item-data-wrapper">
+                                <h3>{{image.name}}</h3>
+                                <p>{{image.description}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+            <div class="clearfix"></div>
+
+            <div class="gallery-load-more">
+                <button type="button" class="btn bg-primary" *ngIf="images.length < totalItems" (click)="loadMore()">
+                    Load More
+                </button>
+            </div>
+        </ng-template>
+    </div>
+
+    <!--<mp-modal *ngIf="selectedImage" (onClose)="selectedImage = null; selectedIndex = 0" [draggable]="true" [showOverlay]="true" [showFooter]="false" [showHeader]="false">-->
+        <!--<div body class="modal-body-content">-->
+            <!--<div style="width: 100%; height: 100%">-->
+                <!--<mp-image-slider (onSlideChange)="onSlideChange($event)" [images]="images" [nameField]="'name'" [index]="selectedIndex" [srcField]="'url'" [backgroundColor]="'#CCC'"></mp-image-slider>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</mp-modal>-->
+
+</ng-template>

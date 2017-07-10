@@ -1,0 +1,15 @@
+<div class="container">
+    <div class="row">
+        <div class="portfolio-sections">
+            <ng-template [ngIf]="categories && categories.length > 0">
+                <a href="javascript:;"  [class.section-selected]="!selectedCategory" (click)="selectCategory('')">All</a>
+                <ng-template ngFor let-category [ngForOf]="categories" let-i="index">
+                    <a href="javascript:;"  [class.section-selected]="selectedCategory == category.name" (click)="selectCategory(category)">{{category.name}}</a>
+                </ng-template>
+            </ng-template>
+        </div>
+    </div>
+    <div class="row">
+        <mp-flex-images [rowHeight]="250" [images]="images"></mp-flex-images>
+    </div>
+</div>

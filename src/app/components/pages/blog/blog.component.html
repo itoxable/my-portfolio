@@ -1,0 +1,72 @@
+
+
+    <mp-loading *ngIf="isLoading" style=""></mp-loading>
+
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-9" *ngIf="blogTitle">
+                <a class="btn btn-primary" [routerLink]="['/blog']" >Go Back</a>
+
+                <div class="blog">
+                    <h1>{{selectedBlog.title}}</h1>
+                    <p class="blog-date">{{selectedBlog.cdate | date}}</p>
+                    <p *ngIf="selectedBlog.summary">{{selectedBlog.summary}}</p>
+
+                    <div [innerHtml]="selectedBlog.text"></div>
+                </div>
+
+            </div>
+
+
+            <div class="col-md-9" *ngIf="!blogTitle">
+                <button  class="btn btn-default" (click)="addNewEntry()">New Entry +</button>
+                <div class="blog-list">
+                    <ng-template ngFor let-blog [ngForOf]="blogs" let-i="index">
+                        <div class="blog">
+
+                            <span class="blog-edit fa fa-pencil-square" (click)="addNewEntry()"></span>
+
+                            <a class="blog-title" href="javascript:;" [routerLink]="['/blog/'+blog.title]">
+                                <h1>{{blog.title}}</h1>
+                            </a>
+
+                            <p class="blog-date">{{blog.cdate | date}}</p>
+
+                            <p *ngIf="blog.summary">{{blog.summary}}</p>
+
+                            <div [innerHtml]="blog.text"></div>
+                            <a class="btn btn-primary" [routerLink]="['/blog/'+blog.title]">Read More</a>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <h2>Right</h2>
+            </div>
+        </div>
+    </div>
+
+
+    <mp-modal *ngIf="newBlog" (onClose)="newBlog = null" [draggable]="true" [showOverlay]="true" [showFooter]="false">
+        <div header>
+            New Blog Entry
+        </div>
+        <div body>
+            <form id="newBlogForm" #newBlogForm="ngForm" (ngSubmit)="saveNewBlog(newBlogForm)" novalidate>
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="newBlog.title" name="newBlog.title" class="form-control" placeholder="Title">
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control" name="newBlog.summary" [(ngModel)]="newBlog.summary" placeholder="Summary"></textarea>
+                </div>
+                <div class="form-group">
+                    <mp-text-editor name="newBlog.text" [(ngModel)]="newBlog.text"></mp-text-editor>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button class="btn btn-default" (click)="newBlog = null">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </mp-modal>

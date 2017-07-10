@@ -3,8 +3,7 @@ $material-design-icons-font-path: '../styles/fonts/' !default;
 
 $link-hover-decoration: "none";
 
-
-$font-family-sans-serif:  "Lato, Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$font-family-sans-serif:  "Questrial", Helvetica, Arial, sans-serif !default;
 
 $gray-base:              #000 !default;
 $gray-darker:            lighten($gray-base, 20%) !default;
@@ -26,3 +25,13 @@ $navbar-default-link-hover-color:          #05425a !default;
 $navbar-default-link-hover-bg:             #ffdd00 !default;
 $navbar-default-link-active-color:         #05425a !default;
 $navbar-default-link-active-bg:            #ffdd00 !default;
+
+
+$merloround-font-path:        "./fonts/merloround" !default;
+$safina-font-path:        "./fonts/safina" !default;
+$faith-glory-font-path:        "./fonts/faith-glory" !default;
+$stringbeans-font-path:        "./fonts/stringbeans" !default;
+$hunterswood-font-path:        "./fonts/hunterswood" !default;
+$graduate-font-path:        "./fonts/graduate" !default;
+$blessed-print-font-path:        "./fonts/blessed-print" !default;
+$sidebar-width:           250px !default;

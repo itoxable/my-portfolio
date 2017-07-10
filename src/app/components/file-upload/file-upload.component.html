@@ -1,0 +1,31 @@
+<input type="file" (change)="changeDetect($event)" [attr.multiple]="multiple" *ngIf="native" [attr.accept]="accept"/>
+<div  *ngIf="!native" class="file-upload {{styleClass}}">
+    <div class="upload-wrapper">
+        <button (click)="chooseFile($event)" class="btn btn-default" type="button">
+            <input type="file" (change)="changeDetect($event)" [attr.multiple]="multiple" class="hidden" [attr.accept]="accept"/>
+            <span>{{buttonText}}</span>
+        </button>
+
+        <span *ngIf="showFileName">{{fileLabel}}</span>
+
+        <ng-template [ngIf]="showPreview && fileWrapper.files.length > 0">
+            <div class="file-upload-preview-wrapper">
+                <div *ngFor="let file of fileWrapper.files; let i = index" class="file-upload-preview">
+                    <img [src]="file.previewURL" alt="{{file.title}}" />
+                    <h5 class="file-upload-file-title">{{file.title}}({{file.size | mpSizeFormat}})</h5>
+                    <span class="fa fa-trash file-upload-remove-file" (click)="removeFile(i,$event)"></span>
+                </div>
+            </div>
+        </ng-template>
+
+        <ng-template [ngIf]="showErrorMessages && errorMessages.length > 0">
+            <div class="file-upload-error-messages-wrapper">
+                <div *ngFor="let errorMessage of errorMessages; let i = index" class="file-upload-error-message">
+                    {{errorMessage}}
+                </div>
+            </div>
+        </ng-template>
+
+        <ng-content></ng-content>
+    </div>
+</div>

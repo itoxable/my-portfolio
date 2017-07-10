@@ -1,0 +1,46 @@
+<!--<div class="container-fluid">-->
+    <!--<div class="main-content">-->
+        <!--<div class="main-page-slider">-->
+            <!--{{images.length}}-->
+            <mp-image-slider *ngIf="images.length > 0" (onSlideChange)="onSlideChange($event)" [backgroundColor]="'#EEE'"
+                             [loop]="true" [images]="images" [descriptionField]="'description'" [nameField]="'name'"
+                             [srcField]="'url'">
+
+
+
+                <mp-image-slide>
+
+                    <div>
+                        <h1>ok</h1>
+                    </div>
+
+                </mp-image-slide>
+                <!--<ng-template ngFor let-img [ngForOf]="images" let-i="index" let-isLast="last">-->
+
+
+                    <!--<mp-image-slide>-->
+
+                        <!--<div>{{img.url}}</div>-->
+
+                    <!--</mp-image-slide>-->
+
+
+                <!--</ng-template>-->
+
+
+
+            </mp-image-slider>
+
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+<!--<div class="container">-->
+    <!--<div class="row">-->
+        <!--<mp-flex-images [rowHeight]="250" [images]="images"></mp-flex-images>-->
+    <!--</div>-->
+<!--</div>-->
+
+<!--<mp-data-table [dataTable]="dataTableModel">-->
+    <!--<mp-column [columnDef]="dataTableModel.columns[0]"></mp-column>-->
+    <!--<mp-column [columnDef]="dataTableModel.columns[1]"></mp-column>-->
+<!--</mp-data-table>-->

@@ -1,0 +1,23 @@
+
+<div class="modal">
+    <div class="modal-content">
+        <mp-loading *ngIf="isLoading"></mp-loading>
+        <div class="modal-header" *ngIf="showHeader">
+            <button type="button" class="close" aria-label="Close" (click)="close($event)"><i class="gp gp-map-close-icon"></i></button>
+            <h3 class="modal-title">
+                <ng-content select="[header]"></ng-content>
+            </h3>
+        </div>
+
+        <div class="modal-body">
+            <ng-content select="[body]"></ng-content>
+        </div>
+
+        <div class="modal-footer" style="text-align: center" *ngIf="showFooter">
+            <button type="button" class="btn btn-primary"(click)="confirm()">OK</button>
+        </div>
+
+    </div>
+    <div class="modal-backdrop" (click)="close($event)"></div>
+
+</div>
