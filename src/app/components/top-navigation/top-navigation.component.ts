@@ -2,7 +2,7 @@
  * Created by ruic on 11/02/2017.
  */
 
-import {Component, Directive, HostListener} from "@angular/core";
+import {Component, Directive, HostListener} from '@angular/core';
 
 
 @Component({
@@ -10,8 +10,8 @@ import {Component, Directive, HostListener} from "@angular/core";
     moduleId: module.id,
     templateUrl: 'top-navigation.component.html'
 })
-export class TopNavigationComponent{
-    constructor(){
+export class TopNavigationComponent {
+    constructor() {
 
     }
 }
@@ -20,22 +20,22 @@ export class TopNavigationComponent{
 @Directive({
     selector: '[mpNavDropdown]'
 })
-export class NavDropDownDirective{
-    mobileView:boolean = false;
+export class NavDropDownDirective {
+    mobileView = false;
     constructor() {
 
     }
 
     @HostListener('mouseenter', ['$event.target'])
     onMouseEnter(el) {
-        if(this.mobileView){
+        if (this.mobileView) {
             return;
         }
         this.applyClass(el, elem => {this.showDropDown(elem)});
     }
     @HostListener('mouseleave', ['$event.target'])
     onMouseleave(el) {
-        if(this.mobileView){
+        if (this.mobileView) {
             return;
         }
         this.applyClass(el, elem => {this.hideDropDown(elem)});
@@ -44,21 +44,21 @@ export class NavDropDownDirective{
     @HostListener('click', ['$event.target'])
     onClick(el) {
         this.applyClass(el, elem => {
-            let match = elem.className.match(/\bopen\b/);
-            if(match != null){
+            const match = elem.className.match(/\bopen\b/);
+            if (match != null) {
                 this.hideDropDown(elem);
-            }else{
+            } else {
                 this.showDropDown(elem)
             }
         });
 
     }
 
-    applyClass(el, action:Function){
-        let namedNodeMap:NamedNodeMap = el.attributes;
-        let attr = namedNodeMap.getNamedItem('gpNavDropdown');
-        if(attr == null){
-            if(el.parentElement){
+    applyClass(el, action: Function) {
+        const namedNodeMap: NamedNodeMap = el.attributes;
+        const attr = namedNodeMap.getNamedItem('gpNavDropdown');
+        if (attr == null) {
+            if (el.parentElement) {
                 this.applyClass(el.parentElement, action);
             }
         }else {
@@ -66,14 +66,14 @@ export class NavDropDownDirective{
         }
     }
 
-    showDropDown(el){
-        if(el && el.classList) {
+    showDropDown(el) {
+        if (el && el.classList) {
             el.classList.add('open');
         }
     }
 
-    hideDropDown(el){
-        if(el && el.classList){
+    hideDropDown(el) {
+        if (el && el.classList) {
             el.classList.remove('open');
         }
 

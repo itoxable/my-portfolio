@@ -2,12 +2,12 @@
  * Created by ruic on 17/02/2017.
  */
 
-import {Component, ViewContainerRef, EventEmitter, Output, Input, AfterViewInit, forwardRef} from "@angular/core";
-import {Subscription} from "rxjs";
-import {fromEvent} from "rxjs/observable/fromEvent";
-import {NG_VALUE_ACCESSOR, ControlValueAccessor} from "@angular/forms";
+import { Component, ViewContainerRef, EventEmitter, Output, Input, AfterViewInit, forwardRef } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
+import { fromEvent } from 'rxjs/observable/fromEvent';
+import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 // import * as CKEDITOR from 'ckeditor';
-declare var CKEDITOR:any
+declare var CKEDITOR: any
 
 
 @Component({
@@ -23,30 +23,30 @@ declare var CKEDITOR:any
     ]
 })
 
-export class TextEditorComponent implements ControlValueAccessor, AfterViewInit{
+export class TextEditorComponent implements ControlValueAccessor, AfterViewInit {
 
-
-    private onTouchedCallback: () => void = () => { };
-    private onChangeCallback: (_: any) => void = () => {};
-
-    text:string;
-    @Input() config:any = {
-        //CKEDITOR_BASEPATH: '/lib/ckeditor/'
-        //skin: 'moono-lisa'
+    text: string;
+    @Input() config = {
+        // CKEDITOR_BASEPATH: '/lib/ckeditor/'
+        // skin: 'moono-lisa'
     };
-    instance:any;
-    get value():string {
+
+    instance: any;
+    get value(): string {
         console.log('get value');
         return this.text
     }
 
-    set value(value:string) {
-        console.log('set value'+ value);
+    set value(value: string) {
+        console.log('set value' + value);
         this.text = value;
         this.onChangeCallback(this.text);
     }
 
-    constructor(){
+    private onTouchedCallback: () => void = () => { };
+    private onChangeCallback: (_: any) => void = () => {};
+
+    constructor() {
 
     }
 
@@ -60,14 +60,14 @@ export class TextEditorComponent implements ControlValueAccessor, AfterViewInit{
         this.onTouchedCallback = fn;
     }
 
-    writeValue(value:string) {
-        console.log('writeValue: '+value);
+    writeValue(value: string) {
+        console.log('writeValue: ' + value);
         // if (this.instance)
         //     this.instance.setData(value);
         this.text = value;
     }
 
-    //Set touched on blur
+    // Set touched on blur
     onBlur() {
         this.onTouchedCallback();
     }
@@ -77,13 +77,13 @@ export class TextEditorComponent implements ControlValueAccessor, AfterViewInit{
         this.onTouchedCallback();
     }
 
-    ngAfterViewInit(){
+    ngAfterViewInit() {
         CKEDITOR = window['CKEDITOR'];
         // var editorElement = CKEDITOR.document.getById('text-editor');
         // editorElement.setHtml(this.text);
         this.instance = CKEDITOR.replace('text-editor', this.config);
         this.instance.on('change', (event) => {
-            //console.log(event);
+            // console.log(event);
             this.text = event.editor.getData();
             this.value = this.text;
 
@@ -97,7 +97,7 @@ export class TextEditorComponent implements ControlValueAccessor, AfterViewInit{
 
         });
         this.instance.on('blur', function(event) {
-            //console.log( 'Saving...', editor.name, editor.getData() );
+            // console.log( 'Saving...', editor.name, editor.getData() );
             console.log(event);
             this.text = event.editor.getData();
             this.value = this.text;

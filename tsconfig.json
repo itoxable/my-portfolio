@@ -1,27 +1,20 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "outDir": "./dist/out-tsc",
+    "baseUrl": "src",
     "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": [ "es2015", "dom" ],
-    "noImplicitAny": false,
-    "removeComments": false,
-    "suppressImplicitAnyIndexErrors": true,
+    "target": "es5",
     "typeRoots": [
-      ".src/",
-      "./node_modules/@types",
-      "./node_modules/*"
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2016",
+      "dom"
     ]
-  },
-  "compileOnSave": true,
-  "exclude": [
-    "node_modules",
-    "typings",
-    "**/*-aot.ts",
-    "aot/*",
-    "src/app/main-aot.ts"
-  ]
+  }
 }
