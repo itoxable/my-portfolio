@@ -3,12 +3,13 @@
  */
 
 
-import {Component} from '@angular/core';
-import {AngularFire, FirebaseListObservable} from "angularfire2";
-import {DataTableModel} from "../../data-table/data-table.component";
-import {DataRequestModel} from "../../../models/data-request.model";
-import {ApplicationService} from "../../../services/application.service";
-import {ImageModel} from "../../../models/models";
+import { Component } from '@angular/core';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+
+import { DataTableModel } from "../../data-table/data-table.component";
+import { DataRequestModel } from "../../../models/data-request.model";
+import { ApplicationService } from "../../../services/application.service";
+import { ImageModel } from "../../../models/models";
 import Reference = firebase.storage.Reference;
 import { DataTablePaginationModel } from "../../data-table/data-table-pagination-control.component";
 
@@ -19,19 +20,19 @@ import { DataTablePaginationModel } from "../../data-table/data-table-pagination
     templateUrl: 'home.component.html'
 })
 
-export class HomeComponent{
-    dataTable:DataTableModel;
-    portfolioFirebaseListObservable:FirebaseListObservable<any>;
-    storageRef:Reference;
-    x:any = {};
-    images:Array<ImageModel> = [];
+export class HomeComponent {
+    dataTable: DataTableModel;
+    portfolioFirebaseListObservable: FirebaseListObservable<any>;
+    storageRef: Reference;
+    x: any = {};
+    images: Array<ImageModel> = [];
     dataTableModel: DataTableModel;
-    selectedImage:ImageModel;
+    selectedImage: ImageModel;
 
-    constructor(private angularFire:AngularFire, private applicationService:ApplicationService) {
+    constructor(private angularFireDatabase: AngularFireDatabase, private applicationService: ApplicationService) {
 
-        this.applicationService.imagesFirebaseListObservable.subscribe((data:ImageModel[]) => {
-            this.images = data.filter((image:ImageModel) => {
+        this.applicationService.imagesFirebaseListObservable.subscribe((data: ImageModel[]) => {
+            this.images = data.filter((image: ImageModel) => {
                 return image.featured;
             });
             //this.images['']
@@ -70,10 +71,10 @@ export class HomeComponent{
                 //     resizable: true
                 // },
                 {
-                    field:'authName',
+                    field: 'authName',
                     displayName: 'Organization',
                     sortField: 'auth_name',
-                    sortable:true,
+                    sortable: true,
                     width: '175px',
                     resizable: true
                 }
@@ -89,7 +90,7 @@ export class HomeComponent{
         });
     }
 
-    onSlideChange(event){
+    onSlideChange(event) {
         //console.log(event);
         this.selectedImage = this.images[event];
     }

@@ -2,15 +2,15 @@
  * Created by ruic on 12/02/2017.
  */
 
-import {Component, Input} from '@angular/core';
-import {Http} from "@angular/http";
+import { Component, Input } from '@angular/core';
+import { Http } from '@angular/http';
 import App = firebase.app.App;
-import {FirebaseListFactoryOpts, Query} from "angularfire2/interfaces";
-import {DataTableModel} from "../../data-table/data-table.component";
-import {ApplicationService} from "../../../services/application.service";
-import {Category, ImageModel} from "../../../models/models";
-import {DataRequestModel} from "../../../models/data-request.model";
-import {FirebaseListObservable} from "angularfire2";
+import { FirebaseListFactoryOpts, Query } from 'angularfire2/interfaces';
+import { DataTableModel } from '../../data-table/data-table.component';
+import { ApplicationService } from '../../../services/application.service';
+import { Category, ImageModel } from '../../../models/models';
+import { DataRequestModel } from '../../../models/data-request.model';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 
 @Component({
     selector: 'mp-portfolio',
@@ -18,42 +18,42 @@ import {FirebaseListObservable} from "angularfire2";
     templateUrl: 'portfolio.component.html'
 })
 
-export class PortfolioComponent{
-    dataTable:DataTableModel;
-    categories:Array<any> = [];
+export class PortfolioComponent {
+    dataTable: DataTableModel;
+    categories: Array<any> = [];
 
-    selectedCategory:string;
+    selectedCategory: string;
 
-    category:string = '';
+    category: string = '';
 
 
-    images:Array<ImageModel> = [];
-    isLoading:boolean;
-    imagesFirebaseListObservable:FirebaseListObservable<any[]>;
-    firebaseListFactoryOpts:FirebaseListFactoryOpts;
+    images: Array<ImageModel> = [];
+    isLoading: boolean;
+    imagesFirebaseListObservable: FirebaseListObservable<any[]>;
+    firebaseListFactoryOpts: FirebaseListFactoryOpts;
 
-    constructor(private applicationService:ApplicationService, private http:Http){
-        this.applicationService.categoriesFirebaseListObservable.subscribe((data:any[]) => {
+    constructor(private applicationService: ApplicationService, private http: Http) {
+        this.applicationService.categoriesFirebaseListObservable.subscribe((data: any[]) => {
             this.categories = data;
-            this.selectCategory('');
+            this.selectCategory({name: ''});
         });
 
         this.init();
     }
 
-    selectCategory(category:Category){
+    selectCategory(category: Category) {
         this.selectedCategory = category.name;
         console.log('selectCategory');
     }
 
-    init(){
+    init() {
 
         this.firebaseListFactoryOpts = {
             preserveSnapshot: false,
         }
         console.log(this.images);
-        if(!this.images || this.images.length == 0){
-            this.applicationService.imagesFirebaseListObservable.subscribe((data:ImageModel[]) => {
+        if (!this.images || this.images.length == 0) {
+            this.applicationService.imagesFirebaseListObservable.subscribe((data: ImageModel[]) => {
                 console.log('imagesFirebaseListObservable');
                 this.images = data;
             });
