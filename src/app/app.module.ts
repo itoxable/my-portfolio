@@ -38,7 +38,7 @@ import {
     HomeComponent,
     PageNotFoundComponent,
     NoPermissionsComponent
-} from './components/pages/index.d';
+} from './components/pages';
 import { FlexImages } from './components/flex-images/flex-images.component';
 import {  ImageSlider  } from './components/image-slider-2/image-slider-new.component';
 

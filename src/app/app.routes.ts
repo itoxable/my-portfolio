@@ -13,18 +13,18 @@ import {
     HomeComponent,
     PageNotFoundComponent,
     NoPermissionsComponent
-} from "./components/pages/index.d";
+} from './components/pages';
 
 export const appRoutes: Routes = [
-    {path: "", component: HomeComponent},
-    {path: "portfolio", component: PortfolioComponent},
-    {path: "edit-portfolio", component: EditPortfolioComponent},
-    {path: "contact", component: ContactComponent},
-    {path: "blog", component: BlogComponent},
-    {path: "blog/:blogTitle", component: BlogComponent},
-    {path: "forbidden", component: NoPermissionsComponent},
-    {path: "about", component: AboutComponent},
-    {path: "404", component: PageNotFoundComponent},
+    {path: '', component: HomeComponent},
+    {path: 'portfolio', component: PortfolioComponent},
+    {path: 'edit-portfolio', component: EditPortfolioComponent},
+    {path: 'contact', component: ContactComponent},
+    {path: 'blog', component: BlogComponent},
+    {path: 'blog/:blogTitle', component: BlogComponent},
+    {path: 'forbidden', component: NoPermissionsComponent},
+    {path: 'about', component: AboutComponent},
+    {path: '404', component: PageNotFoundComponent},
     {path: '**', component: PageNotFoundComponent},
 ];
 export const routing = RouterModule.forRoot(appRoutes);

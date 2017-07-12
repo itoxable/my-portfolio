@@ -1,5 +1,6 @@
-// $fa-font-path: "../assets/fonts" !default;
+$fa-font-path: "../node_modules/font-awesome/fonts" !default;
 // $material-design-icons-font-path: '../assets/fonts/' !default;
+$icon-font-path: "../node_modules/bootstrap-sass/assets/fonts/bootstrap/" !default;
 
 $link-hover-decoration: "none";
 
@@ -27,11 +28,11 @@ $navbar-default-link-active-color:         #05425a !default;
 $navbar-default-link-active-bg:            #ffdd00 !default;
 
 
-$merloround-font-path:        "assets/fonts/merloround" !default;
-$safina-font-path:        "assets/fonts/safina" !default;
-$faith-glory-font-path:        "assets/fonts/faith-glory" !default;
-$stringbeans-font-path:        "assets/fonts/stringbeans" !default;
-$hunterswood-font-path:        "assets/fonts/hunterswood" !default;
-$graduate-font-path:        "assets/fonts/graduate" !default;
-$blessed-print-font-path:        "assets/fonts/blessed-print" !default;
+$merloround-font-path:        "./assets/fonts/merloround" !default;
+$safina-font-path:        "./assets/fonts/safina" !default;
+$faith-glory-font-path:        "./assets/fonts/faith-glory" !default;
+$stringbeans-font-path:        "./assets/fonts/stringbeans" !default;
+$hunterswood-font-path:        "./assets/fonts/hunterswood" !default;
+$graduate-font-path:        "./assets/fonts/graduate" !default;
+$blessed-print-font-path:        "./assets/fonts/blessed-print" !default;
 $sidebar-width:           250px !default;
