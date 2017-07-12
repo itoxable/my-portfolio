@@ -3,16 +3,16 @@
  */
 
 
-import {Component} from "@angular/core";
-import {Title} from "@angular/platform-browser";
+import { Component } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 
 @Component({
     moduleId: module.id,
     templateUrl: 'page-not-found.component.html'
 })
-export class PageNotFoundComponent{
-    constructor(private titleService: Title){
+export class PageNotFoundComponent {
+    constructor(private titleService: Title) {
         this.titleService.setTitle('Not found');
     }
 }

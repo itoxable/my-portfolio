@@ -14,7 +14,7 @@ import * as firebase from 'firebase';
 import UploadTask = firebase.storage.UploadTask;
 import Reference = firebase.database.Reference;
 import TaskEvent = firebase.storage.TaskEvent;
-import { Subscriber } from 'rxjs';
+import { Subscriber } from 'rxjs/Subscriber';
 import 'rxjs/add/observable/of';
 import UploadTaskSnapshot = firebase.storage.UploadTaskSnapshot;
 

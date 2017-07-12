@@ -11,4 +11,4 @@ import { Component } from '@angular/core';
     template: `<span class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></span>`
 })
 
-export class LoadingComponent{}
+export class LoadingComponent { }

@@ -8,10 +8,9 @@ import { BrowserModule, Title } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { APP_BASE_HREF } from '@angular/common';
-
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { routing } from './app.routes';
-import { AppComponent } from './components/app.component';
+import { AppComponent } from './app.component';
 import { NavDropDownDirective, TopNavigationComponent } from './components/top-navigation/top-navigation.component';
 import { ApplicationService } from './services/application.service';
 import { FileUploadService } from './services/file-upload.service';
@@ -26,7 +25,7 @@ import { EditPortfolioService } from './services/edit-portfolio.service';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { SizeFormatPipe, SafeURLPipe } from './pipes/size-format.pipe';
 import { ModalComponent } from './components/modal/modal.component';
-import {  MPImageSliderModule, SlidePlaceholderDirective  } from './components/image-slider/image-slider.component';
+import { MPImageSliderModule, SlidePlaceholderDirective  } from './components/image-slider/image-slider.component';
 import { TextEditorComponent } from './components/text-editor/text-editor.component';
 import { DataTablePaginationControlComponent } from './components/data-table/data-table-pagination-control.component';
 import {
@@ -40,7 +39,6 @@ import {
     NoPermissionsComponent
 } from './components/pages';
 import { FlexImages } from './components/flex-images/flex-images.component';
-import {  ImageSlider  } from './components/image-slider-2/image-slider-new.component';
 
 const FIREBASE_APP_CONFIG = {
     apiKey: 'AIzaSyB6Isl4f6D1onyF07NfZqDfhUV_thnLbdg',
@@ -75,10 +73,9 @@ const FIREBASE_APP_CONFIG = {
         BlogComponent,
         ContactComponent,
         AboutComponent,
-        FlexImages,
-        ImageSlider
+        FlexImages
     ],
-    imports     : [
+    imports: [
         BrowserModule,
         FormsModule,
         HttpModule,
@@ -86,19 +83,15 @@ const FIREBASE_APP_CONFIG = {
         AngularFireModule.initializeApp(FIREBASE_APP_CONFIG),
         MPImageSliderModule
     ],
-    providers   : [
+    providers: [
         ApplicationService,
         EditPortfolioService,
         FileUploadService,
         Title,
         RouterModule,
-        HttpModule,
-        {provide: LocationStrategy, useClass: PathLocationStrategy},
-        {provide: APP_BASE_HREF, useValue: '/'}
+        HttpModule
     ],
-    bootstrap   : [AppComponent]
+    bootstrap: [AppComponent]
 })
-
-
 export class AppModule {}
 

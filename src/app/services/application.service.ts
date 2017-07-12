@@ -3,7 +3,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 

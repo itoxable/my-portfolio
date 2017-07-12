@@ -9,9 +9,8 @@ import { Title } from '@angular/platform-browser';
     moduleId: module.id,
     templateUrl: 'no-permissions.component.html'
 })
-export class NoPermissionsComponent{
+export class NoPermissionsComponent {
     constructor(private titleService: Title){
         this.titleService.setTitle('No Permission');
     }
-
 }

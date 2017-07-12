@@ -8,12 +8,12 @@ import { Subscription } from 'rxjs/Subscription';
 
 
 @Component({
-    selector:  'mp-modal',
-    moduleId:  module.id,
+    selector: 'mp-modal',
+    moduleId: module.id,
     templateUrl:  'modal.component.html',
 })
 
-export class ModalComponent implements AfterViewInit{
+export class ModalComponent implements AfterViewInit {
     @Output() onClose: EventEmitter<any> = new EventEmitter<any>();
     @Output() onLoad: EventEmitter<any> = new EventEmitter<any>();
     @Input() showOverlay = true;
@@ -43,7 +43,7 @@ export class ModalComponent implements AfterViewInit{
     parentSelector: string;
     parent: Element = document.body;
 
-    constructor(private viewContainerRef:  ViewContainerRef){
+    constructor(private viewContainerRef:  ViewContainerRef) {
         this.element = viewContainerRef.element.nativeElement;
         this.mobileView = window.innerWidth < 993;
     }
@@ -75,11 +75,11 @@ export class ModalComponent implements AfterViewInit{
             if (this.parent.clientHeight < this.clientHeight) {
                 this.modalContent['style']['top'] = 0;
             } else {
-                this.modalContent['style']['margin-top'] = (-(this.clientHeight/2))+'px';
+                this.modalContent['style']['margin-top'] = (-(this.clientHeight / 2)) + 'px';
             }
 
             this.clientWidth = this.modalContent.clientWidth;
-            this.modalContent['style']['margin-left'] = (-(this.clientWidth/2))+'px';
+            this.modalContent['style']['margin-left'] = (-(this.clientWidth / 2)) + 'px';
             this.modalContent.classList.add('opened');
 
             if (this.closeOnEsc) {
@@ -90,11 +90,11 @@ export class ModalComponent implements AfterViewInit{
                 });
             }
 
-            if(this.draggable){
+            if (this.draggable) {
                 this.setDraggable();
             }
 
-            if(this.resizeable){
+            if (this.resizeable) {
                 this.setResizeable();
             }
         }
@@ -104,7 +104,7 @@ export class ModalComponent implements AfterViewInit{
 
     }
 
-    addResizeHandler(container: Element, handler: Element, ...styleClasses: string[]): Element{
+    addResizeHandler(container: Element, handler: Element, ...styleClasses: string[]): Element {
         styleClasses.forEach((styleClass: string) => {
             handler.classList.add(styleClass);
         })
@@ -112,7 +112,7 @@ export class ModalComponent implements AfterViewInit{
         return handler;
     }
 
-    setResizeable(){
+    setResizeable() {
 
         const resizeHandleTop: HTMLElement = document.createElement('div');
         resizeHandleTop.classList.add('resize-handle', 'resize-handle-top');
@@ -146,7 +146,7 @@ export class ModalComponent implements AfterViewInit{
         resizeHandleNW.classList.add('resize-handle', 'resize-handle-nw');
         this.modalContent.appendChild(resizeHandleNW);
 
-        this.addObservable(resizeHandleNE, (position)=>{
+        this.addObservable(resizeHandleNE, (position) => {
                 const bottom: number = this.modal.getClientRects()[0].bottom - this.modalContent.getClientRects()[0].bottom;
                 const right: number = this.modal.getClientRects()[0].right - this.modalContent.getClientRects()[0].right;
                 this.setFixedSide('initial', right + 'px', bottom + 'px', 'initial');
@@ -168,7 +168,7 @@ export class ModalComponent implements AfterViewInit{
                 this.modalContent['style']['width'] = (this.modalContent.getClientRects()[0].width - dragDistance[0]) + 'px';
             }
         );
-        this.addObservable(resizeHandleSW, (position)=>{
+        this.addObservable(resizeHandleSW, (position) => {
                 const top: number = this.modalContent.getClientRects()[0].top;
                 const left: number = this.modalContent.getClientRects()[0].left;
                 this.modalContent['style']['margin-top'] = 0;
@@ -224,10 +224,10 @@ export class ModalComponent implements AfterViewInit{
                 this.modalContent['style']['width'] = (this.modalContent.getClientRects()[0].width  + dragDistance[0]) + 'px';
             }
         );
-        this.addObservable(resizeHandleBottom, (position)=>{
+        this.addObservable(resizeHandleBottom, (position) => {
                 const top: number = this.modalContent.getClientRects()[0].top;
                 this.modalContent['style']['margin-top'] = 0;
-                this.setFixedSide(top+'px', null, 'initial', null);
+                this.setFixedSide(top + 'px', null, 'initial', null);
             }, (dragDistance: Array<number>) => {
                 this.modalContent['style']['height'] = (this.modalContent.getClientRects()[0].height + dragDistance[1]) + 'px';
             }

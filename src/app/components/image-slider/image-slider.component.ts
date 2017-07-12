@@ -3,15 +3,16 @@
  */
 
 
-import {CommonModule} from '@angular/common'
+import { CommonModule } from '@angular/common'
 import {
     NgModule, Component, Input, OnInit, ElementRef, AfterContentInit, Output,
     EventEmitter, OnDestroy, Directive, ViewContainerRef, ViewChild, ViewChildren, ContentChildren, QueryList,
     TemplateRef, ChangeDetectionStrategy, ViewEncapsulation
 } from '@angular/core';
 
-import {fromEvent} from "rxjs/observable/fromEvent";
-import {Subscription} from "rxjs/Subscription";
+import { fromEvent } from 'rxjs/observable/fromEvent';
+import { Subscription } from 'rxjs/Subscription';
+import { AfterViewInit } from '@angular/core';
 
 
 @Directive({ selector: '[mpSlide]'})
@@ -33,138 +34,137 @@ export class SliderPlaceholderDirective {
     selector: 'mp-image-slide',
     template: `<ng-container *mpSlide></ng-container>`,
 })
-export class ImageSlideComponent {
+export class ImageSlideComponent implements AfterViewInit {
     @ViewChild(SlidePlaceholderDirective) slide: SlidePlaceholderDirective;
     constructor() {}
     ngAfterViewInit() {
-        console.log('ImageSlideComponent: '+this.slide);
+        console.log('ImageSlideComponent: ' + this.slide);
     }
 }
 
 @Component({
     selector: 'mp-image-slider',
-    moduleId: module.id,
-    templateUrl: 'image-slider.component.html',
+    templateUrl: './image-slider.component.html',
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ImageSliderComponent implements AfterContentInit, OnDestroy{
-    ul:HTMLElement;
-    liWidth:number = 0;
+export class ImageSliderComponent implements AfterContentInit, OnDestroy, AfterViewInit {
+    ul: HTMLElement;
+    liWidth: number = 0;
 
     sliderViewportSize = 0;
-    displayImages:any[] = [];
-    slideTimeOut:any;
-    sliderViewport:Element;
+    displayImages: any[] = [];
+    slideTimeOut: any;
+    sliderViewport: Element;
 
-    mouseMoveSubscription:Subscription;
+    mouseMoveSubscription: Subscription;
 
-    touchStartX:number;
-    swipeLength:number = 0;
+    touchStartX: number;
+    swipeLength: number = 0;
 
-    private touchDirection:string;
-    private htmlElement:HTMLElement;
-    index:number = 0;
-    private resizeSubscription:Subscription;
-    private currentSlidePosition:number;
-    dragPercentage:number = 0;
-    isLoading:boolean = false;
+    private touchDirection: string;
+    private htmlElement: HTMLElement;
+    index: number = 0;
+    private resizeSubscription: Subscription;
+    private currentSlidePosition: number;
+    dragPercentage: number = 0;
+    isLoading: boolean = false;
 
-    @Input() minimumSwipe:number = 25;
-    @Input() backgroundColor:string = 'transparent';//'#383434';
-    @Input() slideCaptionStyleClass:string = '';
-    @Input() styleClass:string = '';
+    @Input() minimumSwipe: number = 25;
+    @Input() backgroundColor: string = 'transparent'; // '#383434';
+    @Input() slideCaptionStyleClass: string = '';
+    @Input() styleClass: string = '';
 
     @Input() nameField = 'name';
     @Input() srcField = 'src';
     @Input() descriptionField = 'description';
-    @Input() transitionDuration:number = 200;
-    @Input() images:any[] = [];
-    @Input() slide:boolean = true;
-    @Input() loop:boolean = false;
-    @Input() balls:boolean = true;
+    @Input() transitionDuration: number = 200;
+    @Input() images: any[] = [];
+    @Input() slide: boolean = true;
+    @Input() loop: boolean = false;
+    @Input() balls: boolean = true;
 
-    @Input('index') set _index(index){
-        this.index = -(index-1);
+    @Input('index') set _index(index) {
+        this.index = -(index - 1);
 
     }
-    @Input('images') set _images(images:Array<any>){
-        this.images = images.filter(()=>{return true});
+    @Input('images') set _images(images: Array<any>) {
+        this.images = images.filter(() => true);
         this.initImages();
     }
 
-    @Output() onSlideChange:EventEmitter<any> = new EventEmitter<any>();
+    @Output() onSlideChange: EventEmitter<any> = new EventEmitter<any>();
 
     @ViewChildren(SliderPlaceholderDirective) sliderPlaceholders: QueryList<SliderPlaceholderDirective>;
 
     @ContentChildren(ImageSlideComponent) imageSlides: QueryList<ImageSlideComponent>;
 
 
-    constructor(private elementRef: ElementRef){
+    constructor(private elementRef: ElementRef) {
         this.isLoading = true;
     }
 
-    private cancelTimeout(){
-        if(this.slideTimeOut){
+    private cancelTimeout() {
+        if (this.slideTimeOut) {
             clearTimeout(this.slideTimeOut);
         }
     }
 
-    isActive(index:number):boolean{
+    isActive(index: number): boolean {
         return Math.abs(this.index) === index;
     }
 
 
-    showLeft():boolean{
+    showLeft(): boolean {
         return this.index < -1;
     }
-    showRight():boolean{
+    showRight(): boolean {
         return Math.abs(this.index) < this.images.length
     }
-    goToSlide(i:number){
+    goToSlide(i: number) {
         this.index = -(i + 1);
         this.moveSlide();
     }
 
-    goLeftClick(event:Event){
+    goLeftClick(event: Event) {
         event.stopPropagation();
         this.goLeft();
     }
 
-    goRightClick(event:Event){
+    goRightClick(event: Event) {
         event.stopPropagation();
         this.goRight();
-        console.log('goRightClick: '+ this.sliderPlaceholders);
-        console.log('goRightClick2: '+ this.imageSlides);
+        console.log('goRightClick: ' + this.sliderPlaceholders);
+        console.log('goRightClick2: ' + this.imageSlides);
 
     }
 
-    goLeft(transitionDuration?:number){
+    goLeft(transitionDuration?: number) {
         this.index++;
         this.cancelTimeout();
         this.moveSlide(transitionDuration);
     }
 
-    goRight(transitionDuration?:number){
+    goRight(transitionDuration?: number) {
         this.index--;
         this.cancelTimeout();
         this.moveSlide(transitionDuration);
     }
 
-    moveSlide(transitionDuration?:number){
+    moveSlide(transitionDuration?: number) {
 
-        if(transitionDuration == undefined){
+        if (transitionDuration === undefined) {
             transitionDuration = this.transitionDuration;
         }
         this.transformSlide(this.liWidth * this.index, transitionDuration);
-        let index:number = this.index;
-        if(Math.abs(this.index) > this.images.length){
+        let index: number = this.index;
+        if (Math.abs(this.index) > this.images.length) {
             this.jumpToSlide(-1);
 
-        }else if(this.index == 0){
-            this.jumpToSlide(-1*(this.images.length));
+        } else if (this.index === 0) {
+            this.jumpToSlide(-1 * (this.images.length));
         }
-        index = Math.abs(this.index)-1;
+        index = Math.abs(this.index) - 1;
 
 
         this.onSlideChange.emit({
@@ -174,100 +174,100 @@ export class ImageSliderComponent implements AfterContentInit, OnDestroy{
 
     }
 
-    transformSlide(translateXVal, transitionDuration?:number){
+    transformSlide(translateXVal, transitionDuration?: number) {
 
-        let value = `translateX(${translateXVal}px)`;
+        const value = `translateX(${translateXVal}px)`;
         this.ul.style.transform =  value;
         this.ul.style['-webkit-transform'] =  value;
         this.ul.style['-ms-transform'] =  value;
-        if(transitionDuration != undefined){
+        if (transitionDuration !== undefined) {
             this.ul.style['transition-duration'] =  `${transitionDuration}ms`;
-        }else{
+        } else {
             this.ul.style['transition-duration'] =  `0ms`;
         }
 
     }
 
-    jumpToSlide(index){
+    jumpToSlide(index) {
         this.index = index;
         this.slideTimeOut = setTimeout(() => {
             this.moveSlide(0);
         }, this.transitionDuration);
     }
 
-    onDragStart(event:MouseEvent | TouchEvent){
+    onDragStart(event: MouseEvent | TouchEvent) {
         event.stopPropagation();
-        if(!this.slide){
+        if (!this.slide ) {
             return;
         }
-        if(event instanceof TouchEvent){
+        if (event instanceof TouchEvent) {
             this.touchStartX = event.touches[0].clientX;
-        }else{
+        } else {
             this.touchStartX  = event.clientX;
         }
 
         this.currentSlidePosition = this.liWidth * this.index;
     }
 
-    onDragSlide(event:MouseEvent | TouchEvent){
+    onDragSlide(event: MouseEvent | TouchEvent) {
         event.stopPropagation();
-        let touchEndX:number = 0;
-        if(event instanceof TouchEvent){
+        let touchEndX: number = 0;
+        if (event instanceof TouchEvent) {
             touchEndX = event.touches[0].clientX;
-        }else{
+        } else {
             touchEndX = event.clientX;
         }
-        if(!this.slide){
+        if (!this.slide) {
             return;
         }
         this.swipeLength = this.touchStartX - touchEndX;
-        if(this.swipeLength < 0){
+        if (this.swipeLength < 0) {
             this.touchDirection = 'LEFT';
-            if(!this.loop && this.index === -1){
+            if (!this.loop && this.index === -1) {
                 this.swipeLength = 0;
             }
-        }else if(this.swipeLength > 0){
+        }else if (this.swipeLength > 0) {
             this.touchDirection = 'RIGHT';
-            if(!this.loop && this.index === -this.images.length){
+            if (!this.loop && this.index === -this.images.length) {
                 this.swipeLength = 0;
             }
         }
-        this.dragPercentage = (100*this.swipeLength)/(this.liWidth/2);
+        this.dragPercentage = (100 * this.swipeLength) / (this.liWidth / 2);
         this.transformSlide(this.currentSlidePosition - this.swipeLength);
     }
 
-    onDragEnd(event:TouchEvent | MouseEvent){
-        if(!this.slide){
+    onDragEnd(event: TouchEvent | MouseEvent) {
+        if (!this.slide) {
             return;
         }
-        if(this.swipedMoreThanMinimum()){
-            if(this.touchDirection === 'RIGHT'){
+        if (this.swipedMoreThanMinimum()) {
+            if (this.touchDirection === 'RIGHT') {
                 this.goRight();
                 this.touchDirection = '';
-            }else if(this.touchDirection === 'LEFT'){
+            }else if (this.touchDirection === 'LEFT') {
                 this.goLeft();
                 this.touchDirection = '';
             }
-        }else{
+        } else {
             this.transformSlide(this.currentSlidePosition, this.transitionDuration);
         }
 
     }
 
-    private swipedMoreThanMinimum():boolean{
+    private swipedMoreThanMinimum(): boolean {
         return (Math.abs(this.dragPercentage) >= this.minimumSwipe);
     }
 
-    attachInteractionEvents(){
-        var mouseDownSubscription:Subscription = fromEvent(this.sliderViewport, 'mousedown').subscribe((event:MouseEvent) => {
-            if(this.mouseMoveSubscription){
+    attachInteractionEvents() {
+        const mouseDownSubscription: Subscription = fromEvent(this.sliderViewport, 'mousedown').subscribe((event: MouseEvent) => {
+            if (this.mouseMoveSubscription) {
                 this.mouseMoveSubscription.unsubscribe();
             }
             this.onDragStart(event);
-            this.mouseMoveSubscription = fromEvent(document, 'mousemove').subscribe((moveEvent:MouseEvent) => {
+            this.mouseMoveSubscription = fromEvent(document, 'mousemove').subscribe((moveEvent: MouseEvent) => {
                 this.onDragSlide(moveEvent)
             })
-            var mouseUpSubscription:Subscription = fromEvent(document, 'mouseup').subscribe((upEvent:MouseEvent) => {
+            const mouseUpSubscription: Subscription = fromEvent(document, 'mouseup').subscribe((upEvent: MouseEvent) => {
                 this.mouseMoveSubscription.unsubscribe();
                 mouseUpSubscription.unsubscribe();
                 this.onDragEnd(upEvent);
@@ -275,10 +275,10 @@ export class ImageSliderComponent implements AfterContentInit, OnDestroy{
         })
     }
 
-    initImages(){
-        if(this.images && this.images.length > 0){
+    initImages() {
+        if (this.images && this.images.length > 0) {
             this.displayImages = [];
-            this.displayImages.push(this.images[this.images.length -1]);
+            this.displayImages.push(this.images[this.images.length - 1]);
             this.images.forEach(image => {
                 this.displayImages.push(image);
             });
@@ -288,23 +288,23 @@ export class ImageSliderComponent implements AfterContentInit, OnDestroy{
         }
     }
 
-    setULSize(){
-        if(!this.ul){
+    setULSize() {
+        if (!this.ul) {
             this.ul = this.htmlElement.querySelector('ul');
         }
-        if(this.ul){
+        if (this.ul) {
             this.ul.style.width = `${this.sliderViewport.getClientRects()[0].width * this.displayImages.length}px`;
             this.liWidth = this.sliderViewport.getClientRects()[0].width;
         }
     }
 
-    init(isResize?:boolean){
-        console.log('init: '+ this.imageSlides);
+    init(isResize?: boolean) {
+        console.log('init: ' + this.imageSlides);
         this.htmlElement = this.elementRef.nativeElement;
 
         this.sliderViewport = this.htmlElement.querySelector('.slider-viewport');
-        if(this.sliderViewport){
-            if(this.styleClass){
+        if (this.sliderViewport) {
+            if (this.styleClass) {
                 this.sliderViewport.classList.add(this.styleClass);
             }
             this.sliderViewportSize = this.sliderViewport.clientWidth;
@@ -312,35 +312,35 @@ export class ImageSliderComponent implements AfterContentInit, OnDestroy{
             this.setULSize();
         }
 
-        if(this.index > 0){
+        if (this.index > 0) {
             this.goRight(0);
-        }else{
+        } else {
             this.goRight(0);
         }
-        if(!this.resizeSubscription){
+        if (!this.resizeSubscription) {
             this.resizeSubscription = fromEvent(window, 'resize').subscribe((moveEvent) => {
                 this.setULSize();
                 this.moveSlide(0);
             });
         }
     }
-    onload(event){
+    onload(event) {
         console.log(event);
     }
-    ngOnDestroy(){
-        if(this.resizeSubscription){
+    ngOnDestroy() {
+        if (this.resizeSubscription) {
             this.resizeSubscription.unsubscribe();
         }
     }
 
-    ngAfterContentInit(){
+    ngAfterContentInit() {
         // this.init();
         // console.log('ngAfterContentInit: '+ this._slidePlaceholders);
         this.isLoading = false;
     }
 
     ngAfterViewInit() {
-        console.log('ngAfterViewInit sliderPlaceholders: '+ this.sliderPlaceholders);
+        console.log('ngAfterViewInit sliderPlaceholders: ' + this.sliderPlaceholders);
         this.sliderPlaceholders.forEach((placeHolder: SliderPlaceholderDirective, index: number) => {
 
             const context = {$implicit: this.images[index]};
@@ -351,9 +351,9 @@ export class ImageSliderComponent implements AfterContentInit, OnDestroy{
             // placeHolder.
 
         });
-        console.log('ngAfterViewInit2 imageSlides: '+ this.imageSlides);
+        console.log('ngAfterViewInit2 imageSlides: ' + this.imageSlides);
         // console.log('ngAfterViewInit: '+ this._slidePlaceholders);
-        //console.log('ngAfterViewInit: ');
+        // console.log('ngAfterViewInit: ');
         // // TODO(andrewseguin): Re-render the header when the header's columns change.
         // this.renderHeaderRow();
         //
@@ -373,45 +373,44 @@ export class ImageSliderComponent implements AfterContentInit, OnDestroy{
 
 @Component({
     selector: 'mp-image-slides-balls',
-    moduleId: module.id,
-    //styleUrls: ['image-slides-balls.component.scss'],
+    styleUrls: ['./image-slides-balls.component.scss'],
     template: `
         <ng-template ngFor let-image [ngForOf]="images" let-idx="index">
-            <div class="ball" [style.width]="ballPercentage+'%'" (click)="ballClick(idx)"></div>
+            <div class="ball" [style.width]="ballPercentage + '%'" (click)="ballClick(idx)"></div>
         </ng-template>
-        <div class="index-ball" [style.width]="ballPercentage+'%'">
-        </div>
+        <div class="index-ball" [style.width]="ballPercentage + '%'"></div>
         <div class="clearfix"></div>`
 })
-export class ImageSliderBalls<T> implements AfterContentInit, OnInit{
+export class ImageSliderBallsComponent<T> implements AfterContentInit, OnInit {
 
-    htmlElement:HTMLElement;
-    indexBall:HTMLElement;
-    dragPercentage:number = 0;
-    index:number = 0;
-    currentPercentage:number = 0;
-    @Input() images:T[] = [];
-    @Input() transitionDuration:number = 0;
-    @Input('dragPercentage') set _dragPercentage(dragPercentage:number){
-        this.dragPercentage = dragPercentage/2;
-        if(this.indexBall){
+    htmlElement: HTMLElement;
+    indexBall: HTMLElement;
+    dragPercentage: number = 0;
+    index: number = 0;
+    currentPercentage: number = 0;
+    ballPercentage: number = 0;
+    @Input() images: T[] = [];
+    @Input() transitionDuration: number = 0;
+    @Input('dragPercentage') set _dragPercentage(dragPercentage: number) {
+        this.dragPercentage = dragPercentage / 2;
+        if (this.indexBall) {
             this.indexBall.style['transition-duration'] = '0ms';
             this.indexBall.style.transform =  `translateX(${this.currentPercentage + this.dragPercentage}%)`;
         }
     }
-    @Input('index') set _index(index){
-        this.index = Math.abs(index)-1;
-        if(this.indexBall) {
+    @Input('index') set _index(index) {
+        this.index = Math.abs(index) - 1;
+        if (this.indexBall) {
             this.indexBall.style['transition-duration'] = `${this.transitionDuration}ms`;
         }
         this.setIndexPosition();
     }
 
-    @Output() ballClicked:EventEmitter<number> = new EventEmitter<number>();
+    @Output() ballClicked: EventEmitter<number> = new EventEmitter<number>();
 
-    constructor(private elementRef: ElementRef){}
+    constructor(private elementRef: ElementRef) {}
 
-    ngAfterContentInit(){
+    ngAfterContentInit() {
         this.htmlElement = this.elementRef.nativeElement;
         this.indexBall = <HTMLElement>this.htmlElement.querySelector('.index-ball');
 
@@ -419,20 +418,20 @@ export class ImageSliderBalls<T> implements AfterContentInit, OnInit{
 
 
     }
-    ballPercentage:number = 0;
-    ngOnInit(){
-        this.ballPercentage = 100/this.images.length;
+
+    ngOnInit() {
+        this.ballPercentage = 100 / this.images.length;
     }
 
-    setIndexPosition(){
-        this.currentPercentage = 100*this.index;
-        if(this.indexBall) {
+    setIndexPosition() {
+        this.currentPercentage = 100 * this.index;
+        if (this.indexBall) {
             this.indexBall.style.transform = `translateX(${this.currentPercentage}%)`;
             this.indexBall.style['transition-duration'] =  0;
         }
     }
 
-    ballClick(index:number){
+    ballClick(index: number) {
         this.ballClicked.emit(index);
     }
 }
@@ -440,12 +439,11 @@ export class ImageSliderBalls<T> implements AfterContentInit, OnInit{
 @NgModule({
     declarations: [
         ImageSliderComponent,
-        ImageSliderBalls,
+        ImageSliderBallsComponent,
         SlidePlaceholderDirective,
         ImageSlideComponent,
         SliderPlaceholderDirective
     ],
-    providers:[],
     exports: [
         ImageSliderComponent,
         ImageSlideComponent,
@@ -455,4 +453,4 @@ export class ImageSliderBalls<T> implements AfterContentInit, OnInit{
         CommonModule,
     ]
 })
-export class MPImageSliderModule {}
+export class MPImageSliderModule { }

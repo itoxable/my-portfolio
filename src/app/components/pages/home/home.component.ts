@@ -6,12 +6,12 @@
 import { Component } from '@angular/core';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 
-import { DataTableModel } from "../../data-table/data-table.component";
-import { DataRequestModel } from "../../../models/data-request.model";
-import { ApplicationService } from "../../../services/application.service";
-import { ImageModel } from "../../../models/models";
+import { DataTableModel } from '../../data-table/data-table.component';
+import { DataRequestModel } from '../../../models/data-request.model';
+import { ApplicationService } from '../../../services/application.service';
+import { ImageModel } from '../../../models/models';
 import Reference = firebase.storage.Reference;
-import { DataTablePaginationModel } from "../../data-table/data-table-pagination-control.component";
+import { DataTablePaginationModel } from '../../data-table/data-table-pagination-control.component';
 
 
 @Component({
@@ -35,12 +35,12 @@ export class HomeComponent {
             this.images = data.filter((image: ImageModel) => {
                 return image.featured;
             });
-            //this.images['']
+            // this.images['']
         });
 
         this.dataTableModel = new DataTableModel({
             data: `/styles/lpis.json`,
-            noDataMessageStyleClass: "error-message",
+            noDataMessageStyleClass: 'error-message',
             dataArrayField: '_embedded.AddressProperty',
             totalItemsField: 'page.totalElements',
             errorMessage: 'Error searching!',
@@ -85,13 +85,13 @@ export class HomeComponent {
             pagination: new DataTablePaginationModel({
                 pageSizes: [20, 50, 75, 100],
                 paginationNumbersSize: 5,
-                legendTemplate: "Page {CURRENT_PAGE} of {CURRENT_NR_OF_PAGES}"
+                legendTemplate: 'Page {CURRENT_PAGE} of {CURRENT_NR_OF_PAGES}'
             }),
         });
     }
 
     onSlideChange(event) {
-        //console.log(event);
+        // console.log(event);
         this.selectedImage = this.images[event];
     }
     // init(){
@@ -106,7 +106,7 @@ export class HomeComponent {
     //     // console.log(data);
     //     this.dataTable = new DataTableModel({
     //         data: 'ruiCunha/portfolio',
-    //         noDataMessageStyleClass: "error-message",
+    //         noDataMessageStyleClass: 'error-message',
     //         firebaseListObservable: this.portfolioFirebaseListObservable,
     //         liveScroll: true,
     //         //isFirebase: true,
